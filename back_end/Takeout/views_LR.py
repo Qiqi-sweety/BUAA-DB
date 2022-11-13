@@ -1,148 +1,125 @@
 import json
 
-from back_end.utils.meta_wrapper import JSR
+from django.contrib.auth import get_user_model, authenticate, login
+
+from utils.meta_wrapper import JSR
 from django.views import View
-from models import *
+from Takeout.models import *
 
 
 class user_register(View):
-    @JSR('hint')
-    def register(self, request):
+    @JSR('code', 'message', 'hint')
+    def post(self, request):
         try:
             kwargs: dict = json.loads(request.body)
         except Exception:
             return "400", "参数异常"
 
-        this_name = kwargs["name"]
-        if len(User.objects.filter(name=this_name)) != 0:
-            return "用户名已被注册"
+        if len(Cookie.objects.filter(name=kwargs["name"])) != 0:
+            return "300", "modify", "用户名已被注册"
+        if kwargs["password"] == "":
+            return "300", "modify", "密码不能为空"
+        if kwargs["address"] == "":
+            return "300", "modify", "地址不能为空"
+        if kwargs["card_num"] == "":
+            return "300", "modify", "卡号不能为空"
 
-        this_password1 = kwargs["password1"]
-        this_password2 = kwargs["password2"]
-        if this_password1 != this_password2:
-            return "两次密码不一致"
+        cookie = get_user_model().objects.create_user(kwargs['name'], kwargs['password'])
 
-        address = kwargs["address"]
-        care_num = kwargs["care_num"]
-
-        if this_password1 == "" or this_password2 == "":
-            return "密码不能为空"
-        if address == "":
-            return "地址不能为空"
-        if care_num == "":
-            return "卡号不能为空"
-
-        this_user = User(name=this_name, password=this_password1, address=address, care_num=care_num)
+        this_user = User(user_name=kwargs['name'], address=kwargs["address"], card_num=kwargs["card_num"])
         this_user.save()
+        cookie.user = this_user
+        cookie.type = "user"
+        cookie.save()
 
-        return "注册成功"
+        return "200", "success", "注册成功"
 
 
 class store_register_step1(View):
-    @JSR('hint')
-    def register(self, request):
+    @JSR('code', 'message', 'hint')
+    def post(self, request):
         try:
             kwargs: dict = json.loads(request.body)
         except Exception:
             return "400", "参数异常"
 
-        this_name = kwargs["name"]
-        if len(Store.objects.filter(name=this_name)) != 0:
-            return "店铺名已被注册"
+        if len(Cookie.objects.filter(name=kwargs["name"])) != 0:
+            return "300", "modify", "店铺名已被注册"
 
-        password1 = kwargs["password1"]
-        password2 = kwargs["password2"]
-        if password1 != password2:
-            return "密码不一致"
-
-        store = Store(name=kwargs['name'], password=password1)
-        store.save()
-        return "下一步"
+        return "200", "success", "下一步"
 
 
 class store_register_step2(View):
-    @JSR('hint')
-    def register(self, request):
+    @JSR('code', 'message', 'hint')
+    def post(self, request):
         try:
             kwargs: dict = json.loads(request.body)
         except Exception:
             return "400", "参数异常"
 
-        name = kwargs["name"]
-        store = Store.objects.get(name=name)
+        if kwargs["logo"] == "":
+            return "300", "modify", "请上传logo"
+        if kwargs["address"] == "":
+            return "300", "modify", "地址不能为空"
+        if kwargs["info"] == "":
+            return "300", "modify", "店铺简介不能为空"
 
-        address = kwargs["address"]
-        logo = kwargs["logo"]
-        license = kwargs["license"]
-        info = kwargs["info"]
+        # TODO: license photo
+        cookie = get_user_model().objects.create_user(kwargs['name'], kwargs['password'])
+        store = Store(store_name=kwargs['name'], logo=kwargs["logo"], address=kwargs["address"], info=kwargs["info"])
+        cookie.store = store
+        cookie.type = "store"
+        cookie.save()
+        store.save()
 
-        if name == "":
-            return "店铺名不能为空"
-        elif address == "":
-            return "地址不能为空"
-        elif logo == "":
-            return "logo不能为空"
-        elif license == "":
-            return "营业执照不能为空"
-        elif info == "":
-            return "店铺简介不能为空"
-        else:
-            store.address = address
-            store.logo = logo
-            store.license = license
-            store.info = info
-            store.save()
-            return "申请成功，等待管理员审核"
+        return "200", "success", "申请成功，等待管理员审核"
 
 
-class user_login(View):
-    @JSR('hint')
-    def login(self, request):
+class cookie_login(View):
+    @JSR('code', 'message')
+    def post(self, request):
         try:
             kwargs: dict = json.loads(request.body)
         except Exception:
             return "400", "参数异常"
-
-        user = kwargs["name"]
-        users = User.objects.filter(name=user)
-
-        if len(users) == 0:
-            return "用户未注册"
-        else:
-            if users[0].password == kwargs["password"]:
-                return "登陆成功"
-            else:
-                return "密码错误"
-
-
-class store_login(View):
-    @JSR('hint')
-    def login(self, request):
-        try:
-            kwargs: dict = json.loads(request.body)
-        except Exception:
+        if kwargs.keys() != {'name', 'password'}:
             return "400", "参数异常"
+        if not get_user_model().objects.filter(name=kwargs['name']).exists():
+            return "400", "账号不存在"
+        user = authenticate(request, username=kwargs['name'], password=kwargs['password'])
+        if user is not None:
+            login(request, user)
+            return "200", "登陆成功"
 
-        store = kwargs["name"]
-        stores = Store.objects.filter(name=store)
-        if len(stores) == 0:
-            return "店铺未注册"
-        else:
-            if stores[0].password == kwargs["password"]:
-                return "登陆成功"
-            else:
-                return "密码错误"
-
-
-class admin_login(View):
-    @JSR('hint')
-    def login(self, request):
-        try:
-            kwargs: dict = json.loads(request.body)
-        except Exception:
-            return "400", "参数异常"
-
-        if kwargs["name"] == "admin" and kwargs["password"] == "PleaseGiveMe30":
-            return "登陆成功"
-        else:
-            return "用户名或密码错误"
+#
+# class store_login(View):
+#     @JSR('code', 'message', 'hint')
+#     def login(self, request):
+#         try:
+#             kwargs: dict = json.loads(request.body)
+#         except Exception:
+#             return "400", "参数异常"
+#
+#         try:
+#             this_store = Store.objects.get(name=kwargs["name"])
+#         except Exception:
+#             return "300", "modify", "店铺名不存在"
+#
+#         if this_store.password == kwargs["password"]:
+#             return "200", "success", "登陆成功"
+#         else:
+#             return "300", "modify", "密码错误"
+#
+#
+# class admin_login(View):
+#     @JSR('code', 'message', 'hint')
+#     def login(self, request):
+#         try:
+#             kwargs: dict = json.loads(request.body)
+#         except Exception:
+#             return "400", "参数异常"
+#
+#         if kwargs["name"] == "ADMIN" and kwargs["password"] == "PASSWORD":
+#             return "200", "success", "登陆成功"
+#         else:
+#             return "300", "modify", "用户名或密码错误"

@@ -1,73 +1,131 @@
 import json
+from datetime import timezone
 
-from back_end.utils.meta_wrapper import JSR
+from utils.dump import dump_comment, dump_user, dump_order
+from utils.meta_wrapper import JSR
 from django.views import View
-from models import *
+from Takeout.models import *
 
 
-class home_search(View):
-    @JSR('hint')
-    def search(self, request):
+class showOrders(View):
+    @JSR('code', 'message', 'list')
+    def get(self, request):
         try:
             kwargs: dict = json.loads(request.body)
         except Exception:
             return "400", "参数异常"
-        name = kwargs["type"]
-        msg = kwargs["msg"]
-        return_list = []
-        return_msg = ""
-        if name == "店铺":
-            stores = Store.objects.filter(name__icontains=msg)
-            if len(stores) == 0:
-                return_msg += "未匹配到相关店铺"
-            else:
-                return_msg += "成功匹配到相关店铺"
-                for i in stores:
-                    name = i.name
-                    logo = i.logo
-                    star = i.star
-                    sales = i.sales
-                    tmp = [name, logo, star, sales]
-                    return_list.append(tmp)
-            return return_msg, return_list
-        else:
-            items = Item.objects.filter(name__icontains=msg)
-            stores = items.values('belonging_store')
-            if len(items) == 0:
-                return_msg += "未匹配到相关店铺"
-            else:
-                return_msg += "成功匹配到相关店铺"
-                return_list = []
-                for i in stores:
-                    res = {}
-                    store_name = i.name
-                    store_logo = i.logo
-                    store_star = i.star
-                    store_sales = i.sales
-                    tmp = [store_name, store_logo, store_star, store_sales]
-                    res["store"] = tmp
-                    for j in items:
-                        if j.belonging_store == i:
-                            item_name = j.name
-                            item_price = j.price
-                            item_image = j.image
-                            tmp = [item_name, item_price, item_image]
-                            res["item"].append(tmp)
-                    return_list.append(res)
-            return return_msg, return_list
 
+        if not request.user.is_authenticated:
+            return "403", "还没登录"
+        cookie = request.user
+        user = cookie.user
+        if cookie.type != "user":
+            return "300", "未登录"
 
-class recommender(View):
-    @JSR('hint')
-    def recommend(self, request):
-        stores = Store.objects.all()
-        stores = stores.order_by('-star')
+        orders = Order.objects.filter(user=user)
         return_list = []
-        for i in stores:
-            name = i.name
-            logo = i.logo
-            star = i.star
-            sales = i.sales
-            tmp = [name, logo, star, sales]
-            return_list.append(tmp)
+        for i in orders:
+            return_list.append(dump_order(i))
         return return_list
+
+
+class writeComment(View):
+    @JSR('code', 'message', 'hint')
+    def post(self, request):
+        try:
+            kwargs: dict = json.loads(request.body)
+        except Exception:
+            return "400", "参数异常"
+
+        try:
+            order = Order.objects.get(id=kwargs["id"])
+        except Exception:
+            return "300", "modify", "订单不存在"
+
+        photo = kwargs["photo"]
+        # todo: save photo
+
+        comment = Comment(info=kwargs["content"], star=kwargs["star"], time=timezone.now(), image=photo,
+                          belonging_order=order)
+        comment.save()
+        return "200", "评论成功"
+
+
+class myComments(View):
+    @JSR('code','message', 'list')
+    def get(self, request):
+        try:
+            kwargs: dict = json.loads(request.body)
+        except Exception:
+            return "400", "参数异常"
+
+        if not request.user.is_authenticated:
+            return "403", "还没登录"
+        cookie = request.user
+        user = cookie.user
+        if cookie.type != "user":
+            return "300", "未登录"
+
+        comments = Comment.objects.filter(belonging_user=user)
+        return_list = []
+        for i in comments:
+            return_list.append(dump_comment(i))
+        return "200","success",return_list
+
+
+class manage(View):
+    @JSR('code', 'message', 'user_info')
+    def get(self, request):
+        try:
+            kwargs: dict = json.loads(request.body)
+        except Exception:
+            return "400", "参数异常"
+
+        if not request.user.is_authenticated:
+            return "403", "还没登录"
+        cookie = request.user
+        user = cookie.user
+        if cookie.type != "user":
+            return "300", "未登录"
+
+        return_dict = dump_user(user)
+        return "200", "success", return_dict
+
+
+class changeInfo(View):
+    @JSR('code', 'message', 'hint')
+    def post(self, request):
+        try:
+            kwargs: dict = json.loads(request.body)
+        except Exception:
+            return "400", "参数异常"
+
+        if not request.user.is_authenticated:
+            return "403", "还没登录"
+        cookie = request.user
+        user = cookie.user
+        if cookie.type != "user":
+            return "300", "未登录"
+
+        kind = kwargs["type"]
+        info = kwargs["info"]
+
+        return_msg = "修改成功"
+        if kind == "name":
+            if len(User.objects.filter(name=info)) != 0:
+                return_msg = "用户名已存在"
+            else:
+                user.name = info
+        elif kind == "image":
+            user.image = info
+        elif kind == "address":
+            user.address = info
+        elif kind == "card_num":
+            user.card_num = info
+        elif kind == 'card_password':
+            user.card_password = info
+        else:
+            return_msg = "参数异常"
+        user.save()
+
+        return "200", "success", return_msg

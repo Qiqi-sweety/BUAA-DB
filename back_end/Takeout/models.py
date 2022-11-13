@@ -1,74 +1,85 @@
+from django.contrib.auth import get_user_model
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
 from datetime import date
 
 
-# 用户
+class MyManager(BaseUserManager):
+    def create_user(self, name, password):
+        user = get_user_model()(
+            name=name
+        )
+        user.set_password(password)
+        user.save()
+        return user
 
+
+# 基类
+class Cookie(AbstractBaseUser):
+    name = models.CharField(max_length=20, verbose_name="用户名", unique=True)
+    type = models.CharField(max_length=20, verbose_name="类型")
+    objects = MyManager()
+    user = models.ForeignKey("User", on_delete=models.CASCADE, verbose_name="用户", null=True)
+    store = models.ForeignKey("Store", on_delete=models.CASCADE, verbose_name="店铺", null=True)
+    USERNAME_FIELD = 'name'
+
+
+# 用户
 class User(models.Model):
-    name = models.CharField(blank=True, verbose_name="用户名", max_length=30, default='用户A')
-    password = models.CharField(verbose_name="密码", primary_key=True, max_length=256)
+    user_name = models.CharField(max_length=20, verbose_name="用户名")
     address = models.TextField(blank=False, default="", max_length=256, verbose_name="地址")
     card_num = models.CharField(verbose_name="银行卡号", max_length=30)
 
 
 # 商家
-
 class Store(models.Model):
-    name = models.CharField(verbose_name="店铺名", max_length=256, default="")
-    password = models.CharField(verbose_name="密码", primary_key=True, max_length=256)
+    store_name = models.CharField(max_length=20, verbose_name="店铺名", unique=True)
     address = models.TextField(blank=False, default="", max_length=256, verbose_name="地址")
     license = models.ImageField(verbose_name="商家执照", name="", width_field=15, height_field=20)
     logo = models.ImageField(verbose_name="店铺头像", blank=True, width_field=15, height_field=20)
     info = models.TextField(verbose_name="商铺描述", max_length=1000)
+
     star = models.FloatField(verbose_name="星级", default=5)
     sales = models.IntegerField(verbose_name="销量", default=0)
     isChecked = models.BooleanField(verbose_name="是否通过审核", default=False)
 
 
-# 管理员
-
-
-class Administer(models.Model):
-    name = models.CharField(verbose_name="管理员名称", max_length=256, default="")
-    password = models.CharField(verbose_name="密码", primary_key=True, max_length=256)
-
-
 # 商品
 class Item(models.Model):
-    belonging_store = models.ForeignKey(Store, on_delete=models.CASCADE)
     name = models.CharField(verbose_name="商品名", max_length=256, default="")
-    image = models.ImageField(verbose_name="商品图片", name="", width_field=8, height_field=8)
+    image = models.ImageField(verbose_name="商品图片", name="")
     price = models.FloatField(verbose_name="商品价格")
     intro = models.TextField(verbose_name="商品描述", max_length=1000)
+    belonging_store = models.ForeignKey(Store, on_delete=models.CASCADE)
 
 
 # 购物车
 class Cart(models.Model):
     items = models.ManyToManyField(Item)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    belonging_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    belonging_store = models.ForeignKey(Store, on_delete=models.CASCADE)
 
 
 # 订单
 class Order(models.Model):
-    id = models.AutoField(primary_key=True)
-    belonging_store = models.ForeignKey(Store, on_delete=models.PROTECT)
     items = models.ManyToManyField(Item)
-    belonging_user = models.ForeignKey(User, on_delete=models.PROTECT)
-    address = models.CharField(verbose_name="订单配送地点", max_length=256)
     time = models.DateField(verbose_name="订单时间", default=date.today)
+    address = models.CharField(verbose_name="订单配送地点", max_length=256)
+
     isProcessed = models.BooleanField(verbose_name="是否已处理", default=False)
-    money = models.FloatField(verbose_name="订单金额", default=0)
+    isDelivered = models.BooleanField(verbose_name="是否已送达", default=False)
+
+    belonging_store = models.ForeignKey(Store, on_delete=models.PROTECT)
+    belonging_user = models.ForeignKey(User, on_delete=models.PROTECT)
 
 
 # 评论
 class Comment(models.Model):
-    belonging_store = models.ForeignKey(Store, on_delete=models.PROTECT)
-    belonging_user = models.ForeignKey(User, on_delete=models.PROTECT)
-    belonging_order = models.ForeignKey(Order, on_delete=models.PROTECT)
-    info = models.TextField(verbose_name="商品描述", max_length=1000)
+    info = models.TextField(verbose_name="评价", max_length=1000)
     star = models.IntegerField(verbose_name="星级", default=5)
     time = models.DateField(verbose_name="评论时间", default=date.today)
     image = models.ImageField(verbose_name="评论图片", name="", width_field=8, height_field=8)
+    belonging_order = models.ForeignKey(Order, on_delete=models.PROTECT)
 
 
 # 运送单
@@ -77,12 +88,7 @@ class Delivery(models.Model):
     time = models.DateTimeField(default=date.today, verbose_name="预计送达时间")
     fee = models.FloatField(verbose_name="骑手小费", default=5)
     isOnTime = models.BooleanField(verbose_name="是否按时送达", default=True)
-
-
-# # 交易记录
-# class Trade(models.Model):
-#     redpaper_id = models.IntegerField(verbose_name="红包id")
-#     user_name = models.CharField(verbose_name="顾客用户名", max_length=256)
+    # TODO
 
 
 # 注册申请
@@ -90,8 +96,4 @@ class Register(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
     time = models.DateTimeField(default=date.today, verbose_name="注册时间")
     isPass = models.BooleanField(verbose_name="是否通过", default=False)
-
-# # 人员登记
-# class CheckIn(models.Model):
-#     store_id = models.IntegerField(verbose_name="店铺id")
-#     name = models.CharField(verbose_name="顾客用户名", max_length=256)
+    # TODO
