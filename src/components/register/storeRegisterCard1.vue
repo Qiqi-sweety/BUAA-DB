@@ -15,7 +15,7 @@
       style = "text-align: center;
               color :black;
               font-size: 35px;   
-              margin: 0px 0px 0px 0px;"
+              margin: 0 0 0 0;"
       >
         商家入驻
       </h3>
@@ -33,7 +33,7 @@
 
       <el-form-item class = "storeRegisterMainItem">
         <el-row 
-        style = "margin-right:0px;
+        style = "margin-right: 0;
                 width:100%;">
           <el-col :span="12" class = "storeRegisterFormCol">
 
@@ -78,8 +78,8 @@
   margin:auto;
   width: 1000px;
   height: 550px;
-  padding-left: 0px;
-  padding-top:0px;
+  padding-left: 0;
+  padding-top: 0;
 }
 
 .storeRegisterForm {

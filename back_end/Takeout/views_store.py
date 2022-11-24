@@ -1,9 +1,9 @@
 import json
 
-from back_end.utils.meta_wrapper import JSR
-from back_end.utils.dump import *
+from utils.meta_wrapper import JSR
+from utils.dump import *
 from django.views import View
-from models import *
+from Takeout.models import *
 
 
 class homepage(View):

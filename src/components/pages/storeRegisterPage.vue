@@ -1,11 +1,5 @@
 <!-- 商家注册页面 -->
 
-<!-- TODO:
-header的用户登录跳转到userLoginPage，管理员登录跳转到managerLoginPage
-
-本页面有三种状态：storeRegisterCard1，storeRegisterCard2，storeRegisterCard3，需要根据这三个组件里面的反馈切换这三个组件。
-实现商家的注册。 -->
-
 
 <template>
     <div class="registerLayout">
@@ -31,11 +25,11 @@ header的用户登录跳转到userLoginPage，管理员登录跳转到managerLog
             
             <el-col :span="3">
 
-                <n-button quaternary ghost class = "managerButtonClass" color = "black">
+                <n-button @click.native="to_userLoginPage" quaternary ghost class = "managerButtonClass" color = "black">
                     用户登录
                 </n-button>
 
-                <n-button quaternary ghost class = "logoutButtonClass" color = "black">
+                <n-button @click.native="to_managerLoginPage" quaternary ghost class = "logoutButtonClass" color = "black">
                     管理员登录
                 </n-button>
             </el-col>
@@ -43,9 +37,10 @@ header的用户登录跳转到userLoginPage，管理员登录跳转到managerLog
         </el-header>
         <el-main>
           <div style = "margin-top: 5%;">
-            <storeRegisterCard1/>
-            <storeRegisterCard2/>
-            <StoreRegisterCard3/>
+            <router-view></router-view>
+<!--            <storeRegisterCard1/>-->
+<!--            <storeRegisterCard2/>-->
+<!--            <StoreRegisterCard3/>-->
           </div>
         </el-main>
       </el-container>
@@ -57,29 +52,37 @@ header的用户登录跳转到userLoginPage，管理员登录跳转到managerLog
   import storeRegisterCard1 from '../register/storeRegisterCard1.vue'
   import storeRegisterCard2 from '../register/storeRegisterCard2.vue'
   import storeRegisterCard3 from '../register/storeRegisterCard3.vue'
-  import { defineComponent ,ref } from 'vue'
+  import { defineComponent } from 'vue'
   import { NTag,NButton} from 'naive-ui'
 
   export default defineComponent({
     name: 'registerPage',
     components: {
-    storeRegisterCard1,
-    storeRegisterCard2,
-    storeRegisterCard3,
-    NTag,
-    NButton,
-}
+      storeRegisterCard1,
+      storeRegisterCard2,
+      storeRegisterCard3,
+      NTag,
+      NButton,
+    },
+    methods: {
+      to_userLoginPage(){
+        this.$router.push({path: '/userLoginPage'})
+      },
+      to_managerLoginPage(){
+        this.$router.push({path: '/managerLoginPage'})
+      }
+    }
   })
 </script>
   
 <style>
-  .el-header {
-    height: 60px;
-    background-color: white;
-  }
+  /*.el-header {*/
+  /*  height: 60px;*/
+  /*  background-color: white;*/
+  /*}*/
   
-  .el-main {
-    height: 870px;
-  }
+  /*.el-main {*/
+  /*  height: 870px;*/
+  /*}*/
 </style>
   

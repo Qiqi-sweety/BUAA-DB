@@ -1,11 +1,5 @@
 <!-- 用户主页——可以按照商品和店铺搜索 -->
 <!-- 子组件：userSearchResForm和userMainForm -->
-<!-- TODO:
-1.header中个人中心跳转到personalCenterPage，商家登录跳转到storeLoginPage，管理员登录跳转到managerLoginPage，退出登录跳转到FirstPage 
-
-2.切换userMainForm和userSearchResForm组件：初始化为userMainForm；
-  根据搜索栏的结果切换userSearchResForm或者更新userSearchResForm
--->
 
 <template>
     <div class="mainLayout">
@@ -63,18 +57,20 @@
                 <el-col :span="15" style = "padding-top : 30px;height: 100%;">
                   <div>
                     <el-input
-                      v-model="input3"
+                      v-model="inputKey"
                       placeholder="请输入"
                       size = "large"
+                      clearable
                     >
                       <template #prepend>
-                        <el-select v-model="select" placeholder="选择" size = "large" style="width: 115px">
-                          <el-option label="店铺" value="1" />
-                          <el-option label="商品" value="2" />
+                        <el-select v-model="select.label" placeholder="请选择" size="large" style="width: 115px">
+                          <el-option v-for="item in typeList" :key="item.id" :label="item.title" :value="item.title">{{item.title}}</el-option>
+<!--                          <el-option :label="店铺" :value="1" />-->
+<!--                          <el-option :label="商品" :value="2" />-->
                         </el-select>
                       </template>
                       <template #append>
-                        <el-button class = "searchButton">
+                        <el-button class = "searchButton" @click="act_search">
                             <el-icon>
                                 <Search/>
                             </el-icon>
@@ -89,10 +85,11 @@
                 </el-col>
 
             </el-row>
+            <router-view :inputKey="inputKey" :inputLabel="select.label"></router-view>
             <!-- 轮播展示图 and 猜你喜欢推荐 -->
-            <user-main-form/>
+<!--            <user-main-form/>-->
             <!-- 搜索结果 -->
-            <UserSearchResForm/>
+<!--            <UserSearchResForm/>-->
           </div>
         </el-main>
       </el-container>
@@ -102,7 +99,7 @@
   <script>
     import userMainForm from '../userMain/userMainForm.vue'
     import userSearchResForm from '../userMain/userSearchResForm.vue'
-    import { defineComponent ,ref } from 'vue'
+    import { defineComponent } from 'vue'
     import { NTag,NButton} from 'naive-ui'
     
     export default defineComponent({
@@ -112,6 +109,13 @@
         userSearchResForm,
         NButton,
         NTag
+      },
+      data() {
+        return {
+          inputKey: '',
+          typeList: [{id: 1, title: '店铺'}, {id: 2, title: '商品'}],
+          select: {id: 1, title: '店铺'}
+        }
       },
       methods: {
         to_personalCenterPage(){
@@ -125,21 +129,24 @@
         },
         to_firstPage(){
           this.$router.push({path: '/'})
+        },
+        act_search(){
+          this.$router.push({path: '/userMainPage/search'})
         }
       }
     })
   </script>
     
   <style>
-    .el-header {
-      /* background-color: #f4d870; */
-      height: 60px;
-      background-color: white;
-    }
+    /*.el-header {*/
+    /*  !* background-color: #f4d870; *!*/
+    /*  height: 60px;*/
+    /*  background-color: white;*/
+    /*}*/
     
-    .el-main {
-      height: 870px;
-    }
+    /*.el-main {*/
+    /*  height: 870px;*/
+    /*}*/
 
     
   </style>

@@ -13,7 +13,7 @@
               margin: auto;">
 
 <el-form :model="form" style = "width: 100%;">
-      <el-form-item style = "    height: 60px;
+      <el-form-item style = "height: 60px;
         width: 100%;">
             <h3 
             style = "font-size: 30px;
@@ -24,12 +24,32 @@
 
             
           </el-form-item>
-          <el-form-item style = "padding-left: 3%;padding-right: 2.5%;">
+          <el-form-item style = "padding: 3% 2.5% 3% 3%;">
             <el-row style = "width: 100%;">
-              <el-col style = "padding-right: 0%;" :span="12">
-                <store-card2/>
-              </el-col>
-              <el-col style = "padding-right: 0%;" :span="12"><store-card2/></el-col>
+              <div v-for="(item, index) in stores" :key="index">
+                <el-col style = "padding-right: 0;" :span="12">
+                  <store-card1
+                      :storeLogoUrl="item.logo"
+                      :storeName="item.name"
+                      :time="'?'"
+                      :star="item.star"
+                      :number="item.sales"
+                  ></store-card1>
+                </el-col>
+              </div>
+              <div v-for="(item, index) in food" :key="index">
+                <el-col style = "padding-right: 0;" :span="12">
+                  <store-card2
+                      :storeLogoUrl="item.logo"
+                      :storeName="item.name"
+                      :time="'?'"
+                      :star="item.star"
+                      :number="item.sales"
+                  ></store-card2>
+                </el-col>
+              </div>
+<!--              <el-col style = "padding-right: 0%;" :span="12"><store-card2/></el-col>-->
+<!--              <el-col style = "padding-right: 0%;" :span="12"><store-card2/></el-col>-->
             </el-row>
             
 
@@ -46,9 +66,70 @@
   
   export default {
     name: 'userSearchResForm',
+    props: {
+      inputKey: {type: String, required: true},
+      inputLabel: {type: String, default: "商品"}
+    },
+    data() {
+      return {
+        stores: [
+            {'id': 123456, 'name': "这是店名", 'address': "这是地址",
+          'logo': "", 'info': "这是信息", 'star': 5, 'sales': 321}
+        ],
+        food: []
+      }
+    },
     components: {
       storeCard2,
       storeCard1,
+    },
+    methods: {
+      // getSearchRes() {
+      //   inject("$axios")
+      //       .get("http://127.0.0.1:8000/login/", {
+      //         label: this.inputLabel,
+      //         key: this.inputKey,
+      //       })
+      //       .then((val) => {
+      //         console.log(val);
+      //         if (this.label === "店铺") {
+      //           this.stores = val.list
+      //         } else {
+      //           this.food = val.list
+      //         }
+      //       });
+      //   // let params = {
+      //   //   label: this.inputLabel,
+      //   //   key: this.inputKey
+      //   // }
+      //   // this.$axios
+      //   //     .get('homepage/search/', params)
+      //   //     .then(res => {
+      //   //       if (res.data.code === 200) {
+      //   //         let content = res.data.list
+      //   //         if (this.label === "店铺") {
+      //   //           this.stores = content
+      //   //         } else {
+      //   //           this.food = content
+      //   //         }
+      //   //       }
+      //   //     })
+      // }
     }
+    // setup(props) {
+    //   inject("$axios")
+    //       .get("http://127.0.0.1:8000/homepage/search/", {
+    //         label: this.inputLabel,
+    //         key: this.inputKey,
+    //       })
+    //       .then((val) => {
+    //         console.log(val);
+    //         if (this.label === "店铺") {
+    //           this.stores = val.list
+    //         } else {
+    //           this.food = val.list
+    //         }
+    //       });
+    // }
   }
 </script>

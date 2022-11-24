@@ -1,5 +1,3 @@
-const { defineConfig } = require("@vue/cli-service")
-
 // vue.config.js
 const AutoImport = require('unplugin-auto-import/webpack')
 const Components = require('unplugin-vue-components/webpack')
@@ -17,6 +15,7 @@ module.exports = {
     },
     //配置webpack自动按需引入element-plus，
       plugins: [
+        // new VueLoaderPlugin(),
         AutoImport({
           resolvers: [ElementPlusResolver()]
         }),
@@ -24,5 +23,18 @@ module.exports = {
           resolvers: [ElementPlusResolver()]
         })
       ]
+  },
+  devServer: {
+    https: false,
+    hot: false,
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:8000/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    }
   }
 }

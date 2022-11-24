@@ -46,18 +46,21 @@
 export default {
   name: 'App',
   components: {
+    firstPageVue,
+
     userLoginPageVue,
     storeLoginPageVue,
     managerLoginPageVue,
-  
+
+    userRegisterPageVue,
     storeRegisterPageVue,
-    firstPageVue,
-    userOrderPageVue,
+
     userMainPageVue,
     storeMainPageVue,
     managerMainPageVue,
+
     personalCenterPageVue,
-    userRegisterPageVue,
+    userOrderPageVue,
 }
 }
 </script>
@@ -70,16 +73,16 @@ export default {
   background-color: #faecb8;
 }
 
-.el-header {
-  height: 60px;
-  background-color: white;
-}
+/*.el-header {*/
+/*  height: 60px;*/
+/*  background-color: white;*/
+/*}*/
 
-.el-main {
-  height: 870px;
-}
+/*.el-main {*/
+/*  height: 870px;*/
+/*}*/
 
-.customerLoginClass {
-  margin-top:100px;
-}
+/*.customerLoginClass {*/
+/*  margin-top:100px;*/
+/*}*/
 </style>

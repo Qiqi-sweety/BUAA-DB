@@ -16,11 +16,13 @@
           <img
             class="carousel-img"
             src = "../../assets/food1.jpg"
+            alt="暂无图片"
           >
 
           <img
             class="carousel-img"
             src = "../../assets/food2.jpg"
+            alt="暂无图片"
           >
 
           <!-- <img
@@ -41,14 +43,13 @@
           <el-form-item
           style = "height: 60px;
                   width: 100%;
-                  margin-bottom: 0%;">
+                  margin-bottom: 0;">
             <h3 style = "font-size: 30px;
                   margin-top : 25px;
                   margin-left : 3%;">
               猜你喜欢
             </h3>
-            <n-tag type="warning" style = "margin-left:20px;
-        margin-top:0px;">
+            <n-tag type="warning" style = "margin: 0 auto 20px;">
               个性推荐
             </n-tag>
 
@@ -59,23 +60,19 @@
                   padding-top: 10px;">
             <el-row
             style = "width: 100%;
-                    margin-bottom: 0%;
-                    margin-top: 0%;">
-              <el-col :span="12" style = "padding-right: 0%;">
-                <store-card1/>
-              </el-col>
-              <el-col :span="12" style = "padding-right: 0%;">
-                <store-card1/>
-              </el-col>
-            </el-row>
-            <el-row
-            style = "width: 100%;
-                    margin-bottom: 0%;
-                    margin-top: 0%;">
-              <el-col :span="12" style = "padding-right: 0%;">
-                <store-card1/>
-              </el-col>
-              <el-col  :span="12" style = "padding-right: 0%;"><store-card1/></el-col>
+                    margin-bottom: 0;
+                    margin-top: 0;">
+              <div v-for="(item, index) in stores" :key="index">
+                <el-col style = "padding-right: 0;" :span="12">
+                  <store-card1
+                      :storeLogoUrl="item.logo"
+                      :storeName="item.name"
+                      :time="'?'"
+                      :star="item.star"
+                      :number="item.sales"
+                  ></store-card1>
+                </el-col>
+              </div>
             </el-row>
 
           </el-form-item>
@@ -88,7 +85,7 @@
 <script>
     import storeCard1 from "../cards/storeCard1.vue"
     
-    import { defineComponent ,ref } from 'vue'
+    import { defineComponent } from 'vue'
     import { NCarousel,NTag} from 'naive-ui'
 
     export default defineComponent({
@@ -97,6 +94,18 @@
         NCarousel,
         storeCard1,
         NTag,
+      },
+      props: {
+        inputKey: {type: String, required: true},
+        inputLabel: {type: String, default: "商品"}
+      },
+      data() {
+        return {
+          stores: [
+              {'id': 123456, 'name': "这是店名", 'address': "这是地址",
+                'logo': "", 'info': "这是信息", 'star': 5, 'sales': 321}
+          ]
+        }
       }
     })
   </script>

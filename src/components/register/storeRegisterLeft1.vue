@@ -19,7 +19,7 @@
       class="storeRegisterLeft1" 
     >
   
-      <el-form-item prop="name" class = "nameInputBox">
+      <el-form-item prop="name" class = "nameInputBoxItem">
         <el-input
           v-model="input"
           type="name"
@@ -35,7 +35,7 @@
       </el-form-item>
   
   
-      <el-form-item prop="password" class = "passwordInputBox">
+      <el-form-item prop="password" class = "passwordInputBoxItem">
         <el-input
           v-model="input"
           type="password"
@@ -51,14 +51,14 @@
         </el-input>
       </el-form-item>
 
-      <el-form-item prop="password" class = "passwordConfirmBox">
+      <el-form-item prop="password" class = "passwordConfirmBoxItem">
         <el-input
           v-model="input"
           type="password"
           placeholder="确认密码"
           show-password
           size = "large"
-          class = "passwordConfirmBoxClass"  
+          class = "passwordConfirmBox"
         >
           <template #prefix>
             <el-icon class="el-input__icon"><lock /></el-icon>
@@ -109,51 +109,33 @@
       width: 350px;
       height: 350px;
       border-radius: 20px;
-      margin-top:0px;
+      margin-top: 0;
       /* 整个表单el-form位于整个屏幕的位置 margin */ 
     }
     
-    .nameInputBox {
-      width: 300px;
-      width: 300px;
-      margin-top: 10px;
-      margin-left: auto;
-      margin-right: auto;
-      margin-bottom: 10px;
-      height: 45px;
-      
-    }
-  
-    .passwordInputBox {
-      width: 300px;
-      margin-bottom: 10px;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 10px;
-      height: 45px;
-    }
-    .passwordConfirmBox {
-      width: 300px;
-      margin-bottom: 10px;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 10px;
-      height: 45px;
-    }
+    /*.nameInputBox {*/
+    /*  width: 300px;*/
+    /*  margin: 10px auto;*/
+    /*  height: 45px;*/
+    /*}*/
+
+    /*.passwordInputBox {*/
+    /*  width: 300px;*/
+    /*  margin: 10px auto;*/
+    /*  height: 45px;*/
+    /*}*/
+    /*.passwordConfirmBox {*/
+    /*  width: 300px;*/
+    /*  margin: 10px auto;*/
+    /*  height: 45px;*/
+    /*}*/
 
     .nextStepButton {
       width: 300px;
-      margin-top:20px;
-      margin-left: auto;
-      margin-right: auto;
-      margin-bottom: 20px;
-      
+      margin: 20px auto;
     }
-  
+
     .el-link {
-      margin-right: 8px;
-    }
-    .el-link .el-icon--right.el-icon {
       vertical-align: text-bottom;
     }
   

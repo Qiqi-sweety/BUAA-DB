@@ -1,15 +1,5 @@
 <!-- 管理员主页 -->
 
-<!-- TODO:
-√1.Header中用户登录按钮跳转到userLoginPage，商家登录按钮跳转到storeLoginPage，退出登录跳转到FisrtPage
-
-2.根据左侧导航栏的按钮进行子组件的切换：
-    初始化为verifySheet
-    商家审核切换到verifySheet，
-    数据统计暂无，
-    查看信息切换到infoSheet
- -->
-
 <template>
     <div class="managerMainLayout">
       <el-container>
@@ -50,21 +40,21 @@
             active-text-color="#ffd04b"
             background-color="#545c64"
             class="el-menu-vertical-demo"
-            default-active="2"
+            default-active="1"
             text-color="#fff"
             >
                 
-            <el-menu-item index="1">
+            <el-menu-item index="1" @click.native="sub_verifySheet">
                 <el-icon><CircleCheck /></el-icon>
                 <span>商家审核</span>
             </el-menu-item>
 
-            <el-menu-item index="2">
+            <el-menu-item index="2" @click.native="sub_infoSheet">
                 <el-icon><Document /></el-icon>
                 <span>查看信息</span>
             </el-menu-item>
 
-            <el-sub-menu index="3">
+            <el-sub-menu index="3" @click.native="sub_dataSheet">
                 <template #title>
                     <el-icon><DataAnalysis /></el-icon>
                     <span>数据统计</span>
@@ -82,9 +72,9 @@
           </el-aside>
 
           <el-main>
-            <infoSheet/>
-            <verifySheet/>
-            
+            <router-view></router-view>
+<!--            <infoSheet/>-->
+<!--            <verifySheet/>-->
           </el-main>
 
         </el-container>
@@ -93,7 +83,7 @@
 </template>
 
 <script>
-  import { defineComponent ,ref } from 'vue'
+  import { defineComponent } from 'vue'
   import { NTag,NButton} from 'naive-ui'
   import infoSheet from '../managerMain/infoSheet.vue'
   import verifySheet from '../managerMain/verifySheet.vue'
@@ -115,6 +105,15 @@
       },
       to_firstPage(){
         this.$router.push({path: '/'})
+      },
+      sub_verifySheet(){
+        this.$router.push({path: '/managerMainPage/verify'})
+      },
+      sub_infoSheet(){
+        this.$router.push({path: '/managerMainPage/info'})
+      },
+      sub_dataSheet(){
+        this.$router.push({path: '/managerMainPage/data'})
       }
     }
   })

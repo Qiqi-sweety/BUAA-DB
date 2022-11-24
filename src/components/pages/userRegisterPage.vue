@@ -1,7 +1,5 @@
 <!-- 用户注册页面 -->
 
-<!-- TODO:
-  header中商家登录按钮跳转到storeLoginPage，管理员登录按钮跳转到managerLoginPage -->
 
 <template>
     <div class="registerLayout">
@@ -25,11 +23,11 @@
             
             <el-col :span="3">
 
-                <n-button quaternary ghost class = "managerButtonClass" color = "black">
+                <n-button @click.native="to_storeLoginPage" quaternary ghost class = "managerButtonClass" color = "black">
                     商家登录
                 </n-button>
 
-                <n-button quaternary ghost class = "logoutButtonClass" color = "black">
+                <n-button @click.native="to_managerLoginPage" quaternary ghost class = "logoutButtonClass" color = "black">
                     管理员登录
                 </n-button>
             </el-col>
@@ -42,10 +40,10 @@
             style = "margin:auto;
                 width: 1000px;
                 height: 650px;
-                padding-left: 0px;
-                padding-top:0px;"
+                padding-left: 0;
+                padding-top: 0;"
             >
-              <el-row style = "padding-top: 0px;">
+              <el-row style = "padding-top: 0;">
                 <el-col :span="12" 
                 style = "height: 510px;
                         padding-top: 25px;">
@@ -69,27 +67,35 @@
   
 <script>
   import userRegisterForm from '../register/userRegisterForm.vue'
-  import { defineComponent ,ref } from 'vue'
+  import { defineComponent } from 'vue'
   import { NTag,NButton} from 'naive-ui'
 
   export default defineComponent({
     name: 'userRegisterPage',
     components: {
-    userRegisterForm,
-    NButton,
-    NTag,
-  }
+      userRegisterForm,
+      NButton,
+      NTag,
+    },
+    methods: {
+      to_storeLoginPage(){
+        this.$router.push({path: '/storeLoginPage'})
+      },
+      to_managerLoginPage(){
+        this.$router.push({path: '/managerLoginPage'})
+      }
+    }
   })
 </script>
   
 <style>
-  .el-header {
-    height: 60px;
-    background-color: white;
-  }
+  /*.el-header {*/
+  /*  height: 60px;*/
+  /*  background-color: white;*/
+  /*}*/
   
-  .el-main {
-    height: 870px;
-  }
+  /*.el-main {*/
+  /*  height: 870px;*/
+  /*}*/
   
 </style>

@@ -25,7 +25,7 @@
 
     <el-form-item prop="name" class = "nameInputBoxItem">
       <el-input
-        v-model="input"
+        v-model="inputName"
         type="name"
         placeholder="用户名"
         size = "large"
@@ -41,7 +41,7 @@
 
     <el-form-item prop="password" class = "passwordInputBoxItem">
       <el-input
-        v-model="input"
+        v-model="inputPw"
         type="password"
         placeholder="密码"
         show-password
@@ -68,7 +68,8 @@
         round
         plain
         size = "large"
-        class = "loginButton"  
+        class = "loginButton"
+        @click="login_in"
       >
         登录
       </el-button>
@@ -93,15 +94,36 @@
 </template>
 
 <script>
-import {defineComponent} from "vue";
+import {defineComponent, inject} from "vue";
 
 export default defineComponent({
+  data() {
+    return {
+      inputName: '',
+      inputPw: '',
+    }
+  },
   methods: {
     to_firstPage(){
       this.$router.push({path: '/'})
     },
     to_userRegisterPage(){
       this.$router.push({path: '/userRegisterPage'})
+    },
+    login_in(){
+      inject("$axios")
+          .get("http://127.0.0.1:8000/search/", {
+            label: this.inputLabel,
+            key: this.inputKey,
+          })
+          .then((val) => {
+            console.log(val);
+            if (this.label === "店铺") {
+              this.stores = val.list
+            } else {
+              this.food = val.list
+            }
+          });
     }
   }
 })
@@ -119,50 +141,41 @@ export default defineComponent({
     color :black;
     font-size: 35px;
     text-align: center;
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 
   .userLoginDetail {
     width:80%;
     color :#606266;
     text-align: center;
-    margin-top: 10px;
     font-family: "微软雅黑";
-    margin-left: auto;
-    margin-right: auto;
     font-weight:bold;
-    margin-bottom: 30px;
-    
+    margin: 10px auto 30px;
+
   }
   
   .nameInputBoxItem {
     width: 300px;
-    margin-top: 0%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 0%;
+    margin: 0 auto;
     height: 45px;
   }
 
   .passwordInputBoxItem {
     width: 300px;
-    margin-bottom: 10px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10px;
+    margin: 10px auto;
     height: 45px;
   }
 
   .rememberBoxItem {
     width: 100px;
     margin-top: 30px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     margin-left: 30px;
   }
 
   .loginButtonItem {
     width: 300px;
-    margin-top:0px;
+    margin-top: 0;
     margin-left: auto;
     margin-right: auto;
     
@@ -173,9 +186,6 @@ export default defineComponent({
   }
 
   .el-link {
-    margin-right: 8px;
-  }
-  .el-link .el-icon--right.el-icon {
     vertical-align: text-bottom;
   }
 

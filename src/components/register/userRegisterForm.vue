@@ -15,43 +15,45 @@
     <el-form 
       :model="form"
       :rules="rules"
-      ref="form"
+      status-icon
       class="userRegisterForm" 
     >
   
-      <h3 class = "userRegisterTitle">
+      <h3 class="userRegisterTitle">
         新用户注册
       </h3>
   
-      <p class = "userRegisterDetail">
+      <p class="userRegisterDetail">
         吃饱了才有力气减肥!
       </p>
   
       <el-form-item prop="name" class = "nameInputBoxItem">
 
         <el-input
-          v-model="input"
+          v-model="form.name"
           type="name"
-          size = "large"
+          size="large"
           placeholder="用户名"
-          class = "nameInputBox"
+          maxlength="20"
+          class="nameInputBox"
           >
             <template #prefix>
               <el-icon class="el-input__icon"><user /></el-icon>
             </template>
-          </el-input>
+        </el-input>
 
       </el-form-item>
   
   
       <el-form-item prop="password" class = "passwordInputBoxItem">
         <el-input
-          v-model="input"
+          v-model="form.password"
           type="password"
           placeholder="设置密码"
           show-password
-          size = "large"
-          class = "passwordInputBox"  
+          size="large"
+          minlength="6"
+          class="passwordInputBox"
         >
           <template #prefix>
             <el-icon class="el-input__icon"><lock /></el-icon>
@@ -60,14 +62,14 @@
         </el-input>
       </el-form-item>
 
-      <el-form-item prop="password" class = "passwordConfirmBoxItem">
+      <el-form-item prop="password_confirm" class = "passwordConfirmBoxItem">
         <el-input
-          v-model="input"
+          v-model="form.password_confirm"
           type="password"
           placeholder="确认密码"
           show-password
-          size = "large"
-          class = "passwordConfirmBox"  
+          size="large"
+          class="passwordConfirmBox"
         >
           <template #prefix>
             <el-icon class="el-input__icon"><lock /></el-icon>
@@ -78,11 +80,12 @@
 
       <el-form-item prop="address" class = "addressInputBoxItem">
         <el-input
-          v-model="input"
+          v-model="form.address"
           type="address"
-          placeholder="设置收获地址"
-          size = "large"
-          class = "addressInputBox"  
+          placeholder="设置收货地址"
+          size="large"
+          maxlength="256"
+          class="addressInputBox"
         >
           <template #prefix>
             <el-icon class="el-input__icon"><position /></el-icon>
@@ -91,13 +94,14 @@
         </el-input>
       </el-form-item>
 
-      <el-form-item prop="card_num" class = "cardNumInputBoxItem">
+      <el-form-item prop="card" class = "cardNumInputBoxItem">
         <el-input
-          v-model="input"
-          type="card_num"
+          v-model="form.card"
+          type="card"
           placeholder="银行卡卡号"
-          size = "large"
-          class = "cardNumInputBox"  
+          size="large"
+          maxlength="30"
+          class="cardNumInputBox"
         >
           <template #prefix>
             <el-icon class="el-input__icon"><CreditCard /></el-icon>
@@ -114,7 +118,8 @@
           round
           plain
           size = "large"
-          class = "registerButton"  
+          class = "registerButton"
+          @click = "userRegister"
         >
           注册
         </el-button>
@@ -126,23 +131,116 @@
       <el-form-item class = "loginLinkItem">
         
         <el-row class = "row">
-        <el-col :span="12">  
+          <el-col :span="12">
             <el-link :underline="false">
-            登录账号
-          </el-link>
+              登录账号
+            </el-link>
           </el-col>
-        <el-col :span="12">
-          <el-link :underline="false">
-            返回首页
-          </el-link>
-        </el-col>
-      </el-row>
+          <el-col :span="12">
+            <el-link :underline="false">
+              返回首页
+            </el-link>
+          </el-col>
+        </el-row>
           
       </el-form-item>
     </el-form>
   </template>
   
-  <script lang="ts" setup>
+  <script setup>
+  import { reactive, ref } from "vue"
+  import { ElMessage } from "element-plus"
+  import { user_register } from "@/api/register";
+
+  const form = reactive({
+    name: '',
+    password: '',
+    password_confirm: '',
+    address: '',
+    card: ''
+  })
+
+  const formRef = ref(null)
+
+  const validatePass = (rule, value, callback) => {
+    if (value.toString().length < 6) {
+      callback(new Error('请设置至少6位的密码'))
+    } else {
+      if (form.password_confirm !== '') {
+        if (!formRef.value) return
+        formRef.value.validateField('password_confirm', () => null)
+      }
+      callback()
+    }
+  }
+  const validatePass2 = (rule, value, callback) => {
+    if (value === '') {
+      callback(new Error('请再次输入密码'))
+    } else if (value !== form.password) {
+      callback(new Error('两次输入密码不一致'))
+    } else {
+      callback()
+    }
+  }
+
+  const rules = ref({
+    name: [
+      {
+        required: true,
+        message: '请输入注册用户名',
+        trigger: 'blur'
+      },
+      {
+        max: 256,
+        message: '用户名过长，请重新输入'
+      }
+    ],
+    password: [
+      {
+        required: true,
+        validator: validatePass,
+        trigger: 'change'
+      }
+    ],
+    password_confirm: [
+      {
+        required: true,
+        validator: validatePass2,
+        trigger: 'change'
+      }
+    ],
+    address: [
+      {
+        required: true,
+        message: '请输入收货地址',
+        trigger: 'blur'
+      }
+    ],
+    card: [
+      {
+        required: true,
+        message: '请输入正确的银行卡卡号',
+        trigger: 'blur'
+      }
+    ],
+  })
+
+  const userRegister = () => {
+    user_register({
+      name: form.name,
+      password: form.password,
+      address: form.address,
+      card_num: form.card
+    }).then(res => {
+      let content = res.data
+      console.log(content)
+      if (content.code === "200") {
+        ElMessage({message: content.hint, type: 'success'})
+      } else if (content.code === "300") {
+        ElMessage({message: content.hint, type: 'error'})
+      }
+    })
+  }
   
   </script>
   
@@ -159,89 +257,61 @@
       color :black;
       font-size: 35px;
       text-align: center;
-      margin-bottom: 0%;
-      margin-top: 0%;
+      margin-bottom: 0;
+      margin-top: 0;
     }
   
     .userRegisterDetail {
-      width:80%;
-      color :#606266;
+      width: 80%;
+      color: #606266;
       text-align: center;
-      margin-top: 10px;
       font-family: "微软雅黑";
-      margin-left: auto;
-      margin-right: auto;
       font-weight:bold;
-      margin-bottom: 30px;
+      margin: 10px auto 30px;
     }
 
-    .Label {
-      /* font-weight: bold; */
-    }
-
-    
-
-    .NameInputBoxItem {
-    width: 300px;
-    margin-top: 0%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 0%;
-    height: 45px;
+    .nameInputBoxItem {
+      width: 300px;
+      margin: 0 auto;
+      height: 45px;
     /* border: 1px solid black; */
-  }
+    }
 
+    /* .nameInputBox {
+      margin-top: 0%;
+      border: 1px solid black;
+    } */
 
-  /* .nameInputBox {
-    margin-top: 0%;
-    border: 1px solid black;
-  } */
-
-  .passwordInputBoxItem {
-    width: 300px;
-    margin-bottom: 10px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10px;
-    height: 45px;
-  }
+    .passwordInputBoxItem {
+      width: 300px;
+      margin: 10px auto;
+      height: 45px;
+    }
     
     .passwordConfirmBoxItem {
       width: 300px;
-      margin-bottom: 10px;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 10px;
+      margin: 10px auto;
       height: 45px;
     }
 
     .addressInputBoxItem {
       width: 300px;
-      margin-bottom: 10px;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 10px;
+      margin: 10px auto;
       height: 45px;
     }
 
 
     .cardNumInputBoxItem {
       width: 300px;
-      margin-bottom: 10px;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 10px;
+      margin: 10px auto;
       height: 45px;
     }
 
-    .cardPasswordInputBoxItem {
-      width: 300px;
-      margin-bottom: 10px;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 10px;
-      height: 45px;
-    }
+    /*.cardPasswordInputBoxItem {*/
+    /*  width: 300px;*/
+    /*  margin: 10px auto;*/
+    /*  height: 45px;*/
+    /*}*/
   
     .registerButtonItem {
       width: 300px;
@@ -252,13 +322,6 @@
 
     .registerButton {
       width: 300px;
-    }
-  
-    .el-link {
-      margin-right: 8px;
-    }
-    .el-link .el-icon--right.el-icon {
-      vertical-align: text-bottom;
     }
   
     .loginLinkItem {

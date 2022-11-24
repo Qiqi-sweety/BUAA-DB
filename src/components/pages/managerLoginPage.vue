@@ -4,7 +4,7 @@
     <div class="loginLayout">
       <el-container>
         <el-header>
-            <el-row>
+          <el-row>
             <el-col :span="4">
                 <img alt="Logo" src="../../assets/logo.png" class = "topLogoClass">         
             </el-col>
@@ -16,9 +16,8 @@
                     </template>
                 </n-tag>
             </el-col>
-            <el-col :span="4"></el-col>
             <el-col :span="9"></el-col>
-            <el-col :span="3">
+            <el-col :span="7">
               <n-button @click.native="to_userLoginPage" quaternary ghost class = "becomeUserButtonClass" color = "black">
                 用户登录
               </n-button>
@@ -34,11 +33,11 @@
             style = "margin:auto;
                     width: 1000px;
                     height: 550px;
-                    padding-left: 0px;
-                    padding-top:0px;
+                    padding-left: 0;
+                    padding-top: 0;
                     margin-top:100px;"
             >
-              <el-row style = "padding-top: 0px;">
+              <el-row style = "padding-top: 0;">
                 <el-col :span="12" 
                 style = "height: 510px;
                         padding-top: 25px;"
@@ -61,7 +60,7 @@
   </template>
     
   <script>
-    import { defineComponent ,ref } from 'vue'
+    import { defineComponent } from 'vue'
     import { NTag,NButton} from 'naive-ui'
     import managerLoginForm from '../login/managerLoginForm.vue'
     
@@ -84,14 +83,22 @@
   </script>
     
   <style>
-    .el-header {
-      /* background-color: #f4d870; */
-      height: 60px;
-      background-color: white;
-    }
+    /*.el-header {*/
+    /*  !* background-color: #f4d870; *!*/
+    /*  height: 60px;*/
+    /*  background-color: white;*/
+    /*}*/
     
-    .el-main {
-      height: 870px;
+    /*.el-main {*/
+    /*  height: 870px;*/
+    /*}*/
+
+    .becomeUserButtonClass {
+      margin: 20px 0 0 0;
+    }
+
+    .becomeStoreButtonClass {
+      margin: 20px 0 0 0;
     }
     
   </style>

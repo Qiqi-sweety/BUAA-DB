@@ -4,7 +4,7 @@
     <n-card hoverable class = "storeCardClass2" embedded>
         <el-row>
             <el-col :span="10">
-                <img :src="{storeLogoUrl}" class = "storeCardImageClass2">
+                <img :src="{storeLogoUrl}" class = "storeCardImageClass2" alt="LOGO">
             </el-col>
             <el-col :span="14">
                 <h3 class = "nameClass">
@@ -44,7 +44,7 @@
   </template>
 
 <script>
-import { defineComponent ,ref } from 'vue'
+import { defineComponent } from 'vue'
 import { NCarousel,NCard,NButton, NRate} from 'naive-ui'
 import storeCardFoodCard from './storeCardFoodCard.vue'
 export default defineComponent({
@@ -56,7 +56,7 @@ export default defineComponent({
     NRate,
     storeCardFoodCard,
   },
-  props:{
+  props: {
       storeLogoUrl:{
         type:String
       },
@@ -72,7 +72,7 @@ export default defineComponent({
       number:{
         type:Number
       },
-    }
+  }
 })
 </script>
 
@@ -80,11 +80,11 @@ export default defineComponent({
 .storeCardClass2 {
     width: 550px;
     height: 450px;
-    padding-left: 0%;
+    padding-left: 0;
 }
 
 .storeCardImageClass2 {
-    margin-left: 0%;
+    margin-left: 0;
     width: 200px;
     height: 200px;
    
@@ -92,7 +92,7 @@ export default defineComponent({
 
 .nameClass {
     font-size: 25px;
-    margin-top: 0%;
+    margin-top: 0;
     
 }
 
@@ -110,17 +110,17 @@ export default defineComponent({
     
 }
 
-.foodName {
-    margin-top: 0%;
-    margin-left: 10px;
-    margin-bottom:0% ;
-}
+/*.foodName {*/
+/*    margin-top: 0%;*/
+/*    margin-left: 10px;*/
+/*    margin-bottom:0% ;*/
+/*}*/
 
-.foodPrice {
-    margin-top: 0%;
-    margin-left: 10px;
-    font-weight: bold;
-    
-}
+/*.foodPrice {*/
+/*    margin-top: 0%;*/
+/*    margin-left: 10px;*/
+/*    font-weight: bold;*/
+/*    */
+/*}*/
 
 </style>
