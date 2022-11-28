@@ -1,7 +1,10 @@
 import json
+import uuid
 
 from django.contrib.auth import get_user_model, authenticate, login
 
+from django.core.files import File
+from django.core.files.images import ImageFile
 from utils.meta_wrapper import JSR
 from django.views import View
 from Takeout.models import *
@@ -63,10 +66,12 @@ class store_register_step2(View):
             return "300", "modify", "地址不能为空"
         if kwargs["info"] == "":
             return "300", "modify", "店铺简介不能为空"
+        if kwargs["license"] == "":
+            return "300", "modify", "license不能为空"
 
-        # TODO: license photo
         cookie = get_user_model().objects.create_user(kwargs['name'], kwargs['password'])
-        store = Store(store_name=kwargs['name'], logo=kwargs["logo"], address=kwargs["address"], info=kwargs["info"])
+        store = Store(store_name=kwargs['name'], logo=kwargs["logo"], address=kwargs["address"], info=kwargs["info"],
+                      license=kwargs["license"])
         cookie.store = store
         cookie.type = "store"
         cookie.save()
@@ -91,6 +96,27 @@ class cookie_login(View):
             login(request, user)
             return "200", "登陆成功"
 
+
+class update_photo(View):
+    @JSR('code', 'message','url')
+    def post(self, request):
+        # if not request.user.is_authenticated:
+        #     return "403", "还没登录"
+
+        update_photo = request.FILES
+        if(len(update_photo) == 0):
+            return "400", "没有图片"
+        if(len(update_photo) > 1):
+            return "400", "只能上传一张图片"
+        img=list(update_photo.values())[0]
+        if img.size > 1024 * 1024:
+            return "400", "图片过大"
+        # generate random name
+        name = str(uuid.uuid4()) + '.jpg'
+        with open(f'media/{name}', 'wb+') as destination:
+            for chunk in img.chunks():
+                destination.write(chunk)
+        return "200", "success","/media/"+name
 #
 # class store_login(View):
 #     @JSR('code', 'message', 'hint')

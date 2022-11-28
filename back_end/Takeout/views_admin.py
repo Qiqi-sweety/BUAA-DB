@@ -1,8 +1,8 @@
 import json
 
-from back_end.utils.meta_wrapper import JSR
+from utils.meta_wrapper import JSR
 from django.views import View
-from models import *
+from Takeout.models import *
 from utils.dump import dump_store, dump_item, dump_order, dump_comment
 
 
