@@ -8,10 +8,7 @@
 -->
 
 <template>
-  <el-form 
-    :model="form"
-    :rules="rules"
-    ref="form"
+  <el-form
     class="managerLoginForm" 
   >
 
@@ -25,7 +22,7 @@
 
     <el-form-item prop="name" class = "nameInputBoxItem">
       <el-input
-        v-model="input"
+        v-model="inputName"
         type="name"
         placeholder="用户名"
         size = "large"
@@ -41,7 +38,7 @@
 
     <el-form-item prop="password" class = "passwordInputBoxItem">
       <el-input
-        v-model="input"
+        v-model="inputPw"
         type="password"
         placeholder="密码"
         show-password
@@ -57,19 +54,19 @@
 
     <el-form-item class = "rememberBoxItem">
 
-      <el-checkbox label="记住密码" size = "large"/>
+      <el-checkbox v-model="remPw" label="记住密码" size = "large"/>
       
     </el-form-item>
 
     <el-form-item class = "loginButtonItem">
 
       <el-button 
-        color = "#fec01b" 
-        :dark="isDark" 
+        color = "#fec01b"
         round
         plain
         size = "large"
-        class = "loginButton"  
+        class = "loginButton"
+        @click="managerLogin"
       >
         登录
       </el-button>
@@ -91,11 +88,33 @@
 
 <script>
 import {defineComponent} from "vue";
+import {login} from "@/api/login";
+import {ElMessage} from "element-plus";
 
 export default defineComponent({
+  data() {
+    return {
+      inputName: '',
+      inputPw: '',
+      remPw: false
+    }
+  },
   methods: {
     to_firstPage(){
       this.$router.push({path: '/'})
+    },
+    managerLogin(){
+      login({
+        name: this.inputName,
+        password: this.inputPw
+      }).then(res => {
+        let content = res.data
+        console.log(content)
+        ElMessage({message: content.message, type: content.hint})
+        if (content.code === '200') {
+          this.$router.push('/managerMainPage')
+        }
+      })
     }
   }
 })

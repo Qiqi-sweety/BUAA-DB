@@ -1,20 +1,8 @@
 <!-- storeLoginPage的一部分——左侧输入表单表单部分 -->
 
-<!-- TODO:
-登录按钮：根据输入数据得到的后端返回值实现登录反馈
-  1.“店铺未注册”出现弹窗
-  2.“密码错误”出现弹窗
-  3.“登陆成功”跳转到userMainPage——用户主页  
-
-  注册账号按钮：跳转到storeRegisterPage
-
--->
 
 <template>
-  <el-form 
-    :model="form"
-    :rules="rules"
-    ref="form"
+  <el-form
     class="storeLoginForm" 
   >
 
@@ -28,7 +16,7 @@
 
     <el-form-item prop="name" class = "nameInputBoxItem">
       <el-input
-        v-model="input"
+        v-model="inputName"
         type="name"
         placeholder="店铺名"
         size = "large"
@@ -44,7 +32,7 @@
 
     <el-form-item prop="password" class = "passwordInputBoxItem">
       <el-input
-        v-model="input"
+        v-model="inputPw"
         type="password"
         placeholder="密码"
         show-password
@@ -60,7 +48,7 @@
 
     <el-form-item class = "rememberBoxItem">
 
-      <el-checkbox label="记住密码" size = "large"/>
+      <el-checkbox v-model="remPw" label="记住密码" size = "large"/>
       
     </el-form-item>
 
@@ -71,7 +59,8 @@
         round
         plain
         size = "large"
-        class = "loginButton"  
+        class = "loginButton"
+        @click="storeLogin"
       >
         登录
       </el-button>
@@ -97,14 +86,36 @@
 
 <script>
 import {defineComponent} from "vue";
+import {ElMessage} from "element-plus";
+import {login} from "@/api/login";
 
 export default defineComponent({
+  data() {
+    return {
+      inputName: '',
+      inputPw: '',
+      remPw: false
+    }
+  },
   methods: {
     to_firstPage(){
       this.$router.push({path: '/'})
     },
     to_storeRegisterPage(){
       this.$router.push({path: '/storeRegisterPage'})
+    },
+    storeLogin(){
+      login({
+        name: this.inputName,
+        password: this.inputPw
+      }).then(res => {
+        let content = res.data
+        console.log(content)
+        ElMessage({message: content.message, type: content.hint})
+        if (content.code === '200') {
+          this.$router.push('/storeMainPage')
+        }
+      })
     }
   }
 })
@@ -122,55 +133,41 @@ export default defineComponent({
     color :black;
     font-size: 35px;
     text-align: center;
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 
   .storeLoginDetail {
     width:80%;
     color :#606266;
     text-align: center;
-    margin-top: 10px;
     font-family: "微软雅黑";
-    margin-left: auto;
-    margin-right: auto;
     font-weight:bold;
-    margin-bottom: 30px;
-    
+    margin: 10px auto 30px;
   }
   
   .nameInputBoxItem {
     width: 300px;
-    width: 300px;
-    margin-top: 0px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 0px;
+    margin: 0 auto;
     height: 45px;
   }
   
   .passwordInputBoxItem {
     width: 300px;
-    margin-bottom: 10px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10px;
+    margin: 10px auto;
     height: 45px;
   }
 
   .rememberBoxItem {
     width: 100px;
     margin-top: 30px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     margin-left: 30px;
   }
 
 
   .loginButtonItem {
     width: 300px;
-    margin-top:0px;
-    margin-left: auto;
-    margin-right: auto;
-    
+    margin: 0 auto;
   }
 
   .loginButton {
