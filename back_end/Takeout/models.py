@@ -35,8 +35,8 @@ class User(models.Model):
 class Store(models.Model):
     store_name = models.CharField(max_length=20, verbose_name="店铺名", unique=True)
     address = models.TextField(blank=False, default="", max_length=256, verbose_name="地址")
-    license = models.ImageField(verbose_name="商家执照", name="", width_field=15, height_field=20)
-    logo = models.ImageField(verbose_name="店铺头像", blank=True, width_field=15, height_field=20)
+    license = models.TextField(blank=False, default="", max_length=256, verbose_name="营业执照")
+    logo = models.TextField(blank=False, default="", max_length=256, verbose_name="logo")
     info = models.TextField(verbose_name="商铺描述", max_length=1000)
 
     star = models.FloatField(verbose_name="星级", default=5)

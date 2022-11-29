@@ -13,18 +13,22 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from Takeout import views_homepage, views_LR, views_switch, views_store, views_admin
-
+from django.conf import settings
 from Takeout import views_user
+from django.urls import path, include, re_path
+from django.views.static import serve
 
 urlpatterns = [
+    re_path(r'^media/(?P<path>.*)$', serve,
+        {"document_root": settings.MEDIA_ROOT}, name='media'),
     path('admin/', admin.site.urls),
     # views_LR
-    path('user/login/', views_LR.cookie_login.as_view()),
-    path('store/login/', views_LR.cookie_login.as_view()),
-    path('admin/login/', views_LR.cookie_login.as_view()),
+    path('image/update/', views_LR.update_photo.as_view()),
+    path('login/', views_LR.cookie_login.as_view()),
     path('user/register/', views_LR.user_register.as_view()),
     path('store/register/step1/', views_LR.store_register_step1.as_view()),
     path('store/register/step2/', views_LR.store_register_step2.as_view()),

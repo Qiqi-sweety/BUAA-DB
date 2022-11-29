@@ -87,7 +87,7 @@ class add_good(View):
 
 
 class manage_orders(View):
-    @JSR('hint')
+    @JSR('code', 'message', 'list')
     def post(self, request):
         try:
             kwargs: dict = json.loads(request.body)
@@ -105,7 +105,7 @@ class manage_orders(View):
         return_list = []
         for i in orders:
             return_list.append(dump_order(i))
-        return return_list
+        return "200", "success", return_list
 
 
 class process_order(View):
@@ -163,7 +163,7 @@ class show_info(View):
 
 
 class change_info(View):
-    @JSR('code','message')
+    @JSR('code', 'message')
     def post(self, request):
         try:
             kwargs: dict = json.loads(request.body)
