@@ -132,12 +132,12 @@
         
         <el-row class = "row">
           <el-col :span="12">
-            <el-link :underline="false">
+            <el-link :underline="false" @click="to_userLoginPage">
               登录账号
             </el-link>
           </el-col>
           <el-col :span="12">
-            <el-link :underline="false">
+            <el-link :underline="false" @click="to_firstPage">
               返回首页
             </el-link>
           </el-col>
@@ -148,9 +148,11 @@
   </template>
   
   <script setup>
-  import { reactive, ref } from "vue"
-  import { ElMessage } from "element-plus"
-  import { user_register } from "@/api/register";
+  import {reactive, ref} from "vue"
+  import {ElMessage} from "element-plus"
+  import {user_register} from "@/api/register";
+  import {useRouter} from "vue-router";
+  const router = useRouter()
 
   const form = reactive({
     name: '',
@@ -167,6 +169,7 @@
       callback(new Error('请设置至少6位的密码'))
     } else {
       if (form.password_confirm !== '') {
+        console.log(formRef.value)
         if (!formRef.value) return
         formRef.value.validateField('password_confirm', () => null)
       }
@@ -192,21 +195,30 @@
       },
       {
         max: 256,
-        message: '用户名过长，请重新输入'
+        message: '用户名过长，请重新输入',
+        trigger: 'change'
       }
     ],
     password: [
       {
-        required: true,
         validator: validatePass,
         trigger: 'change'
+      },
+      {
+        required: true,
+        validator: validatePass,
+        trigger: 'blur'
       }
     ],
     password_confirm: [
       {
-        required: true,
         validator: validatePass2,
         trigger: 'change'
+      },
+      {
+        required: true,
+        validator: validatePass2,
+        trigger: 'blur'
       }
     ],
     address: [
@@ -226,6 +238,10 @@
   })
 
   const userRegister = () => {
+    if (form.password !== form.password_confirm) {
+      ElMessage({message: "未确认密码", type: "error"})
+      return
+    }
     user_register({
       name: form.name,
       password: form.password,
@@ -234,12 +250,19 @@
     }).then(res => {
       let content = res.data
       console.log(content)
-      if (content.code === "200") {
-        ElMessage({message: content.hint, type: 'success'})
-      } else if (content.code === "300") {
-        ElMessage({message: content.hint, type: 'error'})
+      ElMessage({message: content.message, type: content.hint})
+      if (content.code === '200') {
+        router.push('/userLoginPage')
       }
     })
+  }
+
+  const to_userLoginPage = () => {
+    router.push('/userLoginPage')
+  }
+
+  const to_firstPage = () => {
+    router.push('/')
   }
   
   </script>

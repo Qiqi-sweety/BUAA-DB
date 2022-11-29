@@ -19,22 +19,14 @@
         <el-form 
           :model="form"
           :rules="rules"
-          ref="form"
           class="storeRegisterLeft2" 
         >
-          <el-form-item prop="address" class = "shopAddressInputBox">
+          <el-form-item prop="address" class = "addressInputBoxItem">
             <el-input
-              v-model="input"
+              v-model="form.address"
               type="address"
               placeholder="店铺地址"
               size = "large"
-              style = "width: 300px;
-                margin-top: 10px;
-                margin-left: auto;
-                margin-right: auto;
-                margin-bottom: 10px;
-                height: 45px;"
-            
             >
               <template #prefix>
                 <el-icon class="el-input__icon"><location /></el-icon>
@@ -43,17 +35,13 @@
       
           </el-form-item>
 
-          <el-form-item prop="intro" class = "introInputBox"
-            style="width: 300px;
-                    margin-bottom: 10px;
-                    margin-left: auto;
-                    margin-right: auto;
-                    margin-top: 20px;
-                    height: 70px;">
+          <el-form-item prop="info" class = "introInputBoxItem">
             <el-input
-                v-model="textarea2"
+                v-model="form.info"
                 :autosize="{ minRows: 3, maxRows: 4 }"
                 type="textarea"
+                maxlength="500"
+                show-word-limit
                 placeholder="店铺介绍"
             >
             
@@ -68,27 +56,28 @@
             <el-row style = "width: 300px;">
 
 
-              <el-col :span="12">
-                <p
-                style = "text-align: center;
+              <el-col :span="8">
+                <p style = "text-align: center;
                       font-size: 15px;
-                      margin-left:20%;
+                      margin-left: 5%;
                       font-weight: bold;
-                      color:#606266;">
-          上传店铺头像</p>
+                      color:#606266;">上传店铺头像</p>
               </el-col>
 
 
               <el-col :span="12">
+<!--                todo-->
                 <el-upload
-                class="avatar-uploader-head"
-                action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                class="logo-uploader"
                 :show-file-list="false"
-                :on-success="handleAvatarSuccess"
-                :before-upload="beforeAvatarUpload"
-                >
-                  <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-                  <el-icon v-else class="logo-uploader-icon"><Plus /></el-icon>
+                :limit="1"
+                action="/api/image/update/"
+                list-type="picture"
+                :on-success="handleLogoSuccess">
+<!--                :before-upload="beforeLogoUpload"-->
+
+                  <el-image v-if="form.logo" :src="`/api${form.logo}`" class="avatar" :fit='contain'/>
+                  <el-icon v-else><Plus /></el-icon>
                 </el-upload>
               </el-col>
 
@@ -113,6 +102,7 @@
                 margin-top:2%;
                 margin-left: auto;
                 margin-right: auto;"
+              @click="storeRegister2"
             >
               提交申请
             </el-button>
@@ -121,19 +111,21 @@
 
           
       
-          <el-form-item style = "margin-left: 130px;width: 300px;
-          margin-left: 30%;
-          padding: 0;
-          margin-bottom: 0;">
+          <el-form-item style = "width: 300px;
+                                margin-top: 10px;
+                                margin-left: 22%;
+                                padding: 0;
+                                margin-bottom: 10px;"
+          >
             
             <el-row style = " width : 350px">
             <el-col :span="12">  
-                <el-link :underline="false" style = "margin-right: 8px;">
+                <el-link :underline="false" @click="to_storeLoginPage">
                 登录账号
               </el-link>
               </el-col>
             <el-col :span="12">
-              <el-link :underline="false">
+              <el-link :underline="false" @click="to_firstPage">
                 返回首页
               </el-link>
             </el-col>
@@ -145,16 +137,24 @@
 
 
       <el-col :span="12" class = "storeRegisterImageFormCol">
+<!--        todo-->
         <el-upload
-            class="avatar-uploader-license"
-            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
-        >
-            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-            <el-icon v-else class="license-uploader-icon"><Plus /></el-icon>
+          class="avatar-uploader-license"
+          :show-file-list="false"
+          :limit="1"
+          action="/api/image/update/"
+          list-type="picture-card"
+          :on-success="handleLicenseSuccess">
+<!--            :before-upload="beforeAvatarUpload"-->
+
+          <el-image v-if="form.license" :src="`/api${form.license}`" class="avatar"/>
+          <el-icon v-else><Plus /></el-icon>
+
         </el-upload>
+
+<!--        <el-dialog v-model="dialogVisible2">-->
+<!--          <img w-full :src="form.license" alt="图片预览" />-->
+<!--        </el-dialog>-->
 
         <p class = "uploadDetail">上传营业执照</p>
 
@@ -166,11 +166,96 @@
   
 </template>
 
-<script>
-export default {
-  name: 'storeRegisterMain2',
-  components: {
-  }
+<script setup>
+import {ref, reactive, toRefs} from "vue"
+import {ElMessage} from "element-plus"
+import { Delete, Download, Plus, ZoomIn } from '@element-plus/icons-vue'
+import {store_register_2} from "@/api/register";
+import {useRouter} from "vue-router";
+const router = useRouter()
+
+const props = defineProps({
+  // name: {type: String, required: true},
+  // pw: {type: String, required: true}
+  name: String,
+  pw: String
+})
+
+// const former_form = toRefs(props)
+
+const form = reactive({
+  name: props.name,
+  password: props.pw,
+  address: '',
+  info: '',
+  logo: '',
+  license: ''
+})
+
+const dialogVisible1 = ref(false)
+const dialogVisible2 = ref(false)
+const disabled1 = ref(false)
+const disabled2 = ref(false)
+
+const handleLogoSuccess = (res) => {
+  console.log(res)
+  form.logo = res.url
+}
+
+const handleLicenseSuccess = (res) => {
+  console.log(res)
+  form.license = res.url
+}
+
+const handleRemove = (file) => {
+  console.log(file)
+}
+
+const handleLicensePreview = (file) => {
+  form.license = file.url
+  dialogVisible2.value = true
+}
+
+const handleDownload = (file) => {
+  console.log(file)
+}
+
+const rules = ref({
+  address: [
+    {
+      required: true,
+      message: '请输入店铺地址',
+      trigger: 'blur'
+    }
+  ],
+  info: [
+    {
+      required: true,
+      message: '请输入店铺介绍',
+      trigger: 'blur'
+    }
+  ]
+})
+
+const storeRegister2 = () => {
+  console.log(form)
+  store_register_2(form)
+      .then(res => {
+        let content = res.data
+        console.log(content)
+        ElMessage({message: content.message, type: content.hint})
+        if (content.code === '200') {
+          router.push('/storeRegisterPage/step3')
+        }
+      })
+}
+
+const to_storeLoginPage = () => {
+  router.push('/storeLoginPage')
+}
+
+const to_firstPage = () => {
+  router.push('/')
 }
 </script>
 
@@ -184,8 +269,14 @@ export default {
 
 
 .storeRegisterLeft2 {
-  margin:auto;
-  
+  margin-left: 100px;
+  margin-bottom: 50px;
+}
+
+.introInputBoxItem {
+  width: 300px;
+  margin: 10px auto;
+  height: 70px;
 }
 
 .storeRegisterImageFormClass {
@@ -211,7 +302,7 @@ export default {
 
   }
   .storeRegisterRightItem {
-    margin-top: 0%;
+    margin-top: 0;
     margin-left: 20%;
     
   }
@@ -219,13 +310,12 @@ export default {
   .uploadDetail {
     text-align: center;
     font-size: 18px;
-    margin-left:20%;
     font-weight: bold;
     color:#606266;
   }
 
     .avatar-uploader-license .el-upload {
-    border: 1px dashed var(--el-border-color);
+    border: 1px dashed;
     border-radius: 6px;
     cursor: pointer;
     position: relative;

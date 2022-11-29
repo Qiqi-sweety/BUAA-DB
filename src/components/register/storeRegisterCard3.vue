@@ -1,16 +1,8 @@
 <!-- storeRegisterPage的组件三:等待申请-->
 
-<!-- TODO:
-登录账号按钮：跳转到storeLoginPage
-
-返回首页按钮：跳转到firstPage -->
-
 <template>
     <el-card class="storeRegisterBoxCard">
-      <el-form 
-        :model="form"
-        :rules="rules"
-        ref="form"
+      <el-form
         class="storeRegisterForm" 
       >
         <h3 
@@ -35,10 +27,7 @@
   
         <el-form-item class = "storeRegisterMainItem">
 
-          <el-form 
-            :model="form"
-            :rules="rules"
-            ref="form"
+          <el-form
             style = "margin-right:0px;
                     width:100%;
                     height: 380px;"
@@ -71,12 +60,12 @@
                     padding: 0 0 0 35px;">
               <el-row class = "row">
               <el-col :span="12">  
-                  <el-link :underline="false">
+                  <el-link :underline="false" @click.native="to_storeLoginPage">
                   登录账号
                 </el-link>
                 </el-col>
               <el-col :span="12">
-                <el-link :underline="false">
+                <el-link :underline="false"  @click.native="to_firstPage">
                   返回首页
                 </el-link>
               </el-col>
@@ -98,6 +87,14 @@
     export default {
       name: 'storeRegisterCard3',
       components: {
+      },
+      methods: {
+        to_storeLoginPage(){
+          this.$router.push({path: '/storeLoginPage'})
+        },
+        to_firstPage(){
+          this.$router.push({path: '/'})
+        }
       }
     }
     
@@ -108,8 +105,8 @@
     margin:auto;
     width: 1000px;
     height: 550px;
-    padding-left: 0px;
-    padding-top:0px;
+    padding-left: 0;
+    padding-top: 0;
   }
   
   .storeRegisterForm {

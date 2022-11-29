@@ -62,9 +62,9 @@
     
   <script>
     import userLoginForm from '../login/userLoginForm.vue'
-    import { defineComponent ,ref } from 'vue'
-    import { NTag,NButton} from 'naive-ui'
-    
+    import { defineComponent } from 'vue'
+    import { NTag, NButton } from 'naive-ui'
+
     export default defineComponent({
       name: 'userLoginPage',
       components: {
@@ -84,14 +84,14 @@
   </script>
     
   <style>
-    .el-header {
-      /* background-color: #f4d870; */
-      height: 60px;
-      background-color: white;
-    }
+    /*.el-header {*/
+    /*  !* background-color: #f4d870; *!*/
+    /*  height: 60px;*/
+    /*  background-color: white;*/
+    /*}*/
     
-    .el-main {
-      height: 870px;
-    }
+    /*.el-main {*/
+    /*  height: 870px;*/
+    /*}*/
     
   </style>

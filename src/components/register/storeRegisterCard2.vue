@@ -4,10 +4,7 @@
 
 <template>
     <el-card class="storeRegisterBoxCard">
-      <el-form 
-        :model="form"
-        :rules="rules"
-        ref="form"
+      <el-form
         class="storeRegisterForm" 
       >
         <h3 
@@ -33,8 +30,8 @@
   
   
         <el-form-item class = "storeRegisterMainItem">
-  
-          <storeRegisterMain2/>
+<!--          {{name}}{{password}}-->
+          <storeRegisterMain2 :name="name" :pw="password"/>
   
         </el-form-item>
   
@@ -44,14 +41,18 @@
   </template>
     
   <script>
-    
     import storeRegisterMain2 from './storeRegisterMain2.vue'
-    
-  
+    import {useRouter} from "vue-router";
+    const router = useRouter()
+
     export default {
       name: 'storeRegisterCard2',
       components: {
         storeRegisterMain2,
+      },
+      props: {
+        name: {type: String, required: true},
+        password: {type: String, required: true},
       }
     }
     
@@ -62,8 +63,8 @@
     margin:auto;
     width: 1000px;
     height: 550px;
-    padding-left: 0px;
-    padding-top:0px;
+    padding-left: 0;
+    padding-top: 0;
   }
   
   .storeRegisterForm {

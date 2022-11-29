@@ -1,17 +1,7 @@
 <!-- userLoginPage的一部分——左侧输入表单表单部分 -->
 
-<!-- TODO:
-根据输入数据得到的后端返回值实现登录反馈
-  1.“用户未注册”出现弹窗
-  2.“密码错误”出现弹窗
-  3.“登陆成功”跳转到userMainPage——用户主页
--->
-
 <template>
-  <el-form 
-    :model="form"
-    :rules="rules"
-    ref="form"
+  <el-form
     class="userLoginForm" 
   >
 
@@ -23,7 +13,7 @@
       吃饱了才有力气减肥!
     </p>
 
-    <el-form-item prop="name" class = "nameInputBoxItem">
+    <el-form-item class = "nameInputBoxItem">
       <el-input
         v-model="inputName"
         type="name"
@@ -39,7 +29,7 @@
     </el-form-item>
 
 
-    <el-form-item prop="password" class = "passwordInputBoxItem">
+    <el-form-item class = "passwordInputBoxItem">
       <el-input
         v-model="inputPw"
         type="password"
@@ -57,19 +47,19 @@
 
     <el-form-item class = "rememberBoxItem">
 
-      <el-checkbox label="记住密码" size = "large"/>
+      <el-checkbox v-model="remPw" label="记住密码" size="large"/>
       
     </el-form-item>
 
     <el-form-item class = "loginButtonItem">
 
       <el-button 
-        color = "#fec01b" 
+        color="#fec01b"
         round
         plain
-        size = "large"
-        class = "loginButton"
-        @click="login_in"
+        size="large"
+        class="loginButton"
+        @click="userLogin"
       >
         登录
       </el-button>
@@ -94,13 +84,16 @@
 </template>
 
 <script>
-import {defineComponent, inject} from "vue";
+import {defineComponent} from "vue";
+import {ElMessage} from "element-plus";
+import {login} from "@/api/login"
 
 export default defineComponent({
   data() {
     return {
       inputName: '',
       inputPw: '',
+      remPw: false
     }
   },
   methods: {
@@ -110,20 +103,18 @@ export default defineComponent({
     to_userRegisterPage(){
       this.$router.push({path: '/userRegisterPage'})
     },
-    login_in(){
-      inject("$axios")
-          .get("http://127.0.0.1:8000/search/", {
-            label: this.inputLabel,
-            key: this.inputKey,
-          })
-          .then((val) => {
-            console.log(val);
-            if (this.label === "店铺") {
-              this.stores = val.list
-            } else {
-              this.food = val.list
-            }
-          });
+    userLogin(){
+      login({
+        name: this.inputName,
+        password: this.inputPw
+      }).then(res => {
+        let content = res.data
+        console.log(content)
+        ElMessage({message: content.message, type: content.hint})
+        if (content.code === '200') {
+          this.$router.push('/userMainPage')
+        }
+      })
     }
   }
 })

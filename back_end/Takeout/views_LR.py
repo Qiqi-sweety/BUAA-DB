@@ -24,6 +24,8 @@ class user_register(View):
             return "300", "error", "用户名已被注册"
         if kwargs["password"] == "":
             return "300", "error", "密码不能为空"
+        elif len(kwargs["password"]) < 6:
+            return "300", "error", "密码须不少于6位"
         if kwargs["address"] == "":
             return "300", "error", "地址不能为空"
         if kwargs["card_num"] == "":
@@ -54,10 +56,6 @@ class store_register_step1(View):
             return "300", "error", "店铺名已被注册"
         if kwargs["password"] == "":
             return "300", "error", "密码不能为空"
-        if kwargs["address"] == "":
-            return "300", "error", "地址不能为空"
-        if kwargs["card_num"] == "":
-            return "300", "error", "卡号不能为空"
 
         return "200", "success", "下一步"
 
@@ -115,12 +113,12 @@ class update_photo(View):
 
         photo = request.FILES
         if len(photo) == 0:
-            return "400", "error", "没有图片"
+            return "400", "error", "没有图片", ""
         if len(photo) > 1:
-            return "400", "error", "只能上传一张图片"
+            return "400", "error", "只能上传一张图片", ""
         img = list(photo.values())[0]
         if img.size > 1024 * 1024:
-            return "400", "error", "图片过大"
+            return "400", "error", "图片过大", ""
         # generate random name
         name = str(uuid.uuid4()) + '.jpg'
         with open(f'media/{name}', 'wb+') as destination:

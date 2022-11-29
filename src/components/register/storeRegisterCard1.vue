@@ -5,10 +5,8 @@
 <template>
   <el-card class="storeRegisterBoxCard">
 
-    <el-form 
-      :model="form"
-      :rules="rules"
-      ref="form"
+    <el-form
+      status-icon
       class="storeRegisterForm" 
     >
       <h3 
@@ -19,6 +17,7 @@
       >
         商家入驻
       </h3>
+
       <el-form-item>
         <el-steps :active="0" finish-status="success" 
         style = "width: 80%;
@@ -27,42 +26,25 @@
           <el-step title="填写店铺信息" />
           <el-step title="等待管理员审核" />
         </el-steps>
-  
       </el-form-item>
-
 
       <el-form-item class = "storeRegisterMainItem">
         <el-row 
-        style = "margin-right: 0;
-                width:100%;">
+        style = "margin-right: 0; width:100%;">
           <el-col :span="12" class = "storeRegisterFormCol">
-
-
             <storeRegisterLeft1 style = "margin:auto;"/>
           </el-col>
-    
-    
           <el-col :span="12" class = "storeRegisterImageFormCol">
             <img alt="storeRegisterLogo" src="../../assets/storeLogo.svg" >
           </el-col>
-    
-    
         </el-row>
-
       </el-form-item>
-
     </el-form>
-
-
   </el-card>
-
-    
 </template>
   
 <script>
-  
   import storeRegisterLeft1 from './storeRegisterLeft1.vue'
-  
 
   export default {
     name: 'storeRegisterCard1',

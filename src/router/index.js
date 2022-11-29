@@ -42,7 +42,12 @@ const router = new createRouter({
                 {
                     path: 'step2',
                     name: 'storeRegisterCard2',
-                    component: () => import('../components/register/storeRegisterCard2.vue')
+                    component: () => import('../components/register/storeRegisterCard2.vue'),
+                    props: (route) => ({
+                        name: route.query.name,
+                        password: route.query.password,
+                    })
+                    // props: true
                 },
                 {
                     path: 'step3',
