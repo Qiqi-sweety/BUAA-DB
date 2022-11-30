@@ -57,13 +57,13 @@
                 <el-col :span="15" style = "padding-top : 30px;height: 100%;">
                   <div>
                     <el-input
-                      v-model="inputKey"
+                      v-model="search.key"
                       placeholder="请输入"
                       size = "large"
                       clearable
                     >
                       <template #prepend>
-                        <el-select v-model="select.label" placeholder="请选择" size="large" style="width: 115px">
+                        <el-select v-model="search.label" placeholder="请选择" size="large" style="width: 115px">
                           <el-option v-for="item in typeList" :key="item.id" :label="item.title" :value="item.title">{{item.title}}</el-option>
 <!--                          <el-option :label="店铺" :value="1" />-->
 <!--                          <el-option :label="商品" :value="2" />-->
@@ -99,7 +99,7 @@
   <script>
     import userMainForm from '../userMain/userMainForm.vue'
     import userSearchResForm from '../userMain/userSearchResForm.vue'
-    import { defineComponent } from 'vue'
+    import { defineComponent, ref } from 'vue'
     import { NTag,NButton} from 'naive-ui'
     
     export default defineComponent({
@@ -112,9 +112,8 @@
       },
       data() {
         return {
-          inputKey: '',
           typeList: [{id: 1, title: '店铺'}, {id: 2, title: '商品'}],
-          select: {id: 1, title: '店铺'}
+          search: {label: '', key: ''}
         }
       },
       methods: {
@@ -133,7 +132,7 @@
         act_search(){
           this.$router.push({
             name: 'userSearchResForm',
-            query: {key: this.inputKey, label: this.select.label}
+            query: {key: this.search.key, label: this.search.label}
           })
         }
       }

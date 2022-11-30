@@ -26,7 +26,7 @@
           </el-form-item>
           <el-form-item style = "padding: 3% 2.5% 3% 3%;">
             <el-row style = "width: 100%;">
-              <div v-for="(item, index) in stores" :key="index">
+              <div v-for="(item, index) in info.stores" :key="index">
                 <el-col style = "padding-right: 0;" :span="12">
                   <store-card1
                       :storeLogoUrl="item.logo"
@@ -37,14 +37,11 @@
                   ></store-card1>
                 </el-col>
               </div>
-              <div v-for="(item, index) in this.food" :key="index">
+              <div v-for="(item, index) in info.food" :key="index">
                 <el-col style = "padding-right: 0;" :span="12">
                   <store-card2
-                      :storeLogoUrl="item.logo"
-                      :storeName="item.name"
-                      :time="'?'"
-                      :star="item.star"
-                      :number="item.sales"
+                      :store="item.store"
+                      :items="item.items"
                   ></store-card2>
                 </el-col>
               </div>
@@ -64,41 +61,62 @@
   import storeCard2 from "../cards/storeCard2.vue"
   import storeCard1 from "../cards/storeCard1.vue"
   import {user_search} from "@/api/userMain";
-
-
+  import {reactive} from "vue";
+  import {useRoute} from "vue-router"
   
   export default {
     name: 'userSearchResForm',
-    props: {
-      key: {type: String, required: true},
-      label: {type: String, default: "商品"}
-    },
     components: {
       storeCard2,
       storeCard1,
     },
     methods: {
     },
-    setup(props) {
-      const stores = [
-        {'id': 789012, 'name': "这是店名2", 'address': "这是地址2",
-          'logo': "/media/144d6d9c-9157-4010-bd23-594ef753f0ca.jpg", 'info': "这是信息2", 'star': 4, 'sales': 888},
-      ];
-      const food = [];
-      user_search({type: props.label, msg: props.key})
-          .then(res => {
-            let content = res.data
-            console.log(content)
-            if (content.code === "200") {
-              if (content.label === "店铺") {
-                // stores = content.list
-              } else {
-                // food = content.list
-              }
-            }
-          })
+    setup() {
+      const info = reactive({
+        stores: [
+          {'id': 123456, 'name': "这是店名1", 'address': "这是地址1",
+            'logo': "/media/2eecdd44-55ae-42d0-9764-f82b979d59a4.jpg", 'info': "这是信息1", 'star': 5, 'sales': 321},
+          {'id': 789012, 'name': "这是店名2", 'address': "这是地址2",
+            'logo': "/media/144d6d9c-9157-4010-bd23-594ef753f0ca.jpg", 'info': "这是信息2", 'star': 4, 'sales': 888},
+        ],
+        food: [
+          {
+            store: {'id': 123456, 'name': "这是店名1", 'address': "这是地址1",
+              'logo': "/media/2eecdd44-55ae-42d0-9764-f82b979d59a4.jpg", 'info': "这是信息1", 'star': 5, 'sales': 321},
+            items: [
+              {'id': 111, 'name': "这是商品1", 'price': 11, 'image': "/media/2eecdd44-55ae-42d0-9764-f82b979d59a4.jpg",
+                'info': "这是店铺介绍", 'sales': 123},
+              {'id': 222, 'name': "这是商品2", 'price': 22, 'image': "/media/2eecdd44-55ae-42d0-9764-f82b979d59a4.jpg",
+                'info': "这是店铺介绍", 'sales': 123},
+              {'id': 333, 'name': "这是商品3", 'price': 33, 'image': "/media/2eecdd44-55ae-42d0-9764-f82b979d59a4.jpg",
+                'info': "这是店铺介绍", 'sales': 123}
+            ]
+          }
+        ]
+      })
+      const route = useRoute()
+
+      // user_search({
+      //   msg: route.query.key,
+      //   type: route.query.label,
+      // }).then(res => {
+      //   let content = res.data
+      //   console.log(content)
+      //   if (content.code === "200") {
+      //     if (content.label === "店铺") {
+      //       content.list.forEach(item => {
+      //         info.stores.push(item)
+      //       })
+      //     } else {
+      //       content.list.forEach(item => {
+      //         info.food.push(item)
+      //       })
+      //     }
+      //   }
+      // })
       return {
-        stores, food
+        info
       }
     }
   }

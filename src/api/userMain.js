@@ -9,8 +9,9 @@ export const user_recommend = (data) => {
 }
 
 export const user_search = (data) => {
+    console.log(JSON.stringify(data))
     return request({
-        url: 'homepage/search',
+        url: 'homepage/search/',
         method: 'POST',
         data: JSON.stringify(data)
     })

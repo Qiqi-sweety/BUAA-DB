@@ -4,21 +4,21 @@
     <n-card hoverable class = "storeCardClass2" embedded>
         <el-row>
             <el-col :span="10">
-                <img :src="`/api${storeLogoUrl}`" class = "storeCardImageClass2" alt="LOGO">
+                <img :src="`/api${store.logo}`" class = "storeCardImageClass2" alt="LOGO">
             </el-col>
             <el-col :span="14">
                 <h3 class = "nameClass">
-                    {{storeName}}
+                    {{store.name}}
                 </h3>
                 <el-row>
                     <el-col :span="12">
-                        <n-rate allow-half readonly :default-value="star" class = "rateClass">
+                        <n-rate allow-half readonly :default-value="store.star" class = "rateClass">
                         
                         </n-rate> 
                     </el-col>
                     <el-col :span="12">
                         <p class = "numberClass">
-                        销量：{{number}}
+                        销量：{{store.sales}}
                         </p>
                     </el-col>
                 </el-row>
@@ -31,14 +31,10 @@
         </el-row>
 <!--        TODO-->
         <el-row >
-            <el-col :span="8">
-                <store-card-food-card/>
-            </el-col>
-            <el-col :span="8">
-                <store-card-food-card logoUrl="" name="好吃的" price = 19 />
-            </el-col>
-            <el-col :span="8">
-                <store-card-food-card/>
+            <el-col :span="8" v-for="foodItem in items">
+                <store-card-food-card :logoUrl="foodItem.image"
+                                      :name="foodItem.name"
+                                      :price="foodItem.price" />
             </el-col>
         </el-row>
     </n-card>
@@ -58,20 +54,11 @@ export default defineComponent({
     storeCardFoodCard,
   },
   props: {
-      storeLogoUrl:{
-        type:String
+      store:{
+        type: Object
       },
-      storeName:{
-        type:String
-      },
-      time:{
-        type:String
-      },
-      star:{
-        type:Number
-      },
-      number:{
-        type:Number
+      items:{
+        type: Array
       },
   }
 })
