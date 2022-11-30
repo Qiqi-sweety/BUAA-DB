@@ -1,0 +1,8 @@
+./Takeout/__pycache__
+../DS_Store
+../.idea
+../back_end/Databases/__pycache__
+../hello.py
+Takeout/migrations/
+*.pyc
+db.sqlite3

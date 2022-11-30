@@ -73,7 +73,9 @@ class store_register_step2(View):
         if kwargs["address"] == "":
             return "300", "error", "地址不能为空"
         if kwargs["info"] == "":
-            return "300", "error", "店铺简介不能为空"
+            return "300", "modify", "店铺简介不能为空"
+        if kwargs["license"] == "":
+            return "300", "modify", "license不能为空"
 
         cookie = get_user_model().objects.create_user(kwargs['name'], kwargs['password'])
         store = Store(store_name=kwargs['name'], logo=kwargs["logo"], address=kwargs["address"], info=kwargs["info"],
@@ -126,6 +128,27 @@ class update_photo(View):
                 destination.write(chunk)
         return "200", "success", "上传成功", "/media/" + name
 
+
+class update_photo(View):
+    @JSR('code', 'message','url')
+    def post(self, request):
+        # if not request.user.is_authenticated:
+        #     return "403", "还没登录"
+
+        update_photo = request.FILES
+        if(len(update_photo) == 0):
+            return "400", "没有图片"
+        if(len(update_photo) > 1):
+            return "400", "只能上传一张图片"
+        img=list(update_photo.values())[0]
+        if img.size > 1024 * 1024:
+            return "400", "图片过大"
+        # generate random name
+        name = str(uuid.uuid4()) + '.jpg'
+        with open(f'media/{name}', 'wb+') as destination:
+            for chunk in img.chunks():
+                destination.write(chunk)
+        return "200", "success","/media/"+name
 #
 # class store_login(View):
 #     @JSR('code', 'message', 'hint')

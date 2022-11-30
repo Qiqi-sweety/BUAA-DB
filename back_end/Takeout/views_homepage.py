@@ -50,6 +50,7 @@ class recommend(View):
         return_list = []
         for i in stores:
             return_list.append(dump_store(i))
+        print(return_list)
         return return_list
 
     # TODO 调用推荐算法实现推荐功能

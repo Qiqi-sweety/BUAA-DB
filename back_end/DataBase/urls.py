@@ -29,6 +29,7 @@ urlpatterns = [
     # views_LR
     path('image/update/', views_LR.update_photo.as_view()),
     path('login/', views_LR.cookie_login.as_view()),
+
     path('user/register/', views_LR.user_register.as_view()),
     path('store/register/step1/', views_LR.store_register_step1.as_view()),
     path('store/register/step2/', views_LR.store_register_step2.as_view()),
