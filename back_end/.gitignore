@@ -3,6 +3,6 @@
 ../.idea
 ../back_end/Databases/__pycache__
 ../hello.py
-
+Takeout/migrations/
 *.pyc
 db.sqlite3
