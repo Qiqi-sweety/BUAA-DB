@@ -65,11 +65,13 @@ def JSR(*keys):
                 raise e
             else:
                 time_cost = time.time() - prev_time
-                values = list(values) if isinstance(values, (tuple, list)) else [values]
+                #print type of values
+                values = list(values) if isinstance(values, tuple) else [values]
                 # values = list(map(lambda x: x.strftime('%Y-%m-%d %H:%M:%S') if isinstance(x, datetime) else x,
                 # values))
                 [values.append('') for _ in range(len(keys) - len(values))]
                 ret_dict = dict(zip(keys, values))
+
                 if debug and func_name not in ['user.UnreadCount.GET', 'chat.ChatCount.GET',
                                                'entity.DocumentOnline.GET']:
                     c = Fore.RED if ret_dict.get('status', 0) else Fore.GREEN
@@ -77,6 +79,7 @@ def JSR(*keys):
                     dt_str = cur_dt.strftime("%H:%M:%S.") + f'{float(cur_dt.strftime("0.%f")):.2f}'[-2:]
                     print(
                         c + f'[{func_name}] input: {inputs}\n ret: {pformat(ret_dict)}, time: {time_cost:.2f}s, at [{dt_str}]')
+
                 return HttpResponse(json.dumps(ret_dict, ensure_ascii=False))
 
         return wrapper

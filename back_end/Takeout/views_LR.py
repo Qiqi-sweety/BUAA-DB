@@ -72,10 +72,10 @@ class store_register_step2(View):
         cookie = get_user_model().objects.create_user(kwargs['name'], kwargs['password'])
         store = Store(store_name=kwargs['name'], logo=kwargs["logo"], address=kwargs["address"], info=kwargs["info"],
                       license=kwargs["license"])
+        store.save()
         cookie.store = store
         cookie.type = "store"
         cookie.save()
-        store.save()
 
         return "200", "success", "申请成功，等待管理员审核"
 
