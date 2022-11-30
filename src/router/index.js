@@ -97,7 +97,11 @@ const router = new createRouter({
                 {
                     path: 'search',
                     name: 'userSearchResForm',
-                    component: () => import('../components/userMain/userSearchResForm.vue')
+                    component: () => import('../components/userMain/userSearchResForm.vue'),
+                    props: (route) => ({
+                        key: route.query.key,
+                        label: route.query.label,
+                    })
                 }
             ]
         },

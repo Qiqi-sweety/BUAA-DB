@@ -4,7 +4,7 @@
 
 
 <template>
-    <el-form :model="form" class = "userMainFormClass">
+    <el-form class = "userMainFormClass">
       <el-form-item
       style = "width: 1200px;
               height: 550px;
@@ -39,7 +39,7 @@
       </el-form-item>
 
       <el-form-item class="recommendListItem">
-        <el-form :model="form" style = "width: 100%;">
+        <el-form :model="info" style = "width: 100%;">
           <el-form-item
           style = "height: 60px;
                   width: 100%;
@@ -54,15 +54,16 @@
             </n-tag>
 
           </el-form-item>
-          <el-form-item 
-          style = "padding-left: 3%;
-                  padding-right: 2.5%;
-                  padding-top: 10px;">
+          <el-form-item
+            style = "padding-left: 3%;
+                    padding-right: 2.5%;
+                    padding-top: 10px;"
+          >
             <el-row
             style = "width: 100%;
                     margin-bottom: 0;
                     margin-top: 0;">
-              <div v-for="(item, index) in stores" :key="index">
+              <div v-for="(item, index) in info.stores" :key="index">
                 <el-col style = "padding-right: 0;" :span="12">
                   <store-card1
                       :storeLogoUrl="item.logo"
@@ -84,9 +85,11 @@
 
 <script>
     import storeCard1 from "../cards/storeCard1.vue"
-    
-    import { defineComponent } from 'vue'
+    import { defineComponent, reactive } from 'vue'
     import { NCarousel,NTag} from 'naive-ui'
+    import {user_recommend} from "@/api/userMain";
+
+
 
     export default defineComponent({
       name: 'userMainForm',
@@ -95,16 +98,29 @@
         storeCard1,
         NTag,
       },
-      props: {
-        inputKey: {type: String, required: true},
-        inputLabel: {type: String, default: "商品"}
-      },
-      data() {
-        return {
+      setup() {
+        const info = reactive({
           stores: [
-              {'id': 123456, 'name': "这是店名", 'address': "这是地址",
-                'logo': "", 'info': "这是信息", 'star': 5, 'sales': 321}
-          ]
+            {'id': 123456, 'name': "这是店名1", 'address': "这是地址1",
+              'logo': "/media/2eecdd44-55ae-42d0-9764-f82b979d59a4.jpg", 'info': "这是信息1", 'star': 5, 'sales': 321},
+            {'id': 789012, 'name': "这是店名2", 'address': "这是地址2",
+              'logo': "/media/144d6d9c-9157-4010-bd23-594ef753f0ca.jpg", 'info': "这是信息2", 'star': 4, 'sales': 888},
+          ],
+        })
+
+        user_recommend()
+            .then(res => {
+              const store_list = res.data.recommended_stores
+              console.log(store_list)
+              if (res) {
+                store_list.forEach(item => {
+                  info.stores.push(item)
+                })
+              }
+              console.log(info.stores)
+            })
+        return {
+          info
         }
       }
     })

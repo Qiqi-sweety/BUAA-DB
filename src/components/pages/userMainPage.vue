@@ -85,7 +85,7 @@
                 </el-col>
 
             </el-row>
-            <router-view :inputKey="inputKey" :inputLabel="select.label"></router-view>
+            <router-view></router-view>
             <!-- 轮播展示图 and 猜你喜欢推荐 -->
 <!--            <user-main-form/>-->
             <!-- 搜索结果 -->
@@ -131,7 +131,10 @@
           this.$router.push({path: '/'})
         },
         act_search(){
-          this.$router.push({path: '/userMainPage/search'})
+          this.$router.push({
+            name: 'userSearchResForm',
+            query: {key: this.inputKey, label: this.select.label}
+          })
         }
       }
     })

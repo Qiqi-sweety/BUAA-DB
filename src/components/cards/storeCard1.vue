@@ -4,7 +4,7 @@
     <n-card hoverable class = "storeCardClass1" embedded>
         <el-row>
             <el-col :span="10">
-                <img :src="storeLogoUrl" class = "storeCardImageClass1">
+                <img :src="`/api${storeLogoUrl}`" class = "storeCardImageClass1">
             </el-col>
             <el-col :span="14">
                 <h3 class = "nameClass">
@@ -12,7 +12,7 @@
                 </h3>
                 <el-row>
                     <el-col :span="12">
-                        <n-rate allow-half readonly :default-value={star} class = "rateClass">
+                        <n-rate allow-half readonly :default-value="star" class = "rateClass">
                         
                         </n-rate> 
                     </el-col>

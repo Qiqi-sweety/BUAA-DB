@@ -5,14 +5,14 @@
 如果是按照商品搜索，则建立storeCard2； -->
 
 <template>
-    <el-form :model="form">
+    <el-form>
       <el-form-item
       style = "width: 1200px;
               background-color: white;
               border-radius: 10px;
               margin: auto;">
 
-<el-form :model="form" style = "width: 100%;">
+<el-form style = "width: 100%;">
       <el-form-item style = "height: 60px;
         width: 100%;">
             <h3 
@@ -37,7 +37,7 @@
                   ></store-card1>
                 </el-col>
               </div>
-              <div v-for="(item, index) in food" :key="index">
+              <div v-for="(item, index) in this.food" :key="index">
                 <el-col style = "padding-right: 0;" :span="12">
                   <store-card2
                       :storeLogoUrl="item.logo"
@@ -63,73 +63,43 @@
 <script>
   import storeCard2 from "../cards/storeCard2.vue"
   import storeCard1 from "../cards/storeCard1.vue"
+  import {user_search} from "@/api/userMain";
+
+
   
   export default {
     name: 'userSearchResForm',
     props: {
-      inputKey: {type: String, required: true},
-      inputLabel: {type: String, default: "商品"}
-    },
-    data() {
-      return {
-        stores: [
-            {'id': 123456, 'name': "这是店名", 'address': "这是地址",
-          'logo': "", 'info': "这是信息", 'star': 5, 'sales': 321}
-        ],
-        food: []
-      }
+      key: {type: String, required: true},
+      label: {type: String, default: "商品"}
     },
     components: {
       storeCard2,
       storeCard1,
     },
     methods: {
-      // getSearchRes() {
-      //   inject("$axios")
-      //       .get("http://127.0.0.1:8000/login/", {
-      //         label: this.inputLabel,
-      //         key: this.inputKey,
-      //       })
-      //       .then((val) => {
-      //         console.log(val);
-      //         if (this.label === "店铺") {
-      //           this.stores = val.list
-      //         } else {
-      //           this.food = val.list
-      //         }
-      //       });
-      //   // let params = {
-      //   //   label: this.inputLabel,
-      //   //   key: this.inputKey
-      //   // }
-      //   // this.$axios
-      //   //     .get('homepage/search/', params)
-      //   //     .then(res => {
-      //   //       if (res.data.code === 200) {
-      //   //         let content = res.data.list
-      //   //         if (this.label === "店铺") {
-      //   //           this.stores = content
-      //   //         } else {
-      //   //           this.food = content
-      //   //         }
-      //   //       }
-      //   //     })
-      // }
+    },
+    setup(props) {
+      const stores = [
+        {'id': 789012, 'name': "这是店名2", 'address': "这是地址2",
+          'logo': "/media/144d6d9c-9157-4010-bd23-594ef753f0ca.jpg", 'info': "这是信息2", 'star': 4, 'sales': 888},
+      ];
+      const food = [];
+      user_search({type: props.label, msg: props.key})
+          .then(res => {
+            let content = res.data
+            console.log(content)
+            if (content.code === "200") {
+              if (content.label === "店铺") {
+                // stores = content.list
+              } else {
+                // food = content.list
+              }
+            }
+          })
+      return {
+        stores, food
+      }
     }
-    // setup(props) {
-    //   inject("$axios")
-    //       .get("http://127.0.0.1:8000/homepage/search/", {
-    //         label: this.inputLabel,
-    //         key: this.inputKey,
-    //       })
-    //       .then((val) => {
-    //         console.log(val);
-    //         if (this.label === "店铺") {
-    //           this.stores = val.list
-    //         } else {
-    //           this.food = val.list
-    //         }
-    //       });
-    // }
   }
 </script>

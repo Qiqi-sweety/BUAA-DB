@@ -27,24 +27,16 @@
   
         <el-form-item class = "storeRegisterMainItem">
 
-          <el-form
-            style = "margin-right:0px;
-                    width:100%;
-                    height: 380px;"
-          >
-            <el-form-item 
-            style = "  margin-left: 45%;
-        margin-bottom: 0%;
-        height: 40px;">
+          <el-form style = "margin-right: 0; width:100%; height: 100px;">
+            <el-form-item style = "margin-left: 45%; margin-bottom: 0; height: 40px;">
               <el-icon color="green" size = "large"><SuccessFilled /></el-icon>
               <h3>提交成功！</h3>
             </el-form-item>
 
-            <p 
-            style = "text-align: center;
-            margin-top: 0%;
-            font-weight:bold;
-            color :#606266;">
+            <p style = "text-align: center;
+                        margin-top: 0;
+                        font-weight: bold;
+                        color :#606266;">
             请耐心等待审核消息
             </p>
 
