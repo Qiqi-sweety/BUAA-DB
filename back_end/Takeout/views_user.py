@@ -1,5 +1,5 @@
 import json
-from datetime import timezone
+from datetime import *
 
 from utils.dump import dump_comment, dump_user, dump_order
 from utils.meta_wrapper import JSR
@@ -9,12 +9,7 @@ from Takeout.models import *
 
 class showOrders(View):
     @JSR('code', 'message', 'list')
-    def get(self, request):
-        try:
-            kwargs: dict = json.loads(request.body)
-        except Exception:
-            return "400", "参数异常"
-
+    def post(self, request):
         if not request.user.is_authenticated:
             return "403", "还没登录"
         cookie = request.user
@@ -22,11 +17,11 @@ class showOrders(View):
         if cookie.type != "user":
             return "300", "未登录"
 
-        orders = Order.objects.filter(user=user)
+        orders = Order.objects.filter(belonging_user=user)
         return_list = []
         for i in orders:
             return_list.append(dump_order(i))
-        return return_list
+        return "200", "success", return_list
 
 
 class writeComment(View):
@@ -38,48 +33,42 @@ class writeComment(View):
             return "400", "参数异常"
 
         try:
-            order = Order.objects.get(id=kwargs["id"])
+            order = Order.objects.get(id=kwargs["order_id"])
         except Exception:
             return "300", "modify", "订单不存在"
 
         photo = kwargs["photo"]
         # todo: save photo
 
-        comment = Comment(info=kwargs["content"], star=kwargs["star"], time=timezone.now(), image=photo,
+        comment = Comment(info=kwargs["content"], star=kwargs["star"], image=photo,
                           belonging_order=order)
         comment.save()
         return "200", "评论成功"
 
 
 class myComments(View):
-    @JSR('code','message', 'list')
-    def get(self, request):
-        try:
-            kwargs: dict = json.loads(request.body)
-        except Exception:
-            return "400", "参数异常"
-
+    @JSR('code', 'message', 'list')
+    def post(self, request):
         if not request.user.is_authenticated:
             return "403", "还没登录"
         cookie = request.user
         user = cookie.user
         if cookie.type != "user":
             return "300", "未登录"
-
-        comments = Comment.objects.filter(belonging_user=user)
+        orders=Order.objects.filter(belonging_user=user)
+        comments=[]
+        for i in orders:
+            comment=Comment.objects.filter(belonging_order=i)
+            comments.append(comment)
         return_list = []
         for i in comments:
             return_list.append(dump_comment(i))
-        return "200","success",return_list
+        return "200", "success", return_list
 
 
 class manage(View):
     @JSR('code', 'message', 'user_info')
-    def get(self, request):
-        try:
-            kwargs: dict = json.loads(request.body)
-        except Exception:
-            return "400", "参数异常"
+    def post(self, request):
 
         if not request.user.is_authenticated:
             return "403", "还没登录"

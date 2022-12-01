@@ -9,22 +9,23 @@ from Takeout.models import *
 class homepage(View):
     @JSR('code', 'message', 'store_data', 'item_data')
     def post(self, request):
-        try:
-            kwargs: dict = json.loads(request.body)
-        except Exception:
-            return "400", "参数异常"
+        # try:
+        #     kwargs: dict = json.loads(request.body)
+        # except Exception:
+        #     return "400", "参数异常"
 
         if not request.user.is_authenticated:
             return "403", "还没登录"
         cookie = request.user
-        store = cookie.user
+        store = cookie.store
         if cookie.type != "store":
             return "300", "未登录"
 
         return_card = dump_store(store)
         return_list = []
         items = Item.objects.filter(belonging_store=store).order_by('-sales')
-        for i in range(5):
+        num = min(5, len(items))
+        for i in range(num):
             return_list.append(dump_item(items[i]))
 
         return "200", "success", return_card, return_list
@@ -36,7 +37,7 @@ class display_goods(View):
         if not request.user.is_authenticated:
             return "403", "还没登录"
         cookie = request.user
-        store = cookie.user
+        store = cookie.store
         if cookie.type != "store":
             return "300", "未登录"
 
@@ -74,14 +75,16 @@ class add_good(View):
         if not request.user.is_authenticated:
             return "403", "还没登录"
         cookie = request.user
-        store = cookie.user
+
         if cookie.type != "store":
             return "300", "未登录"
 
-        image = kwargs["image"]
+        item = Item(name=kwargs["name"], image=kwargs["image"], price=kwargs["price"], intro=kwargs["intro"],
+                    belonging_store=request.user.store)
+
         # TODO: 上传图片
 
-        Item.objects.create(name=kwargs["name"], price=kwargs["price"], intro=kwargs["intro"], belonging_store=store)
+        item.save()
 
         return "200", "添加成功"
 
@@ -97,7 +100,7 @@ class manage_orders(View):
         if not request.user.is_authenticated:
             return "403", "还没登录"
         cookie = request.user
-        store = cookie.user
+        store = cookie.store
         if cookie.type != "store":
             return "300", "未登录"
 
@@ -125,19 +128,19 @@ class process_order(View):
 class comments(View):
     @JSR('code', 'message', 'comment_list')
     def post(self, request):
-        try:
-            kwargs: dict = json.loads(request.body)
-        except Exception:
-            return "400", "参数异常"
 
         if not request.user.is_authenticated:
             return "403", "还没登录"
         cookie = request.user
-        store = cookie.user
+        store = cookie.store
         if cookie.type != "store":
             return "300", "未登录"
 
-        words = Comment.objects.filter(belonging_store=store)
+        orders = Order.objects.filter(belonging_store=store)
+        words = []
+        for i in orders:
+            word = Comment.objects.filter(belonging_order=i)
+            words.append(word)
         return_list = []
         for i in words:
             return_list.append(dump_comment(i))
@@ -147,15 +150,10 @@ class comments(View):
 class show_info(View):
     @JSR('code', 'message', 'store_info')
     def post(self, request):
-        try:
-            kwargs: dict = json.loads(request.body)
-        except Exception:
-            return "400", "参数异常"
-
         if not request.user.is_authenticated:
             return "403", "还没登录"
         cookie = request.user
-        store = cookie.user
+        store = cookie.store
         if cookie.type != "store":
             return "300", "未登录"
 
@@ -173,7 +171,7 @@ class change_info(View):
         if not request.user.is_authenticated:
             return "403", "还没登录"
         cookie = request.user
-        store = cookie.user
+        store = cookie.store
         if cookie.type != "store":
             return "300", "未登录"
 
@@ -184,7 +182,9 @@ class change_info(View):
             if Cookie.objects.filter(name=info):
                 return "300", "店铺名已存在"
             else:
-                store.name = info
+                print(store.store_name)
+                store.store_name = info
+                print(store.store_name)
 
         # TODO logo & license
 
@@ -196,4 +196,5 @@ class change_info(View):
             store.info = info
         else:
             return "404", "修改失败"
+        store.save()
         return "200", "success"

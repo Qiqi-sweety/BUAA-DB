@@ -1,22 +1,22 @@
 def dump_store(store):
-    return {'id': store.id, 'name': store.store_name, 'address': store.address, 'logo': store.logo, 'info': store.info,
+    return {'id': store.id, 'name': store.store_name, 'address': store.address, 'info': store.info,
             'star': store.star, 'sales': store.sales}
 
 
 def dump_item(item):
-    return {"id": item.id, 'name': item.name, 'price': item.price, 'image': item.image, 'info': item.info,
+    return {"id": item.id, 'name': item.name, 'price': item.price, 'intro': item.intro,
             'sales': item.sales}
 
 
 def dump_comment(comment):
-    return {'order_id': comment.belonging_order.id, "store_name": comment.belonging_store.name,
-            "user_id": comment.belonging_user.id, "user_name": comment.belonging_user.name,
-            'star': comment.star, 'time': comment.time, 'content': comment.info, 'photo': comment.image}
+    return {'order_id': comment.belonging_order.id,
+            'star': comment.star, 'time': comment.time, 'content': comment.info}
 
 
 def dump_order(order):
     return {"order_id": order.id, "items": [dump_item(i) for i in order.items.all()],
-            "time": order.time, "address": order.address, "store": order.store.name, "user": order.belonging_user.name}
+            "time": order.time, "address": order.address, "store": order.belonging_store.store_name,
+            "user": order.belonging_user.user_name}
 
 
 def dump_user(user):

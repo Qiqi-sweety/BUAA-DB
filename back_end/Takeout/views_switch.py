@@ -71,8 +71,11 @@ class comments(View):
             return "400", "参数异常"
 
         store = Store.objects.get(id=kwargs["store_id"])
-
-        words = Comment.objects.filter(belonging_store=store)
+        orders = Order.objects.filter(belonging_store=store)
+        words = []
+        for i in orders:
+            word = Comment.objects.filter(belonging_order=i)
+            words.append(word)
         return_list = []
         for i in words:
             return_list.append(dump_comment(i))
@@ -104,4 +107,33 @@ class addToCart(View):
             cart = Cart.objects.get(belonging_store=store, belonging_user=user)
 
         cart.items.add(item)
+        return "200", "success"
+
+
+class makeOrder(View):
+    @JSR('code', 'message')
+    def post(self, request):
+        try:
+            kwargs: dict = json.loads(request.body)
+        except Exception:
+            return "400", "参数异常"
+
+        store = Store.objects.get(id=kwargs["store_id"])
+
+        if not request.user.is_authenticated:
+            return "403", "还没登录"
+        cookie = request.user
+        user = cookie.user
+        if cookie.type != "user":
+            return "300", "未登录"
+
+        cart = Cart.objects.get(belonging_store=store, belonging_user=user)
+        items = cart.items.all()
+        if len(items) == 0:
+            return "404", "购物车为空"
+
+        order = Order.objects.create(belonging_store=store, belonging_user=user,address=user.address)
+        order.items.set(items)
+        order.save()
+        cart.items.clear()
         return "200", "success"

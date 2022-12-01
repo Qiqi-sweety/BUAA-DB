@@ -7,7 +7,7 @@ from Takeout.models import *
 
 
 class search(View):
-    @JSR('code', 'message', 'list')
+    @JSR('code', 'message', 'store_list', 'item_list')
     def post(self, request):
         try:
             kwargs: dict = json.loads(request.body)
@@ -16,31 +16,33 @@ class search(View):
 
         msg = kwargs["msg"]
         return_list = []
-        return_msg = ""
+        return_msg = "success"
 
         if kwargs["type"] == "店铺":
-            stores = Store.objects.filter(name__icontains=msg)
+            stores = Store.objects.filter(store_name__icontains=msg)
             if len(stores) == 0:
                 return "404", "未匹配到相关店铺"
             for i in stores:
                 return_list.append(dump_store(i))
+            return "200", return_msg, return_list
         elif kwargs["type"] == "商品":
             items = Item.objects.filter(name__icontains=msg)
             stores = items.values('belonging_store').distinct()
+            store_list = []
+            items_list = []
             if len(items) == 0:
                 return "404", "未匹配到相关商品"
             for i in stores:
-                res = {"store": dump_store(i)}
+                store_list.append(dump_store(i))
+                print(dump_store(i))
                 items = Item.objects.filter(belonging_store=i)
                 item_cards = []
                 for j in items:
                     item_cards.append(dump_item(j))
-                res["items"] = item_cards
-                return_list.append(res)
+                items_list.append(item_cards)
+            return "200", return_msg, store_list, items_list
         else:
             return "403", "前端查询类别有误"
-
-        return "200", return_msg, return_list
 
 
 class recommend(View):

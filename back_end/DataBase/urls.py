@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
-from Takeout import views_homepage, views_LR, views_switch, views_store, views_admin
+from Takeout import views_homepage, views_LR, views_switch, views_store, views_admin,views_cart,views_user
 from django.conf import settings
 from Takeout import views_user
 from django.urls import path, include, re_path
@@ -29,10 +29,10 @@ urlpatterns = [
     # views_LR
     path('image/update/', views_LR.update_photo.as_view()),
     path('login/', views_LR.cookie_login.as_view()),
-
     path('user/register/', views_LR.user_register.as_view()),
     path('store/register/step1/', views_LR.store_register_step1.as_view()),
     path('store/register/step2/', views_LR.store_register_step2.as_view()),
+    path('set_admin/', views_LR.set_admin.as_view()),
     # views_homepage
     path('homepage/search/', views_homepage.search.as_view()),
     path('homepage/recommend/', views_homepage.recommend.as_view()),
@@ -41,9 +41,11 @@ urlpatterns = [
     path('switch/homepage/', views_switch.homepage.as_view()),
     path('switch/goods/', views_switch.goods.as_view()),
     path('switch/comments/', views_switch.comments.as_view()),
+    path('switch/addToCart',views_switch.addToCart.as_view()),
+    path('switch/makeOrder',views_switch.makeOrder.as_view()),
     # views_user
     path('user/showOrders/', views_user.showOrders.as_view()),
-    path('user/writeComment/', views_user.writeComment.as_view()),
+    path('user/writeComments/', views_user.writeComment.as_view()),
     path('user/myComments/', views_user.myComments.as_view()),
     path('user/changeInfo/', views_user.changeInfo.as_view()),
     path('user/manage/', views_user.manage.as_view()),
@@ -60,4 +62,6 @@ urlpatterns = [
     # views_admin
     path('admin/displayInfo/', views_admin.displayInfo.as_view()),
     path('admin/validate/', views_admin.validate.as_view()),
+    # views_cart
+    path('cart/cart/', views_cart.cart.as_view()),
 ]
