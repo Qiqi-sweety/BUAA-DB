@@ -8,11 +8,14 @@ from utils.dump import dump_store, dump_item, dump_order, dump_comment
 
 class displayInfo(View):
     @JSR('code', 'message', 'list')
-    def display(self, request):
+    def post(self, request):
         try:
             kwargs: dict = json.loads(request.body)
         except Exception:
             return "400", "参数异常"
+
+        if not request.user.is_authenticated:
+            return "403", "还没登录"
 
         kind = kwargs["kind"]
         return_list = []
@@ -37,7 +40,7 @@ class displayInfo(View):
 
 class validate(View):
     @JSR('code', 'message')
-    def validate(self,request):
+    def post(self,request):
         try:
             kwargs: dict = json.loads(request.body)
         except Exception:
@@ -45,6 +48,7 @@ class validate(View):
 
         if not request.user.is_authenticated:
             return "403", "还没登录"
+
         stores = Store.objects.filter(isChecked=False)
         if len(stores) != len(kwargs["requests"]):
             return "300", "请求异常"

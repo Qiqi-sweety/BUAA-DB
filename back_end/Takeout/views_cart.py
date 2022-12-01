@@ -7,7 +7,7 @@ from utils.dump import dump_item
 
 class cart(View):
     @JSR('code', 'message', 'items')
-    def get(self, request):
+    def post(self, request):
         try:
             kwargs: dict = json.loads(request.body)
         except Exception:
@@ -23,7 +23,7 @@ class cart(View):
         store=Store.objects.get(id=kwargs["store_id"])
         this_cart = Cart.objects.get(belonging_user=user,belonging_store=store)
         return_list = []
-        for i in this_cart.items:
+        for i in this_cart.items.all():
             return_list.append(dump_item(i))
 
         return "200", "success", return_list

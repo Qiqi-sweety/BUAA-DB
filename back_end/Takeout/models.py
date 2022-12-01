@@ -51,6 +51,7 @@ class Item(models.Model):
     price = models.FloatField(verbose_name="商品价格")
     intro = models.TextField(verbose_name="商品描述", max_length=1000)
     belonging_store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    sales = models.IntegerField(verbose_name="销量", default=0)
 
 
 # 购物车
@@ -78,7 +79,7 @@ class Comment(models.Model):
     info = models.TextField(verbose_name="评价", max_length=1000)
     star = models.IntegerField(verbose_name="星级", default=5)
     time = models.DateField(verbose_name="评论时间", default=date.today)
-    image = models.ImageField(verbose_name="评论图片", name="", width_field=8, height_field=8)
+    image = models.ImageField(verbose_name="评论图片", name="商品图")
     belonging_order = models.ForeignKey(Order, on_delete=models.PROTECT)
 
 

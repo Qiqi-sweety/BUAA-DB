@@ -3,8 +3,6 @@ import uuid
 
 from django.contrib.auth import get_user_model, authenticate, login
 
-from django.core.files import File
-from django.core.files.images import ImageFile
 from utils.meta_wrapper import JSR
 from django.views import View
 from Takeout.models import *
@@ -88,6 +86,15 @@ class store_register_step2(View):
         return "200", "success", "申请成功，等待管理员审核"
 
 
+class set_admin(View):
+    @JSR('code', 'hint')
+    def post(self, request):
+        cookie = get_user_model().objects.create_user("admin", "ADMIN")
+        cookie.type = "admin"
+        cookie.save()
+        return "200","success"
+
+
 class cookie_login(View):
     @JSR('code', 'hint', 'message')
     def post(self, request):
@@ -110,8 +117,8 @@ class cookie_login(View):
 class update_photo(View):
     @JSR('code', 'hint', 'message', 'url')
     def post(self, request):
-        # if not request.user.is_authenticated:
-        #     return "403", "还没登录"
+        if not request.user.is_authenticated:
+            return "403", "还没登录"
 
         photo = request.FILES
         if len(photo) == 0:
@@ -127,57 +134,3 @@ class update_photo(View):
             for chunk in img.chunks():
                 destination.write(chunk)
         return "200", "success", "上传成功", "/media/" + name
-
-
-class update_photo(View):
-    @JSR('code', 'message','url')
-    def post(self, request):
-        # if not request.user.is_authenticated:
-        #     return "403", "还没登录"
-
-        update_photo = request.FILES
-        if(len(update_photo) == 0):
-            return "400", "没有图片"
-        if(len(update_photo) > 1):
-            return "400", "只能上传一张图片"
-        img=list(update_photo.values())[0]
-        if img.size > 1024 * 1024:
-            return "400", "图片过大"
-        # generate random name
-        name = str(uuid.uuid4()) + '.jpg'
-        with open(f'media/{name}', 'wb+') as destination:
-            for chunk in img.chunks():
-                destination.write(chunk)
-        return "200", "success","/media/"+name
-#
-# class store_login(View):
-#     @JSR('code', 'message', 'hint')
-#     def login(self, request):
-#         try:
-#             kwargs: dict = json.loads(request.body)
-#         except Exception:
-#             return "400", "参数异常"
-#
-#         try:
-#             this_store = Store.objects.get(name=kwargs["name"])
-#         except Exception:
-#             return "300", "modify", "店铺名不存在"
-#
-#         if this_store.password == kwargs["password"]:
-#             return "200", "success", "登录成功"
-#         else:
-#             return "300", "modify", "密码错误"
-#
-#
-# class admin_login(View):
-#     @JSR('code', 'message', 'hint')
-#     def login(self, request):
-#         try:
-#             kwargs: dict = json.loads(request.body)
-#         except Exception:
-#             return "400", "参数异常"
-#
-#         if kwargs["name"] == "ADMIN" and kwargs["password"] == "PASSWORD":
-#             return "200", "success", "登录成功"
-#         else:
-#             return "300", "modify", "用户名或密码错误"
