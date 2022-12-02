@@ -65,13 +65,14 @@
                     margin-top: 0;">
               <div v-for="(item, index) in info.stores" :key="index">
                 <el-col style = "padding-right: 0;" :span="12">
-                  <store-card1
-                      :storeLogoUrl="item.logo"
-                      :storeName="item.name"
-                      :time="'?'"
-                      :star="item.star"
-                      :number="item.sales"
-                  ></store-card1>
+                  <store-card1 :store="item"></store-card1>
+<!--                      :storeId="item.id"-->
+<!--                      :storeLogoUrl="item.logo"-->
+<!--                      :storeName="item.name"-->
+<!--                      :time="'?'"-->
+<!--                      :star="item.star"-->
+<!--                      :number="item.sales"-->
+
                 </el-col>
               </div>
             </el-row>
@@ -108,17 +109,16 @@
           ],
         })
 
-        user_recommend()
-            .then(res => {
-              const store_list = res.data.recommended_stores
-              console.log(store_list)
-              if (res) {
-                store_list.forEach(item => {
-                  info.stores.push(item)
-                })
-              }
-              console.log(info.stores)
+        user_recommend().then(res => {
+          const store_list = res.data.recommended_stores
+          console.log(store_list)
+          if (res) {
+            store_list.forEach(item => {
+              info.stores.push(item)
             })
+          }
+          console.log(info.stores)
+        })
         return {
           info
         }

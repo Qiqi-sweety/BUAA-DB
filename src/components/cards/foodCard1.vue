@@ -12,14 +12,14 @@
 <template>
     <n-card class = "foodCardClass1" embedded>
       <template #cover>
-        <img :src= "{logoUrl}" class = "foodCardImageClass1">
+        <img :src= "`/api${props.item.image}`" class = "foodCardImageClass1">
       </template>
-      <h3 class = "foodCardName">{{name}}</h3>
-      <p class = "foodCardNumber">销量：{{number}}</p>
+      <h3 class = "foodCardName">{{props.item.name}}</h3>
+      <p class = "foodCardNumber">销量：{{props.item.sales}}</p>
       <el-row class = "foodCardRow">
-        <el-col :span="12"><h3 class = "foodCardPrice">￥{{price}}</h3></el-col>
+        <el-col :span="12"><h3 class = "foodCardPrice">￥{{props.item.price}}</h3></el-col>
         <el-col :span="12">
-          <n-button class = "joinButtonClass" type="warning" size = "medium">
+          <n-button class = "joinButtonClass" type="warning" size = "medium" @click="addToCart">
             加入购物车
           </n-button>
         </el-col>
@@ -29,45 +29,49 @@
     </n-card>
   </template>
 
-<script>
-import { defineComponent ,ref } from 'vue'
-import { NCarousel,NCard,NButton} from 'naive-ui'
+<script setup>
+import {NCard, NButton} from 'naive-ui'
+import {add_to_cart} from "@/api/userMain";
+import {ElMessage} from "element-plus";
 
-export default defineComponent({
-  name: 'foodCard1',
-  components: {
-    NCarousel,
-    NCard,
-    NButton,
-  },
-  props:{
-    logoUrl:{
-      type:String
-    },
-    name:{
-      type:String
-    },
-    number:{
-      type:Number
-    },
-    price:{
-      type:Number
-    }
-  },
+const props = defineProps({
+  item: Object,
+  store_id: String,
 })
+const addToCart = () => {
+  add_to_cart({
+    store_id: props.store_id,
+    item_id: props.item.id
+  }).then(res => {
+    let content = res.data
+    console.log(content)
+    if (content.code === "200") {
+      ElMessage({
+        dangerouslyUseHTMLString: true,
+        message: "已将[<i>{{props.item.name}}</i>]加入购物车",
+        type: "success"
+      })
+    } else {
+      ElMessage({
+        message: content.message,
+        type: "error"
+      })
+    }
+  })
+}
 </script>
 
 <style>
 
 .foodCardName {
-  margin-top: 0%;
+  margin-top: 0;
   font-size: 20px;
-  margin-bottom: 0%;
+  margin-bottom: 0;
 }
 
 .foodCardNumber {
-  margin-top: 0%;
-  margin-bottom: 0%;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .joinButtonClass {
@@ -78,17 +82,17 @@ export default defineComponent({
 .foodCardPrice {
   color: red;
   margin-top: 5px;
-  margin-bottom: 0%;
+  margin-bottom: 0;
 }
 
 .foodCardRow {
-  margin-top: 0%;
-  margin-bottom: 0%;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 .foodCardClass1 {
     width: 300px;
     height: 430px;
-    padding-bottom: 0%;
+    padding-bottom: 0;
 }
 
 .foodCardImageClass1 {

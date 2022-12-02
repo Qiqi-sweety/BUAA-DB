@@ -28,13 +28,7 @@
             <el-row style = "width: 100%;">
               <div v-for="(item, index) in info.stores" :key="index">
                 <el-col style = "padding-right: 0;" :span="12">
-                  <store-card1
-                      :storeLogoUrl="item.logo"
-                      :storeName="item.name"
-                      :time="'?'"
-                      :star="item.star"
-                      :number="item.sales"
-                  ></store-card1>
+                  <store-card1 :store="item"></store-card1>
                 </el-col>
               </div>
               <div v-for="(item, index) in info.food" :key="index">
@@ -63,6 +57,7 @@
   import {user_search} from "@/api/userMain";
   import {reactive} from "vue";
   import {useRoute} from "vue-router"
+  import {ElMessage} from "element-plus";
   
   export default {
     name: 'userSearchResForm',
@@ -97,24 +92,29 @@
       })
       const route = useRoute()
 
-      // user_search({
-      //   msg: route.query.key,
-      //   type: route.query.label,
-      // }).then(res => {
-      //   let content = res.data
-      //   console.log(content)
-      //   if (content.code === "200") {
-      //     if (content.label === "店铺") {
-      //       content.list.forEach(item => {
-      //         info.stores.push(item)
-      //       })
-      //     } else {
-      //       content.list.forEach(item => {
-      //         info.food.push(item)
-      //       })
-      //     }
-      //   }
-      // })
+      user_search({
+        msg: route.query.key,
+        type: route.query.label,
+      }).then(res => {
+        let content = res.data
+        console.log(content)
+        if (content.code === "200") {
+          if (content.label === "店铺") {
+            content.list.forEach(item => {
+              info.stores.push(item)
+            })
+          } else {
+            content.list.forEach(item => {
+              info.food.push(item)
+            })
+          }
+        } else if (content.code === "404") {
+          content.list.forEach(item => {
+            info.stores.push(item)
+          })
+          ElMessage(content.message)
+        }
+      })
       return {
         info
       }

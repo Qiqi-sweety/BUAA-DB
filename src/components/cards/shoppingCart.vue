@@ -1,15 +1,16 @@
+<!--TODO: 接口没好-->
 <template>
     <n-card class = "shoppingCartClass" embedded>
       <el-row>
         <el-col :span="8">
-          <img :src="{logo}" class = "shoppingCartImageClass">
+          <img :src="`/api${item.logo}`" class = "shoppingCartImageClass">
         </el-col>
         <el-col :span="16">
-          <h3 class = "shoppingCartName">{{name}}</h3>
+          <h3 class = "shoppingCartName">{{item.name}}</h3>
           <el-row>
             <el-col :span="12"><h3 class = "shoppingCartPrice">￥{{price}}</h3></el-col>
             <el-col :span="12">
-              <el-input-number v-model="num" :min="1" :max="100" @change="handleChange"  class = "numInputClass"/>
+              <el-input-number v-model="item.num" :min="1" :max="100" @change="handleChange"  class = "numInputClass"/>
             </el-col>
           </el-row>
         </el-col>
@@ -17,26 +18,10 @@
   </n-card>
 </template>
   
-  <script>
-  import { defineComponent } from "vue";
+  <script setup>
   import {NCard} from "naive-ui";
 
-  export default defineComponent({
-    components: {
-      NCard,
-    },
-    props:{
-      logo:{
-        type:String
-      },
-      name:{
-        type:String
-      },
-      price:{
-        type:Number
-      }
-    }
-  });
+
   </script>
   
   <style>

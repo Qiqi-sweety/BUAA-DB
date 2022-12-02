@@ -83,7 +83,7 @@ class comments(View):
 
 
 class addToCart(View):
-    @JSR('code', 'message', 'comments')
+    @JSR('code', 'message')
     def post(self, request):
         try:
             kwargs: dict = json.loads(request.body)
@@ -93,11 +93,11 @@ class addToCart(View):
         store = Store.objects.get(id=kwargs["store_id"])
 
         if not request.user.is_authenticated:
-            return "403", "还没登录"
+            return "403", "用户未登录"
         cookie = request.user
         user = cookie.user
         if cookie.type != "user":
-            return "300", "未登录"
+            return "300", "用户未登录"
 
         item = Item.objects.get(belonging_store=store, id=kwargs['item_id'])
 
@@ -121,11 +121,11 @@ class makeOrder(View):
         store = Store.objects.get(id=kwargs["store_id"])
 
         if not request.user.is_authenticated:
-            return "403", "还没登录"
+            return "403", "用户未登录"
         cookie = request.user
         user = cookie.user
         if cookie.type != "user":
-            return "300", "未登录"
+            return "300", "用户未登录"
 
         cart = Cart.objects.get(belonging_store=store, belonging_user=user)
         items = cart.items.all()

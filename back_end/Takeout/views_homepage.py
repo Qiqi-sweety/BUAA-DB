@@ -18,10 +18,20 @@ class search(View):
         return_list = []
         return_msg = "success"
 
+        def not_found(type):
+            stores = Store.objects.all().order_by('-sales', '-star')
+            return_list = []
+            for i in stores:
+                return_list.append(dump_store(i))
+            return "404", f"未匹配到相关{type}", return_list
+
+        if msg == "":
+            return not_found(kwargs["type"])
+
         if kwargs["type"] == "店铺":
             stores = Store.objects.filter(store_name__icontains=msg)
             if len(stores) == 0:
-                return "404", "未匹配到相关店铺"
+                return not_found(kwargs["type"])
             for i in stores:
                 return_list.append(dump_store(i))
             return "200", return_msg, return_list
@@ -31,7 +41,7 @@ class search(View):
             store_list = []
             items_list = []
             if len(items) == 0:
-                return "404", "未匹配到相关商品"
+                return not_found(kwargs["type"])
             for i in stores:
                 store_list.append(dump_store(i))
                 print(dump_store(i))

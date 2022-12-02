@@ -5,28 +5,31 @@
     <NCard class = "introCardClass">
         <el-row>
             <el-col :span="16">
-                <h3 class = "homePageName">{{storeName}}</h3>
+                <h3 class = "homePageName">{{info.store.name}}</h3>
                 <el-row>
                     <el-col :span="12">
-                        <n-rate allow-half readonly :default-value={star} class = "homePageRateClass" size = "large">        
-                        </n-rate>
+                      <el-rate
+                          disabled
+                          v-model="info.store.star"
+                          class = "homePageRateClass"
+                          size="large"/>
                     </el-col>
                     <el-col :span="12">
-                        <p class = "homePageNumber">销量：{{number}}</p>
+                        <p class = "homePageNumber">销量：{{info.store.sales}}</p>
                     </el-col>
                 </el-row>
                 <el-divider />
                 <p class = "homePageWord">
-                    地址：{{address}} 
+                    地址：{{info.store.address}}
                 </p>
                 <p class = "homePageWord">
-                介绍：{{intro}}
+                介绍：{{info.store.info}}
                 </p>
 
 
             </el-col>
             <el-col :span="8">
-                <img :src="{logoUrl}" class = "homePageImageClass">
+                <img :src="`/api${info.store.logo}`" class = "homePageImageClass">
             </el-col>
         </el-row>
     </NCard>
@@ -37,47 +40,41 @@
             margin-left: auto;
             margin-right:auto;">
         <el-row class = "recommendCardRow">
-            <el-col :span="6"><foodCard2/></el-col>
-            <el-col :span="6"><foodCard2/></el-col>
-            <el-col :span="6"><foodCard2/></el-col>
-            <el-col :span="6"><foodCard2/></el-col>
+            <el-col :span="6" v-for="item in info.hot_items">
+              <foodCard2 :food="item" :store_id="route.query.store_id"></foodCard2>
+            </el-col>
         </el-row>
     </NCard>
 
 </template>
 
-<script>
-  import { defineComponent ,ref } from 'vue'
-  import { NCard,NRate} from 'naive-ui'
-  import foodCard2 from "../cards/foodCard2.vue"
+<script setup>
+  import {reactive, onMounted} from 'vue'
+  import {NCard} from 'naive-ui'
+  import {enter_store} from "@/api/userMain";
+  import {useRoute} from "vue-router";
 
-  export default defineComponent({
-    components: {
-      NCard,
-      NRate,
-      foodCard2,
-    },
-    props:{
-        storeName:{
-            type:String
-        },
-        star:{
-            type:Number
-        },
-        number:{
-            type:Number
-        },
-        address:{
-            type:String
-        },
-        intro:{
-            type:String
-        },
-        logoUrl:{
-            type:String
-        }
-    }
+  const info = reactive({
+    store: {},
+    hot_items: [],
   })
+  const route = useRoute()
+
+  onMounted(() => {
+    enter_store({
+      store_id: route.query.store_id
+    }).then(res => {
+      let content = res.data
+      console.log(content)
+      if (content.code === "200") {
+        info.store = content.info
+        content.items.forEach(item => {
+          info.hot_items.push(item)
+        })
+      }
+    })
+  })
+
 </script>
 
 <style>
@@ -97,7 +94,7 @@
 
 .homePageName {
     margin-left: 100px;
-    margin-bottom: 0%;
+    margin-bottom: 0;
     font-size: 40px;
 }
 

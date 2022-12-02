@@ -57,33 +57,6 @@ const router = new createRouter({
             ]
         },
         {
-            path: '/personalCenterPage',
-            name: 'personalCenterPage',
-            redirect: '/personalCenterPage/order',
-            component: () => import('../components/pages/personalCenterPage.vue'),
-            children: [
-                {
-                    path: 'order',
-                    name: 'orderSheet',
-                    component: () => import('../components/personalCenter/orderSheet.vue')
-                },
-                {
-                    path: 'comment',
-                    name: 'evaluateSheet',
-                    component: () => import('../components/personalCenter/evaluateSheet.vue')
-                },
-                {
-                    path: 'data',
-                    name: 'dataSheet'
-                },
-                {
-                    path: 'userManage',
-                    name: 'userManageSheet',
-                    component: () => import('../components/personalCenter/userManageSheet.vue')
-                },
-            ]
-        },
-        {
             path: '/userMainPage',
             name: 'userMainPage',
             redirect: '/userMainPage/main',
@@ -162,6 +135,77 @@ const router = new createRouter({
                     path: 'data',
                     name: 'dataSheet'
                 }
+            ]
+        },
+        {
+            path: '/personalCenterPage',
+            name: 'personalCenterPage',
+            redirect: '/personalCenterPage/order',
+            component: () => import('../components/pages/personalCenterPage.vue'),
+            children: [
+                {
+                    path: 'order',
+                    name: 'orderSheet',
+                    component: () => import('../components/personalCenter/orderSheet.vue')
+                },
+                {
+                    path: 'comment',
+                    name: 'evaluateSheet',
+                    component: () => import('../components/personalCenter/evaluateSheet.vue')
+                },
+                {
+                    path: 'data',
+                    name: 'dataSheet'
+                },
+                {
+                    path: 'userManage',
+                    name: 'userManageSheet',
+                    component: () => import('../components/personalCenter/userManageSheet.vue')
+                },
+            ]
+        },
+        {
+            path: '/userOrderPage',
+            name: 'userOrderPage',
+            props: (route) => ({
+                store_id: route.query.store_id,
+            }),
+            redirect: '/userOrderPage/home',
+            component: () => import('../components/pages/userOrderPage.vue'),
+            children: [
+                {
+                    path: 'home',
+                    name: 'homePageCard',
+                    component: () => import('../components/orderPage/homePageCard.vue'),
+                    props: (route) => ({
+                        store_id: route.query.store_id,
+                    })
+                },
+                {
+                    path: 'menu',
+                    name: 'menuPageCard',
+                    component: () => import('../components/orderPage/menuPageCard.vue'),
+                    props: (route) => ({
+                        store_id: route.query.store_id,
+                    })
+                },
+                {
+                    path: 'comment',
+                    name: 'evaluatePageCard',
+                    component: () => import('../components/orderPage/evaluatePageCard.vue'),
+                    props: (route) => ({
+                        store_id: route.query.store_id,
+                    })
+                },
+                {
+                    path: 'result',
+                    name: 'resultPageCard',
+                    component: () => import('../components/orderPage/resultPageCard.vue'),
+                    props: (route) => ({
+                        store_id: route.query.store_id,
+                        msg: route.query.msg,
+                    })
+                },
             ]
         }
     ]

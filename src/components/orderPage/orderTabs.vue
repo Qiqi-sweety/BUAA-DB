@@ -1,12 +1,5 @@
 <!-- userOrderPage的子组件：页面的顶部导航栏 -->
 
-<!-- TODO：
-首页按钮传递信号给userOrderPage，userOrderPage展示子组件homePageCard
-商品按钮传递信号给userOrderPage，userOrderPage展示子组件manuPageCard
-评价按钮传递信号给userOrderPage，userOrderPage展示子组件evaluatePageCard
-进行搜索操作，将信号传递给userOrderPage，userOrderPage展示子组件resultPageCard
-查看购物车按钮，可以查看购物车内容，点击购物车内的结算按钮将购物车信息与后端交互 -->
-
 <template>
   <el-row
   style = "background-color: white;
@@ -17,28 +10,28 @@
     <el-col :span="12">
       
       <el-menu
-    :default-active="activeIndex"
-    class="el-menu-demo"
-    mode="horizontal"
-    :ellipsis="false"
-    @select="handleSelect"
-  >
-    <el-menu-item index="0">首页</el-menu-item>
-    <el-menu-item index="1">商品</el-menu-item>
-    <el-menu-item index="3">评价</el-menu-item>
-  </el-menu>
+        default-active="0"
+        class="el-menu-demo"
+        mode="horizontal"
+        :ellipsis="false"
+        @select="handleSelect"
+      >
+        <el-menu-item index="0">首页</el-menu-item>
+        <el-menu-item index="1">商品</el-menu-item>
+        <el-menu-item index="2">评价</el-menu-item>
+      </el-menu>
     </el-col>
     <el-col :span="8">
       <el-input
-        v-model="input3"
+        v-model="input"
         placeholder="搜索商品"
         class="input-with-select"
-        >
+      >
       <template #append>
-        <el-button>
+        <el-button @click="act_search">
           <el-icon>
                 <Search/>
-            </el-icon>
+          </el-icon>
         </el-button>
       </template>
     </el-input>
@@ -46,30 +39,27 @@
     </el-col>
     <el-col :span="4">
       
-      <n-button @click="activate" type="warning" size="large" class = "shoppingButtonClass"  > 
+      <n-button @click="activate" type="warning" size="large" class = "shoppingButtonClass">
           查看购物车
       </n-button>
     
     </el-col>
   </el-row>
 
-  <n-drawer v-model:show="active" :width="502">
+  <n-drawer v-model:show="active" width="502">
     <n-drawer-content closable>
       <template #header>
         购物车
       </template>
-      
-      <shoppingCart/>
-      <shoppingCart/>
-      <shoppingCart/>
-
+      <div v-for="item in cart.items">
+        <shoppingCart :item="item"/>
+      </div>
       <template #footer >
-        <h3
-        style = "    font-size: 18px;
-                /* color: red; */
-                margin-left:0%;
-                margin-top: 5px;
-                width: 250px;"
+        <h3 style = "font-size: 18px;
+                    /* color: red; */
+                    margin-left: 0;
+                    margin-top: 5px;
+                    width: 250px;"
         >合计：</h3>
         <n-popconfirm
           @positive-click="handlePositiveClick"
@@ -85,42 +75,77 @@
   </n-drawer>
 
 </template>
-  <script>
-  import { defineComponent ,ref } from 'vue'
-  import { NCard , NTabs, NTabPane ,NButton ,NDrawer,NDrawerContent,NPopconfirm,useMessage} from 'naive-ui'
-  import foodCard2 from "../cards/foodCard2.vue"
+  <script setup>
+  import {reactive, ref} from 'vue'
+  import {NButton, NDrawer, NDrawerContent, NPopconfirm} from 'naive-ui'
+  import {ElMessage} from 'element-plus'
+  import {make_order, show_cart} from "@/api/userMain";
+  import {useRouter} from "vue-router";
+  const router = useRouter()
 
-  import shoppingCart from "../cards/shoppingCart.vue"
-
-  export default defineComponent({
-    components: {
-      NCard,
-      NTabs,
-      NTabPane,
-      NButton,
-      NDrawer,
-      NDrawerContent,
-      NPopconfirm,
-      foodCard2,
-      shoppingCart,
-    },
-    setup () {
-    const active = ref(false)
-    const activate = () => {
-      active.value = true
-    }
-    
-    const message = useMessage();
-    return {
-      active,
-      activate,
-      handlePositiveClick() {
-        message.success("商家开始准备订单")
-      }
-    }
-
-  }
+  let input = ref('')
+  const cart = reactive({
+    items: []
   })
+
+  const props = defineProps({store_id: String})
+
+  const active = ref(false)
+  const activate = () => {
+    active.value = true
+    show_cart({
+      store_id: props.store_id
+    }).then(res => {
+      let content = res.data
+      console.log(content)
+      if (content.code === "200") {
+        content.items.forEach(item => {
+          cart.items.push(item)
+        })
+      }
+    })
+  }
+
+  const handlePositiveClick = () => {
+    make_order({
+      store_id: props.store_id
+    }).then(res => {
+      let content = res.data
+      console.log(content)
+      if (content.code === "200") {
+        ElMessage({message: "下单成功，商家正在准备订单！", type: "success"})
+      } else {
+        ElMessage({message: content.message, type: "error"})
+      }
+    })
+  }
+  const handleNegativeClick = () => {
+  }
+
+  const handleSelect = (key) => {
+    if (key === "0") {
+      router.push({
+        name: 'homePageCard',
+        query: {store_id: props.store_id}
+      })
+    } else if (key === "1") {
+      router.push({
+        name: 'menuPageCard',
+        query: {store_id: props.store_id}
+      })
+    } else if (key === "2") {
+      router.push({
+        name: 'evaluatePageCard',
+        query: {store_id: props.store_id}
+      })
+    }
+  }
+  const act_search = () => {
+    router.push({
+      name: 'resultPageCard',
+      query: {store_id: props.store_id, msg: input.value}
+    })
+  }
   </script>
   <style>
 

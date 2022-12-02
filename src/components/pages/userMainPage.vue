@@ -113,7 +113,7 @@
       data() {
         return {
           typeList: [{id: 1, title: '店铺'}, {id: 2, title: '商品'}],
-          search: {label: '', key: ''}
+          search: {label: '店铺', key: ''}
         }
       },
       methods: {
