@@ -11,7 +11,6 @@ def test_showOrders():
     url = "http://127.0.0.1:8000/user/showOrders/"
     r = requests.post(url, cookies=cookie)
     print(r.json())
-    # TODO some err with time
     assert (r.json()["code"] == '200')
 
 
@@ -22,7 +21,7 @@ def test_write_comments():
     url = "http://127.0.0.1:8000/user/writeComments/"
     data = {
         "order_id": 1,
-        "content": "还凑合",
+        "content": "还凑合hhhhhh",
         "star": 4,
         "photo": "/media/milktea.jpg",
     }
@@ -38,7 +37,6 @@ def test_myComments():
     url = "http://127.0.0.1:8000/user/myComments/"
     r = requests.post(url, cookies=cookie)
     print(r.json())
-    # TODO some err with dump_comment
     assert (r.json()["code"] == '200')
 
 

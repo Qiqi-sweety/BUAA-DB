@@ -12,7 +12,7 @@ def test_add_good():
 
     url = "http://127.0.0.1:8000/store/add_good/"
     data = {
-        'name': "面包2",
+        'name': "奶茶",
         'image': "/media/bread.jpg",
         'price': 5,
         'intro': "好喝",
@@ -57,7 +57,6 @@ def test_display_goods():
 
 
 def test_process_order():
-    # todo not yet test
     login = test_LR.test_cookie_login()
     cookie = login.cookies
 
@@ -71,7 +70,6 @@ def test_process_order():
 
 
 def test_manage_orders():
-    # todo not yet test
     login = test_LR.test_cookie_login()
     cookie = login.cookies
 
@@ -109,7 +107,6 @@ def test_change_info():
 
 
 def test_comments():
-    # todo not yet comment
     login = test_LR.test_cookie_login()
     cookie = login.cookies
 

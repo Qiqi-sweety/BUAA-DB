@@ -82,8 +82,6 @@ class add_good(View):
         item = Item(name=kwargs["name"], image=kwargs["image"], price=kwargs["price"], intro=kwargs["intro"],
                     belonging_store=request.user.store)
 
-        # TODO: 上传图片
-
         item.save()
 
         return "200", "添加成功"
@@ -139,7 +137,7 @@ class comments(View):
         orders = Order.objects.filter(belonging_store=store)
         words = []
         for i in orders:
-            word = Comment.objects.filter(belonging_order=i)
+            word = Comment.objects.get(belonging_order=i)
             words.append(word)
         return_list = []
         for i in words:
@@ -186,8 +184,10 @@ class change_info(View):
                 store.store_name = info
                 print(store.store_name)
 
-        # TODO logo & license
-
+        elif kind == "license":
+            store.license = info
+        elif kind == "logo":
+            store.logo = info
         elif kind == "address":
             store.address = info
         elif kind == 'password':

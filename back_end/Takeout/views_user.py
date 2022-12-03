@@ -37,10 +37,7 @@ class writeComment(View):
         except Exception:
             return "300", "订单不存在", "error"
 
-        photo = kwargs["photo"]
-        # todo: save photo
-
-        comment = Comment(info=kwargs["content"], star=kwargs["star"], image=photo,
+        comment = Comment(info=kwargs["content"], star=kwargs["star"], image=kwargs["photo"],
                           belonging_order=order)
         comment.save()
         return "200", "评论成功", "success"
@@ -55,10 +52,10 @@ class myComments(View):
         user = cookie.user
         if cookie.type != "user":
             return "300", "未登录"
-        orders=Order.objects.filter(belonging_user=user)
-        comments=[]
+        orders = Order.objects.filter(belonging_user=user)
+        comments = []
         for i in orders:
-            comment=Comment.objects.filter(belonging_order=i)
+            comment = Comment.objects.get(belonging_order=i)
             comments.append(comment)
         return_list = []
         for i in comments:

@@ -30,11 +30,10 @@ def test_search():
     # r = requests.post(url, json=data, cookies=cookie)
     # print(r.json())
     # assert (len(r.json()["search_result"]) >= 1)
-    # todo still some bugs here
     date = {
-        "msg": "奶茶",
-        "type": "商品",
+        "msg": "why",
+        "type": "店铺",
     }
     r = requests.post(url, json=date, cookies=cookie)
     print(r.json())
-    assert (r.json()["code"] == "403")
+    assert (r.json()["code"] == "200")

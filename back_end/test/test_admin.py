@@ -5,10 +5,10 @@ import test_LR
 
 
 def test_displayInfo():
-    #TODO err!
-    login = test_LR.test_cookie_login("admin")
+    login = test_LR.test_cookie_login("user")
     cookie=login.cookies
-    url = "http://127.0.0.1:8000/admin/displayInfo/"
+    print(cookie)
+    url = "http://127.0.0.1:8000/manage/displayinfo/"
     data = {
         "kind": "店铺",
     }
@@ -21,4 +21,4 @@ def test_validate():
     # todo not yet
     login = test_LR.test_cookie_login("admin")
     cookie = login.cookies
-    url = "http://127.0.0.1:8000/admin/validate/"
+    url = "http://127.0.0.1:8000/manage/validate/"

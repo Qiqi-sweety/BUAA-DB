@@ -10,7 +10,48 @@ def test_cart():
 
     url = "http://127.0.0.1:8000/cart/cart/"
     data = {
-        "store_id": 33,
+        "store_id": 2,
+    }
+    r = requests.post(url, json=data, cookies=cookie)
+    print(r.json())
+    assert (r.json()['code'] == '200')
+
+
+def test_addItem():
+    login = test_LR.test_cookie_login("user")
+    cookie = login.cookies
+
+    url = "http://127.0.0.1:8000/cart/addItem/"
+    data = {
+        "store_id": 2,
+        "item_id": 2,
+    }
+    r = requests.post(url, json=data, cookies=cookie)
+    print(r.json())
+    assert (r.json()['code'] == '200')
+
+
+def test_deleteItem():
+    login = test_LR.test_cookie_login("user")
+    cookie = login.cookies
+
+    url = "http://127.0.0.1:8000/cart/deleteItem/"
+    data = {
+        "store_id": 2,
+        "item_id": 3,
+    }
+    r = requests.post(url, json=data, cookies=cookie)
+    print(r.json())
+    assert (r.json()['code'] == '200')
+
+
+def test_makeOrder():
+    login = test_LR.test_cookie_login("user")
+    cookie = login.cookies
+
+    url = "http://127.0.0.1:8000/cart/makeOrder/"
+    data = {
+        "store_id": 2,
     }
     r = requests.post(url, json=data, cookies=cookie)
     print(r.json())

@@ -68,8 +68,7 @@ def test_set_admin():
     print(r.json())
 
 
-def test_update_photo():
-    login = test_cookie_login()
-    cookie = login.cookies
-
-    # todo not yet test
+# def test_update_photo():
+#     login = test_cookie_login()
+#     cookie = login.cookies
+#

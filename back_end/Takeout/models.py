@@ -47,23 +47,28 @@ class Store(models.Model):
 # 商品
 class Item(models.Model):
     name = models.CharField(verbose_name="商品名", max_length=256, default="")
-    image = models.ImageField(verbose_name="商品图片", name="")
+    image = models.TextField(blank=False, default="", max_length=256, verbose_name="商品图片")
     price = models.FloatField(verbose_name="商品价格")
     intro = models.TextField(verbose_name="商品描述", max_length=1000)
     belonging_store = models.ForeignKey(Store, on_delete=models.CASCADE)
     sales = models.IntegerField(verbose_name="销量", default=0)
 
 
+class OrderItem(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    tmp_num = models.IntegerField(verbose_name="数量", default=0)
+
+
 # 购物车
 class Cart(models.Model):
-    items = models.ManyToManyField(Item)
+    items = models.ManyToManyField(OrderItem)
     belonging_user = models.ForeignKey(User, on_delete=models.CASCADE)
     belonging_store = models.ForeignKey(Store, on_delete=models.CASCADE)
 
 
 # 订单
 class Order(models.Model):
-    items = models.ManyToManyField(Item)
+    items = models.ManyToManyField(OrderItem)
     time = models.DateField(verbose_name="订单时间", default=date.today)
     address = models.CharField(verbose_name="订单配送地点", max_length=256)
 
@@ -73,14 +78,16 @@ class Order(models.Model):
     belonging_store = models.ForeignKey(Store, on_delete=models.PROTECT)
     belonging_user = models.ForeignKey(User, on_delete=models.PROTECT)
 
+    money=models.FloatField(verbose_name="订单金额",default=0)
+
 
 # 评论
 class Comment(models.Model):
     info = models.TextField(verbose_name="评价", max_length=1000)
     star = models.IntegerField(verbose_name="星级", default=5)
     time = models.DateField(verbose_name="评论时间", default=date.today)
-    image = models.ImageField(verbose_name="评论图片", name="商品图")
-    belonging_order = models.ForeignKey(Order, on_delete=models.PROTECT)
+    image = models.TextField(blank=False, default="", max_length=256, verbose_name="评论图片")
+    belonging_order = models.OneToOneField(Order, on_delete=models.PROTECT, unique=True)
 
 
 # 运送单

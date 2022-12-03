@@ -60,8 +60,11 @@ urlpatterns = [
     path('store/change_info/', views_store.change_info.as_view()),
     path('store/show_info/', views_store.show_info.as_view()),
     # views_admin
-    path('admin/displayInfo/', views_admin.displayInfo.as_view()),
-    path('admin/validate/', views_admin.validate.as_view()),
+    path('manage/displayinfo/', views_admin.displayInfo.as_view()),
+    path('manage/validate/', views_admin.validate.as_view()),
     # views_cart
     path('cart/cart/', views_cart.cart.as_view()),
+    path('cart/addItem/',views_cart.addItem.as_view()),
+    path('cart/deleteItem/',views_cart.deleteItem.as_view()),
+    path('cart/makeOrder/',views_cart.makeOrder.as_view()),
 ]

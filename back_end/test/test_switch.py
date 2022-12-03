@@ -15,7 +15,7 @@ def test_search():
     url = "http://127.0.0.1:8000/switch/search/"
     data = {
         "msg": "奶茶",
-        "store_id": 33,
+        "store_id": 2,
     }
     r = requests.post(url, json=data, cookies=cookie)
     print(r.json())
@@ -28,7 +28,7 @@ def test_homepage():
 
     url = "http://127.0.0.1:8000/switch/homepage/"
     data = {
-        "store_id": 33,
+        "store_id": 2,
     }
     r = requests.post(url, json=data, cookies=cookie)
     print(r.json())
@@ -41,7 +41,7 @@ def test_goods():
 
     url = "http://127.0.0.1:8000/switch/goods/"
     data = {
-        "store_id": 33,
+        "store_id": 2,
     }
     r = requests.post(url, json=data, cookies=cookie)
     print(r.json())
@@ -49,13 +49,12 @@ def test_goods():
 
 
 def test_comments():
-    # TODO better to add some comments
     login = test_LR.test_cookie_login("user")
     cookie = login.cookies
 
     url = "http://127.0.0.1:8000/switch/comments/"
     data = {
-        "store_id": 33,
+        "store_id": 2,
     }
     r = requests.post(url, json=data, cookies=cookie)
     print(r.json())
@@ -68,8 +67,8 @@ def test_add_to_cart():
 
     url = "http://127.0.0.1:8000/switch/addToCart"
     data = {
-        "store_id": 33,
-        "item_id": 3,
+        "store_id": 2,
+        "item_id": 2,
     }
     r = requests.post(url, json=data, cookies=cookie)
     print(r.json())
@@ -82,7 +81,7 @@ def test_make_order():
 
     url = "http://127.0.0.1:8000/switch/makeOrder"
     data = {
-        "store_id": 33,
+        "store_id": 2,
     }
     r = requests.post(url, json=data, cookies=cookie)
     print(r.json())
