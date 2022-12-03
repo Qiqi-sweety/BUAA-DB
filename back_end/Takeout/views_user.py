@@ -11,11 +11,11 @@ class showOrders(View):
     @JSR('code', 'message', 'list')
     def post(self, request):
         if not request.user.is_authenticated:
-            return "403", "还没登录"
+            return "403", "用户未登录"
         cookie = request.user
         user = cookie.user
         if cookie.type != "user":
-            return "300", "未登录"
+            return "300", "用户未登录"
 
         orders = Order.objects.filter(belonging_user=user)
         return_list = []
@@ -35,7 +35,7 @@ class writeComment(View):
         try:
             order = Order.objects.get(id=kwargs["order_id"])
         except Exception:
-            return "300", "modify", "订单不存在"
+            return "300", "订单不存在", "error"
 
         photo = kwargs["photo"]
         # todo: save photo
@@ -43,7 +43,7 @@ class writeComment(View):
         comment = Comment(info=kwargs["content"], star=kwargs["star"], image=photo,
                           belonging_order=order)
         comment.save()
-        return "200", "评论成功"
+        return "200", "评论成功", "success"
 
 
 class myComments(View):
