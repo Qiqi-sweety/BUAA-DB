@@ -60,7 +60,7 @@
                     margin-left: 0;
                     margin-top: 5px;
                     width: 250px;"
-        >合计：</h3>
+        >合计：￥{{sum}}</h3>
         <n-popconfirm
           @positive-click="handlePositiveClick"
           @negative-click="handleNegativeClick"
@@ -79,16 +79,9 @@
   import {reactive, ref} from 'vue'
   import {NButton, NDrawer, NDrawerContent, NPopconfirm} from 'naive-ui'
   import {ElMessage} from 'element-plus'
-  import {make_order, show_cart} from "@/api/userMain";
+  import {make_order, show_cart} from "@/api/user";
   import {useRouter} from "vue-router";
   const router = useRouter()
-
-  let input = ref('')
-  const cart = reactive({
-    items: []
-  })
-
-  const props = defineProps({store_id: String})
 
   const active = ref(false)
   const activate = () => {
@@ -105,6 +98,24 @@
       }
     })
   }
+  const input = ref('')
+
+  const props = defineProps({store_id: String})
+
+  const cart = reactive({
+    items: []
+  })
+  const calSum = () => {
+    let ans = 0
+    cart.items.forEach(item => {
+      // TODO: 等接口
+      ans += item.price * item.num
+    })
+    return ans
+  }
+  const sum = ref(calSum())
+
+
 
   const handlePositiveClick = () => {
     make_order({
@@ -146,6 +157,7 @@
       query: {store_id: props.store_id, msg: input.value}
     })
   }
+
   </script>
   <style>
 

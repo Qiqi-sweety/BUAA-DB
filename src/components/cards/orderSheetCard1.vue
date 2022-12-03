@@ -1,22 +1,21 @@
 <template>
     <n-card  style="margin-bottom: 50px"  class = "orderSheetCardClass">
         <el-row>
-            <el-col :span="14"><h3 class = "orderId">订单号：{{orderId}}</h3></el-col>
-            <el-col :span="10"><p class = "orderTime">日期：{{orderTime}}</p></el-col>
+            <el-col :span="14"><h3 class = "orderId">订单号：{{props.order.order_id}}</h3></el-col>
+            <el-col :span="10"><p class = "orderTime">日期：{{props.order.time}}</p></el-col>
         </el-row>
-        <h3 class = "orderStoreName">{{orderStoreName}}</h3>
+        <h3 class = "orderStoreName">{{props.order.store}}</h3>
         <el-divider class = "orderDivider"/>
 
         <n-scrollbar class = "orderScrollbar">
-            <orderSheetFoodCard/>
-            <orderSheetFoodCard/>
-            <orderSheetFoodCard/>
-            <orderSheetFoodCard/>
-            <orderSheetFoodCard/>
+            <orderSheetFoodCard :item="{}"/>
+            <div v-for="item in props.order.items">
+              <orderSheetFoodCard :item="item"/>
+            </div>
         </n-scrollbar>
 
         <el-row>
-            <el-col :span="12"><h3>合计：{{money}}</h3></el-col>
+            <el-col :span="12"><h3>合计：{{sum}}</h3></el-col>
             <el-col :span="12">
                 <n-button round type="warning" class = "orderRateButton" @click="showModal = true">
                 评价
@@ -26,48 +25,56 @@
         
     </n-card>
     <n-modal
-    v-model:show="showModal"
-    class="custom-card"
-    preset="card"
-    :style="bodyStyle"
-    title="发表评价"
-    style="width:850px;height:600px"
-    :bordered="false"
-    :segmented="segmented"
+      v-model:show="showModal"
+      class="custom-card"
+      preset="card"
+      title="发表评价"
+      style="width:850px;height:600px"
+      :bordered="false"
     >
+<!--    :style="bodyStyle"-->
+<!--    :segmented="segmented"-->
+
         <n-card
-        style="width: 800px;height:500px"
-        :bordered="false"
-        size="huge"
-        role="dialog"
-        aria-modal="true"
+          style="width: 800px;height:500px"
+          :bordered="false"
+          size="huge"
+          role="dialog"
+          aria-modal="true"
         >
-            <h3 class = "orderModelName">{{orderStoreName}}</h3>
+            <h3 class = "orderModelName">{{props.order.store}}</h3>
             <el-row>
                 <el-col :span="3"><p class = "orderModelTotal">总体</p></el-col>
-                <el-col :span="21"><n-rate allow-half size = "large" class = "orderModelStar"/></el-col>
+                <el-col :span="21">
+                  <n-rate size="large" class="orderModelStar" v-model:value="form.star"/>
+                </el-col>
             </el-row>
             <n-input
-            v-model:value="value"
-            type="textarea"
-            placeholder="说说味道怎么样，给大家参考"
-            class = "orderModelText"
+                v-model:value="form.input"
+                type="textarea"
+                placeholder="说说味道怎么样，给大家参考"
+                class = "orderModelText"
             />
 
-            <n-upload
-            action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
-            @before-upload="beforeUpload"
-            style = "margin-top: 20px;"
+            <el-upload
+                action="/api/image/update/"
+                list-type="picture-card"
+                :show-file-list="false"
+                :limit="1"
+                :on-success="handlePhotoSuccess"
+                style = "margin-top: 20px;"
             >
-            <n-button>
-                <template #icon>
-                    <el-icon><Camera /></el-icon>
-                </template>
-                上传图片
-            </n-button>
-            </n-upload>
+              <el-image v-if="form.photo" :src="`/api${form.photo}`" class="avatar"/>
+              <el-icon v-else><Camera /></el-icon>
+<!--              <n-button>-->
+<!--                  <template #icon>-->
+<!--                      <el-icon><Camera /></el-icon>-->
+<!--                  </template>-->
+<!--                  上传图片-->
+<!--              </n-button>-->
+            </el-upload>
       <template #footer>
-        <n-button style = "margin-left:320px;width: 100px;" size = "large" round type="warning">
+        <n-button style = "margin-left:320px;width: 100px;" size = "large" round type="warning" @click="submitComment">
         提交
         </n-button>
       </template>
@@ -79,49 +86,55 @@
 
 
 
-<script>
-  import { defineComponent ,ref } from 'vue'
-  import {NButton,NCard,NScrollbar,NModal,NRate,NInput,NUpload} from 'naive-ui'
-  import orderSheetFoodCard from './orderSheetFoodCard.vue'
+<script setup>
+import {reactive, ref} from 'vue'
+import {NButton,NCard,NScrollbar,NModal,NRate,NInput} from 'naive-ui'
+import {write_comment} from "@/api/user";
+import {ElMessage} from "element-plus";
 
-  export default defineComponent({
-    components: {
-      NButton,
-      NCard,
-      NScrollbar,
-      NModal,
-      NRate,
-      NInput,
-      NUpload,
-      orderSheetFoodCard,
-    },
-    props:{
-        orderId:{
-            type:String
-        },
-        orderTime:{
-            type:String
-        },
-        orderStoreName:{
-            type:String
-        },
-        money:{
-            type:Number
-        }
-
-    },
-    setup() {
-    return {
-      showModal: ref(false),
-      value: ref(null)
-    };
-  }
+const showModal = ref(false)
+const form = reactive({
+  input: '',
+  star: 0,
+  photo: '',
+})
+const props = defineProps({
+  order: Object
+})
+const calSum = () => {
+  let ans = 0
+  props.order.items.forEach(item => {
+    // TODO: 等接口
+    ans += item.price * item.num
   })
+  return ans
+}
+const sum = ref(calSum())
 
-  
+const handlePhotoSuccess = (res) => {
+  console.log(res)
+  form.photo = res.url
+}
 
+const submitComment = () => {
+  if (form.star === 0) {
+    ElMessage({message: "请为本订单评星", type: "error"})
+    return
+  }
+  write_comment({
+    content: form.input,
+    id: props.order.order_id,
+    photo: form.photo,
+    star: form.star
+  }).then(res => {
+    let content = res.data
+    console.log(content)
+    ElMessage({message: content.message, type: content.hint})
+  })
+  showModal.value = false
+}
 
-  </script>
+</script>
 
 <style>
 
@@ -133,25 +146,25 @@
 }
 
 .orderId {
-    margin-top: 0%;
-    margin-bottom: 0%;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .orderStoreName {
     font-size: 20px;
-    margin-top: 0%;
-    margin-bottom: 0%;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 .orderDivider {
-    margin-top: 0%;
+    margin-top: 0;
 }
 .orderTime {
     margin-top: 2px;
-    margin-bottom: 0%;
+    margin-bottom: 0;
 }
 
 .orderScrollbar {
-    margin-top: 0%;
+    margin-top: 0;
     height: 180px;
     width: 280px;
     /* border: 2px solid palevioletred; */
@@ -164,12 +177,12 @@
 }
 
 .orderModelName {
-    margin-top: 0%;
+    margin-top: 0;
     font-size: 25px;
 }
 
 .orderModelTotal {
-    margin-top: 0%;
+    margin-top: 0;
     font-size:20px;
     /* border: 2px solid black;; */
 }
@@ -177,11 +190,11 @@
 .orderModelStar {
     margin-top: 2px;
     height: 50px;
-    margin-bottom: 0%;
+    margin-bottom: 0;
 }
 
 .orderModelText {
-    margin-top: 0%;
+    margin-top: 0;
     height: 150px;
 }
 

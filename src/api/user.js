@@ -71,3 +71,44 @@ export const make_order = (data) => {
         data: JSON.stringify(data)
     })
 }
+
+export const show_orders = (data) => {
+    return request({
+        url: 'user/showOrders/',
+        method: 'POST',
+        data: JSON.stringify(data)
+    })
+}
+
+export const write_comment = (data) => {
+    console.log(JSON.stringify(data))
+    return request({
+        url: 'user/writeComments/',
+        method: 'POST',
+        data: JSON.stringify(data)
+    })
+}
+
+export const show_comments = (data) => {
+    return request({
+        url: 'user/myComments/',
+        method: 'POST',
+        data: JSON.stringify(data)
+    })
+}
+
+export const show_info = (data) => {
+    return request({
+        url: 'user/manage/',
+        method: 'POST',
+        data: JSON.stringify(data)
+    })
+}
+
+export const change_info = (data) => {
+    return request({
+        url: 'user/changeInfo/',
+        method: 'POST',
+        data: JSON.stringify(data)
+    })
+}

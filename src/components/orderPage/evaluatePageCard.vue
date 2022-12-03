@@ -1,8 +1,5 @@
 <!-- userOrderPage的子组件:展示该店铺的所有用户评价 -->
 
-<!-- TODO:
-1.展示本店铺的所有评价，实例化rateCard1，进行展示 -->
-
 <template>
     <n-card class = "evaluateCardClass">
        <!--评价 -->
@@ -17,7 +14,7 @@
 <script setup>
 import {defineProps, reactive, onMounted} from 'vue'
 import {NCard} from 'naive-ui'
-import {enter_comment} from "@/api/userMain";
+import {enter_comment} from "@/api/user";
 import {useRoute} from "vue-router";
 const route = useRoute()
 

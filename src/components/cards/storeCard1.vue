@@ -36,7 +36,7 @@
   </template>
 
 <script>
-import { defineComponent ,ref } from 'vue'
+import { defineComponent } from 'vue'
 import { NCarousel,NCard,NButton, NRate} from 'naive-ui'
 export default defineComponent({
   name: 'storeCard1',
@@ -48,9 +48,7 @@ export default defineComponent({
 
   },
   props:{
-    store: {
-      type: Object
-    },
+    store: Object
       // storeLogoUrl:{
       //   type:String
       // },

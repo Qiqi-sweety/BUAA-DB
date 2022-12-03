@@ -1,16 +1,5 @@
 <!-- storeRegisterCard1的组件:左侧表单获得商家注册的店铺名和密码部分-->
 
-<!-- TODO:
-下一步按钮：根据后端返回值
-1.“密码不一致”出现弹窗
-2.“店铺名已被使用”出现弹窗
-3.“成功”发送一个信号给storeRegisterCard1，然后storeRegisterCard1把信号传给storeRegisterPage，storeRegisterPage会切换到storeRegisterCard2组件
-
-登录账号按钮：跳转到storeRegisterPage
-
-返回首页按钮：跳转到firstPage -->
-
-
 <template>
     <el-form 
       :model="form"

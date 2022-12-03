@@ -31,7 +31,7 @@
 
 <script setup>
 import {NCard, NButton} from 'naive-ui'
-import {add_to_cart} from "@/api/userMain";
+import {add_to_cart} from "@/api/user";
 import {ElMessage} from "element-plus";
 
 const props = defineProps({

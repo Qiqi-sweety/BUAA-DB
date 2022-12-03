@@ -18,7 +18,7 @@
 <script setup>
 import {reactive, onMounted} from 'vue'
 import { NCard } from 'naive-ui'
-import {enter_menu} from "@/api/userMain";
+import {enter_menu} from "@/api/user";
 import {useRoute} from "vue-router";
 const route = useRoute()
 

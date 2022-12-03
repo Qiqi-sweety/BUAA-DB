@@ -4,31 +4,34 @@
 
 <template>
     <el-row class = "orderSheetRowClass">
-        <el-col :span="6"><orderSheetCard1/></el-col>
-        <el-col :span="6"><orderSheetCard1/></el-col>
-        <el-col :span="6"><orderSheetCard1/></el-col>
-        <el-col :span="6"><orderSheetCard1/></el-col>
-    </el-row>
-        <el-row class = "orderSheetRowClass">
-        <el-col :span="6"><orderSheetCard1/></el-col>
-        <el-col :span="6"><orderSheetCard1/></el-col>
-        <el-col :span="6"><orderSheetCard1/></el-col>
-        <el-col :span="6"><orderSheetCard1/></el-col>
+      <el-col :span="6" v-for="order in info.orders">
+        <orderSheetCard1 :order="order"/>
+      </el-col>
     </el-row>
 </template>
 
-<script>
-  import { defineComponent ,ref } from 'vue'
-  import { NTag,NButton} from 'naive-ui'
-  import orderSheetCard1 from '../cards/orderSheetCard1.vue'
+<script setup>
+import {onMounted, reactive} from 'vue'
+import {show_orders} from "@/api/user";
+import {ElMessage} from "element-plus";
 
-  export default defineComponent({
-    components: {
-      NTag,
-      NButton,
-      orderSheetCard1
-    },
+const info = reactive({
+  orders: []
+})
+
+onMounted(() => {
+  show_orders().then(res => {
+    let content = res.data
+    console.log(content)
+    if (content.code === "200") {
+      content.list.forEach(item => {
+        info.orders.push(item)
+      })
+    } else {
+      ElMessage({message: content.message, type: "error"})
+    }
   })
+})
 
 </script>
 

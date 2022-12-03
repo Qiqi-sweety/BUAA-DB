@@ -1,12 +1,5 @@
 <!-- manageLoginPage的一部分——左侧输入表单表单部分 -->
 
-<!-- TODO:
-根据输入数据得到的后端返回值实现登录按钮反馈
-  1.“管理员未注册”出现弹窗
-  2.“密码错误”出现弹窗
-  3.“登陆成功”成功跳转到manageMainPage——管理员主页
--->
-
 <template>
   <el-form
     class="managerLoginForm" 

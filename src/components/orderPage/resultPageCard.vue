@@ -1,8 +1,5 @@
 <!-- userOrderPage的子组件：搜索框搜索店内商品的商品结果展示界面 -->
 
-<!-- TODO:
-根据从userOrderPage传进来的搜索结果list实例化foodCard1的list，并进行展示 -->
-
 <template>
     <h3
     style = "margin-left: 50px;
@@ -27,7 +24,7 @@
 <script setup>
 import {reactive, onMounted} from 'vue'
 import { NCard} from 'naive-ui'
-import {enter_search} from "@/api/userMain";
+import {enter_search} from "@/api/user";
 import {useRoute} from "vue-router";
 const route = useRoute()
 

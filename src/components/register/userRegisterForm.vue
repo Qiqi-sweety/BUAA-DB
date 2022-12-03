@@ -1,16 +1,5 @@
 <!-- userRegisterPage的一部分——左侧表单部分 -->
 
-<!-- TODO:
-注册按钮：
-1.“用户名被使用”出现弹窗
-2.“密码不一致”出现弹窗
-3.“信息不完整”出现弹窗
-4.“注册成功”跳转到userMainPage——用户主页
-
-登录账号按钮：跳转到userLoginPage
-
-返回首页按钮：跳转到firstPage -->
-
 <template>
     <el-form 
       :model="form"

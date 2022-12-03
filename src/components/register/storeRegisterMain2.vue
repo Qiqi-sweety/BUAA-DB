@@ -1,15 +1,6 @@
 <!-- storeRegisterCard2的子组件，负责获得商家营业执照
 其包含子组件storeRegisterLeft2——负责获得商家商家注册的店铺地址，店铺介绍，店铺头像 -->
 
-<!-- TODO:
-提交按钮：根据后端返回值
-1.“信息不完整”出现弹窗
-2.“提交成功”发送一个信号给storeRegisterCard2，storeRegisterCard2再传信号给storeRegisterPage，然后storeRegisterPage会切换到storeRegisterCard3组件
-
-登录账号按钮：跳转到storeRegisterPage
-
-返回首页按钮：跳转到firstPage -->
-
 <template>
     
     <el-row
@@ -66,7 +57,6 @@
 
 
               <el-col :span="12">
-<!--                todo-->
                 <el-upload
                 class="logo-uploader"
                 :show-file-list="false"
@@ -137,7 +127,6 @@
 
 
       <el-col :span="12" class = "storeRegisterImageFormCol">
-<!--        todo-->
         <el-upload
           class="avatar-uploader-license"
           :show-file-list="false"

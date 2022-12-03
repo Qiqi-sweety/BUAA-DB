@@ -1,9 +1,5 @@
 <!-- userMainPage的子组件：搜索结果组件 -->
 
-<!-- TODO:根据搜索返回的list，构建展示卡，将结果进行展示
-如果是按照店铺搜索，则建立storeCard1；
-如果是按照商品搜索，则建立storeCard2； -->
-
 <template>
     <el-form>
       <el-form-item
@@ -54,7 +50,7 @@
 <script>
   import storeCard2 from "../cards/storeCard2.vue"
   import storeCard1 from "../cards/storeCard1.vue"
-  import {user_search} from "@/api/userMain";
+  import {user_search} from "@/api/user";
   import {reactive} from "vue";
   import {useRoute} from "vue-router"
   import {ElMessage} from "element-plus";
@@ -77,15 +73,14 @@
         ],
         food: [
           {
-            store: {'id': 123456, 'name': "这是店名1", 'address': "这是地址1",
-              'logo': "/media/2eecdd44-55ae-42d0-9764-f82b979d59a4.jpg", 'info': "这是信息1", 'star': 5, 'sales': 321},
+            store: {},
             items: [
-              {'id': 111, 'name': "这是商品1", 'price': 11, 'image': "/media/2eecdd44-55ae-42d0-9764-f82b979d59a4.jpg",
-                'info': "这是店铺介绍", 'sales': 123},
-              {'id': 222, 'name': "这是商品2", 'price': 22, 'image': "/media/2eecdd44-55ae-42d0-9764-f82b979d59a4.jpg",
-                'info': "这是店铺介绍", 'sales': 123},
-              {'id': 333, 'name': "这是商品3", 'price': 33, 'image': "/media/2eecdd44-55ae-42d0-9764-f82b979d59a4.jpg",
-                'info': "这是店铺介绍", 'sales': 123}
+              // {'id': 111, 'name': "这是商品1", 'price': 11, 'image': "/media/2eecdd44-55ae-42d0-9764-f82b979d59a4.jpg",
+              //   'info': "这是店铺介绍", 'sales': 123},
+              // {'id': 222, 'name': "这是商品2", 'price': 22, 'image': "/media/2eecdd44-55ae-42d0-9764-f82b979d59a4.jpg",
+              //   'info': "这是店铺介绍", 'sales': 123},
+              // {'id': 333, 'name': "这是商品3", 'price': 33, 'image': "/media/2eecdd44-55ae-42d0-9764-f82b979d59a4.jpg",
+              //   'info': "这是店铺介绍", 'sales': 123}
             ]
           }
         ]

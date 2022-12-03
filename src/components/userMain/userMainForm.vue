@@ -1,7 +1,5 @@
 <!-- userMainPage的子组件：包含展示轮播图和猜你喜欢推荐部分 -->
 
-<!-- TODO:根据后端的推荐餐厅list，新建storeCard1的list，将结果进行展示-->
-
 
 <template>
     <el-form class = "userMainFormClass">
@@ -88,9 +86,7 @@
     import storeCard1 from "../cards/storeCard1.vue"
     import { defineComponent, reactive } from 'vue'
     import { NCarousel,NTag} from 'naive-ui'
-    import {user_recommend} from "@/api/userMain";
-
-
+    import {user_recommend} from "@/api/user";
 
     export default defineComponent({
       name: 'userMainForm',
@@ -102,10 +98,10 @@
       setup() {
         const info = reactive({
           stores: [
-            {'id': 123456, 'name': "这是店名1", 'address': "这是地址1",
-              'logo': "/media/2eecdd44-55ae-42d0-9764-f82b979d59a4.jpg", 'info': "这是信息1", 'star': 5, 'sales': 321},
-            {'id': 789012, 'name': "这是店名2", 'address': "这是地址2",
-              'logo': "/media/144d6d9c-9157-4010-bd23-594ef753f0ca.jpg", 'info': "这是信息2", 'star': 4, 'sales': 888},
+            // {'id': 123456, 'name': "这是店名1", 'address': "这是地址1",
+            //   'logo': "/media/2eecdd44-55ae-42d0-9764-f82b979d59a4.jpg", 'info': "这是信息1", 'star': 5, 'sales': 321},
+            // {'id': 789012, 'name': "这是店名2", 'address': "这是地址2",
+            //   'logo': "/media/144d6d9c-9157-4010-bd23-594ef753f0ca.jpg", 'info': "这是信息2", 'star': 4, 'sales': 888},
           ],
         })
 

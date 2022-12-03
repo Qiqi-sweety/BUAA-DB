@@ -40,9 +40,9 @@
             margin-left: auto;
             margin-right:auto;">
         <el-row class = "recommendCardRow">
-            <el-col :span="6" v-for="item in info.hot_items">
-              <foodCard2 :food="item" :store_id="route.query.store_id"></foodCard2>
-            </el-col>
+          <el-col :span="6" v-for="item in info.hot_items">
+            <foodCard2 :item="item" :store_id="route.query.store_id"></foodCard2>
+          </el-col>
         </el-row>
     </NCard>
 
@@ -51,7 +51,7 @@
 <script setup>
   import {reactive, onMounted} from 'vue'
   import {NCard} from 'naive-ui'
-  import {enter_store} from "@/api/userMain";
+  import {enter_store} from "@/api/user";
   import {useRoute} from "vue-router";
 
   const info = reactive({

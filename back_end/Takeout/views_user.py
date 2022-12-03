@@ -47,11 +47,11 @@ class myComments(View):
     @JSR('code', 'message', 'list')
     def post(self, request):
         if not request.user.is_authenticated:
-            return "403", "还没登录"
+            return "403", "用户未登录"
         cookie = request.user
         user = cookie.user
         if cookie.type != "user":
-            return "300", "未登录"
+            return "300", "用户未登录"
         orders = Order.objects.filter(belonging_user=user)
         comments = []
         for i in orders:
@@ -68,11 +68,11 @@ class manage(View):
     def post(self, request):
 
         if not request.user.is_authenticated:
-            return "403", "还没登录"
+            return "403", "用户未登录"
         cookie = request.user
         user = cookie.user
         if cookie.type != "user":
-            return "300", "未登录"
+            return "300", "用户未登录"
 
         return_dict = dump_user(user)
         return "200", "success", return_dict
@@ -87,11 +87,11 @@ class changeInfo(View):
             return "400", "参数异常"
 
         if not request.user.is_authenticated:
-            return "403", "还没登录"
+            return "403", "用户未登录", "error"
         cookie = request.user
         user = cookie.user
         if cookie.type != "user":
-            return "300", "未登录"
+            return "300", "用户未登录", "error"
 
         kind = kwargs["type"]
         info = kwargs["info"]
@@ -114,4 +114,4 @@ class changeInfo(View):
             return_msg = "参数异常"
         user.save()
 
-        return "200", "success", return_msg
+        return "200", return_msg, "success"

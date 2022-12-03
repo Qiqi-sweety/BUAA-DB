@@ -3,12 +3,13 @@
     <NCard style = "width: 700px;height: 450px;" embedded>
         <el-row>
             <el-col :span="6">
-                <img :src="`/api${props.comment.photo}`"
+<!--              user_logo-->
+                <img src="../../assets/card.jpg"
                 style = "width: 100px;height: 100px;border-radius: 20px;background-color: white;">
             </el-col>
             <el-col :span="14">
                 <h3 style = "font-size: 25px;margin-bottom: 10px;">
-                  {{props.comment.user_name}}
+                  {{props.comment.user_id}}
                 </h3>
             </el-col>
             <el-col :span="4">
@@ -20,14 +21,14 @@
 
         <el-row>
             <el-col :span="14">
-                <el-rate disable v-model="props.comment.star" style = "margin-left: 20px;" size = "large"/>
+                <el-rate disabled v-model="props.comment.star" style = "margin-left: 20px;" size = "large"/>
                 <h3 style = "font-size: 17px;margin-left: 20px;margin-right: 20px;">
                   {{props.comment.star}}
                 </h3>
             </el-col>
-<!--            <el-col :span="10">-->
-<!--              <img :src="`/api${props.comment.user_logo}`" style = "margin-top: 0%;width: 240px;height: 290px;">-->
-<!--            </el-col>-->
+            <el-col :span="10">
+              <img :src="`/api${props.comment.image}`" style = "margin-top: 0;width: 240px;height: 290px;">
+            </el-col>
         </el-row>
     </NCard>
     
