@@ -8,14 +8,13 @@
         <el-divider class = "orderDivider"/>
 
         <n-scrollbar class = "orderScrollbar">
-            <orderSheetFoodCard :item="{}"/>
             <div v-for="item in props.order.items">
-              <orderSheetFoodCard :item="item"/>
+              <orderSheetFoodCard :item="item.item" :num="item.num"/>
             </div>
         </n-scrollbar>
 
         <el-row>
-            <el-col :span="12"><h3>合计：{{sum}}</h3></el-col>
+            <el-col :span="12"><h3>合计：￥{{sum}}</h3></el-col>
             <el-col :span="12">
                 <n-button round type="warning" class = "orderRateButton" @click="showModal = true">
                 评价
@@ -29,14 +28,14 @@
       class="custom-card"
       preset="card"
       title="发表评价"
-      style="width:850px;height:600px"
+      style="width:850px;"
       :bordered="false"
     >
 <!--    :style="bodyStyle"-->
 <!--    :segmented="segmented"-->
 
         <n-card
-          style="width: 800px;height:500px"
+          style="width: 800px;"
           :bordered="false"
           size="huge"
           role="dialog"
@@ -64,7 +63,7 @@
                 :on-success="handlePhotoSuccess"
                 style = "margin-top: 20px;"
             >
-              <el-image v-if="form.photo" :src="`/api${form.photo}`" class="avatar"/>
+              <el-image v-if="form.photo" fit="contain" :src="`/api${form.photo}`" class="avatar" />
               <el-icon v-else><Camera /></el-icon>
 <!--              <n-button>-->
 <!--                  <template #icon>-->
@@ -104,8 +103,7 @@ const props = defineProps({
 const calSum = () => {
   let ans = 0
   props.order.items.forEach(item => {
-    // TODO: 等接口
-    ans += item.price * item.num
+    ans += item.item.price * item.num
   })
   return ans
 }

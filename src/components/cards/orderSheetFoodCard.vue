@@ -5,10 +5,10 @@
         </el-col>
         <el-col :span="11">
             <h3 class = "orderSheetFoodName">{{props.item.name}}</h3>
-            <p class = "orderSheetFoodNumber">×{{props.item.num}}</p>
+            <p class = "orderSheetFoodNumber">×{{props.num}}</p>
         </el-col>
         <el-col :span="6">
-            <h3 class = "orderSheetFoodPrice">￥{{props.item.price}}</h3>
+            <h3 class = "orderSheetFoodPrice">￥{{props.num * props.item.price}}</h3>
         </el-col>
     </el-row>
 </template>
@@ -19,6 +19,7 @@
 
 const props = defineProps({
   item: Object,
+  num: Number
 })
 
 

@@ -23,6 +23,7 @@ onMounted(() => {
   show_orders().then(res => {
     let content = res.data
     console.log(content)
+    info.orders = []
     if (content.code === "200") {
       content.list.forEach(item => {
         info.orders.push(item)

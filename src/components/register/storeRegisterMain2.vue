@@ -136,7 +136,7 @@
           :on-success="handleLicenseSuccess">
 <!--            :before-upload="beforeAvatarUpload"-->
 
-          <el-image v-if="form.license" :src="`/api${form.license}`" class="avatar"/>
+          <el-image v-if="form.license" :src="`/api${form.license}`" class="avatar" :fit='contain'/>
           <el-icon v-else><Plus /></el-icon>
 
         </el-upload>
