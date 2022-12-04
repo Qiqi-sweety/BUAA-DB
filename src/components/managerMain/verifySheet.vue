@@ -6,7 +6,7 @@
 <template>
     <el-row>
         <el-col :span="12"><verifyCard/></el-col>
-        <el-col :span="12"> <verifyCard/></el-col>
+        <el-col :span="12"><verifyCard/></el-col>
     </el-row>
     
 </template>

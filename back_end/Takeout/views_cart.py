@@ -47,6 +47,7 @@ class addItem(View):
         if cookie.type != "user":
             return "300", "未登录"
 
+        num = kwargs["num"] if "num" in kwargs else 1
         item = Item.objects.get(id=kwargs["item_id"])
         store = Store.objects.get(id=kwargs["store_id"])
         carts = Cart.objects.filter(belonging_user=user, belonging_store=store)
@@ -62,14 +63,14 @@ class addItem(View):
                 break
         if isItemInCart:
             # order_item = OrderItem.objects.get(item=item, cart=this_cart)
-            order_item.tmp_num = order_item.tmp_num + 1
+            order_item.tmp_num = order_item.tmp_num + num
             order_item.save()
             this_cart.save()
-            return "200", "add num"
+            return "200", f"add {num}"
         else:
             order_item = OrderItem.objects.create(item=item)
             this_cart.items.add(order_item)
-            order_item.tmp_num = 1
+            order_item.tmp_num = num
             order_item.save()
             this_cart.save()
             return "200", "add item"
@@ -84,12 +85,13 @@ class deleteItem(View):
             return "400", "参数异常"
 
         if not request.user.is_authenticated:
-            return "403", "还没登录"
+            return "403", "用户未登录"
         cookie = request.user
         user = cookie.user
         if cookie.type != "user":
-            return "300", "未登录"
+            return "300", "用户未登录"
 
+        num = kwargs["num"] if "num" in kwargs else 1
         item = Item.objects.get(id=kwargs["item_id"])
         store = Store.objects.get(id=kwargs["store_id"])
         this_cart = Cart.objects.get(belonging_user=user, belonging_store=store)
@@ -100,14 +102,14 @@ class deleteItem(View):
                 break
         if isItemInCart:
             order_item = OrderItem.objects.get(item=item, cart=this_cart)
-            order_item.tmp_num = order_item.tmp_num - 1
+            order_item.tmp_num = order_item.tmp_num - num
             order_item.save()
             if order_item.tmp_num == 0:
                 this_cart.items.remove(order_item)
                 this_cart.save()
                 order_item.delete()
                 return "200", "delete item"
-            return "200", "delete num"
+            return "200", f"delete {num}"
         else:
             return "300", "zero but remove"
 

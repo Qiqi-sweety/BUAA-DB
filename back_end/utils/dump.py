@@ -13,7 +13,7 @@ def dump_comment(comment):
     store = comment.belonging_order.belonging_store
     user = comment.belonging_order.belonging_user
     return {'order_id': comment.belonging_order.id, 'image': comment.image, 'user_id': user.id,
-            'store_name': store.store_name,'store_logo':store.logo,
+            'store_name': store.store_name, 'store_logo': store.logo,
             'star': comment.star, 'time': t.strftime("%Y-%m-%d %H:%M:%S"), 'content': comment.info}
 
 

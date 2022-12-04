@@ -34,7 +34,15 @@ export const enter_menu = (data) => {
 
 export const add_to_cart = (data) => {
     return request({
-        url: 'switch/addToCart/',
+        url: 'cart/addItem/',
+        method: 'POST',
+        data: JSON.stringify(data)
+    })
+}
+
+export const del_from_cart = (data) => {
+    return request({
+        url: 'cart/deleteItem/',
         method: 'POST',
         data: JSON.stringify(data)
     })

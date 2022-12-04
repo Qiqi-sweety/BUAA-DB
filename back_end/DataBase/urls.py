@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
-from Takeout import views_homepage, views_LR, views_switch, views_store, views_admin,views_cart,views_user
+from Takeout import views_homepage, views_LR, views_switch, views_store, views_admin, views_cart, views_user
 from django.conf import settings
 from Takeout import views_user
 from django.urls import path, include, re_path
@@ -24,7 +24,7 @@ from django.views.static import serve
 
 urlpatterns = [
     re_path(r'^media/(?P<path>.*)$', serve,
-        {"document_root": settings.MEDIA_ROOT}, name='media'),
+            {"document_root": settings.MEDIA_ROOT}, name='media'),
     path('admin/', admin.site.urls),
     # views_LR
     path('image/update/', views_LR.update_photo.as_view()),
@@ -64,7 +64,7 @@ urlpatterns = [
     path('manage/validate/', views_admin.validate.as_view()),
     # views_cart
     path('cart/cart/', views_cart.cart.as_view()),
-    path('cart/addItem/',views_cart.addItem.as_view()),
-    path('cart/deleteItem/',views_cart.deleteItem.as_view()),
-    path('cart/makeOrder/',views_cart.makeOrder.as_view()),
+    path('cart/addItem/', views_cart.addItem.as_view()),
+    path('cart/deleteItem/', views_cart.deleteItem.as_view()),
+    path('cart/makeOrder/', views_cart.makeOrder.as_view()),
 ]

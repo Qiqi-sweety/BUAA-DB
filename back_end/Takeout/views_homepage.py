@@ -7,7 +7,7 @@ from Takeout.models import *
 
 
 class search(View):
-    @JSR('code', 'message', 'store_list', 'item_list')
+    @JSR('code', 'message', 'list')
     def post(self, request):
         try:
             kwargs: dict = json.loads(request.body)
@@ -18,10 +18,20 @@ class search(View):
         return_list = []
         return_msg = "success"
 
+        def not_found(type):
+            stores = Store.objects.all().order_by('-sales', '-star')
+            return_list = []
+            for i in stores:
+                return_list.append(dump_store(i))
+            return "404", f"未匹配到相关{type}", return_list
+
+        if msg == "":
+            return not_found(kwargs["type"])
+
         if kwargs["type"] == "店铺":
             stores = Store.objects.filter(store_name__icontains=msg)
             if len(stores) == 0:
-                return "404", "未匹配到相关店铺"
+                return not_found(kwargs["type"])
             for i in stores:
                 return_list.append(dump_store(i))
             return "200", return_msg, return_list
@@ -30,11 +40,12 @@ class search(View):
             stores = items.values('belonging_store').distinct()
             res_list = []
             if len(items) == 0:
-                return "404", "未匹配到相关商品"
+                return not_found(kwargs["type"])
             for i in stores:
-                temp={}
-                temp["store"]=dump_store(Store.objects.get(id=i["belonging_store"]))
-                temp["items"]=[]
+                temp = {
+                    "store": dump_store(Store.objects.get(id=i["belonging_store"])),
+                    "items": []
+                }
                 print(i)
                 items = Item.objects.filter(belonging_store__id=i["belonging_store"])
                 for j in items[0:3]:
