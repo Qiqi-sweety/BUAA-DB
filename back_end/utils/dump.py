@@ -19,7 +19,7 @@ def dump_comment(comment):
 
 def dump_order(order):
     t = order.time
-    return {"order_id": order.id, "items": [dump_item(i) for i in order.items.all()],
+    return {"order_id": order.id, "items": [{"item": dump_item(i.item), "num": i.tmp_num} for i in order.items.all()],
             "time": t.strftime("%Y-%m-%d %H:%M:%S"), "address": order.address,
             "store": order.belonging_store.store_name,
             "user": order.belonging_user.user_name}

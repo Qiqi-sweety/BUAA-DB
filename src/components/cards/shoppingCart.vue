@@ -27,12 +27,13 @@
   import {add_to_cart, del_from_cart} from "@/api/user";
   import {ElMessage} from "element-plus";
 
+  const emit = defineEmits(["activate"])
   const props = defineProps({
     item: {},
     store_id: ''
   })
   const num = ref(-1)
-  const price = ref(props.item.price * props.item.num)
+  const price = ref(-1)
 
   const handleChange = (value) => {
     if (props.item.num < value) {
@@ -45,6 +46,7 @@
         console.log(content)
         if (content.code === "200") {
           props.item.num = value
+          emit("activate")
         } else {
           ElMessage({message: content.message, type: "error"})
         }
@@ -59,15 +61,18 @@
         console.log(content)
         if (content.code === "200") {
           props.item.num = value
+          emit("activate")
         } else {
           ElMessage({message: content.message, type: "error"})
         }
       })
     }
+    price.value = props.item.price * value
   }
 
   onMounted(() => {
     num.value = props.item.num
+    price.value = props.item.price * props.item.num
   })
 
   </script>

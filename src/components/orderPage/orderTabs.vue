@@ -52,7 +52,7 @@
         购物车
       </template>
       <div v-for="item in cart.items">
-        <shoppingCart :item="item" :store_id="props.store_id"/>
+        <shoppingCart :item="item" :store_id="props.store_id" @activate="activate"/>
       </div>
       <template #footer >
         <h3 style = "font-size: 18px;
@@ -82,27 +82,6 @@
   import {make_order, show_cart} from "@/api/user";
   import {useRouter} from "vue-router";
   const router = useRouter()
-
-  const active = ref(false)
-  const activate = () => {
-    active.value = true
-    show_cart({
-      store_id: props.store_id
-    }).then(res => {
-      let content = res.data
-      console.log(content)
-      cart.items = []
-      if (content.code === "200") {
-        content.items.forEach(item => {
-          if (item.num > 0) {
-            cart.items.push(item)
-          }
-        })
-      }
-    })
-  }
-  const input = ref('')
-
   const props = defineProps({store_id: String})
 
   const cart = reactive({
@@ -117,7 +96,28 @@
   }
   const sum = ref(calSum())
 
-
+  const active = ref(false)
+  const activate = () => {
+    active.value = true
+    show_cart({
+      store_id: props.store_id
+    }).then(res => {
+      let content = res.data
+      console.log(content)
+      cart.items = []
+      if (content.code === "200") {
+        content.items.forEach(item => {
+          console.log(item)
+          if (item.num > 0) {
+            cart.items.push(item)
+          }
+        })
+      }
+      console.log({msg: "activate", items: cart.items})
+      sum.value = calSum()
+    })
+  }
+  const input = ref('')
 
   const handlePositiveClick = () => {
     make_order({

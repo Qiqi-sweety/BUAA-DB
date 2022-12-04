@@ -74,7 +74,7 @@ export const show_cart = (data) => {
 
 export const make_order = (data) => {
     return request({
-        url: 'switch/makeOrder/',
+        url: 'cart/makeOrder/',
         method: 'POST',
         data: JSON.stringify(data)
     })
