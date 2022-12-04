@@ -41,8 +41,8 @@ urlpatterns = [
     path('switch/homepage/', views_switch.homepage.as_view()),
     path('switch/goods/', views_switch.goods.as_view()),
     path('switch/comments/', views_switch.comments.as_view()),
-    path('switch/addToCart/', views_switch.addToCart.as_view()),
-    path('switch/makeOrder/', views_switch.makeOrder.as_view()),
+    # path('switch/addToCart',views_switch.addToCart.as_view()),
+    # path('switch/makeOrder',views_switch.makeOrder.as_view()),
     # views_user
     path('user/showOrders/', views_user.showOrders.as_view()),
     path('user/writeComments/', views_user.writeComment.as_view()),

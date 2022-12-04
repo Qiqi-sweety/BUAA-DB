@@ -131,17 +131,18 @@ class makeOrder(View):
         items = Cart.objects.get(belonging_user=user, belonging_store=store).items.all()
         money = 0
         for i in items:
+            print(i)
             for j in range(i.tmp_num):
                 money += i.item.price
                 i.item.sales += 1
             i.item.save()
         order = Order.objects.create(belonging_user=user, belonging_store=store, address=user.address, money=money)
-        order.items.set(Cart.objects.get(belonging_user=user, belonging_store=store).items.all())
+        items=Cart.objects.get(belonging_user=user, belonging_store=store).items.all()
+        for i in items:
+            order.items.add(i)
         order.save()
 
         this_cart = Cart.objects.get(belonging_user=user, belonging_store=store)
-        for i in this_cart.items.all():
-            i.delete()
         this_cart.delete()
 
         return "200", "success"
