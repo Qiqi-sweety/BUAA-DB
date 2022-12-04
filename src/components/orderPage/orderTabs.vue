@@ -52,7 +52,7 @@
         购物车
       </template>
       <div v-for="item in cart.items">
-        <shoppingCart :item="item"/>
+        <shoppingCart :item="item" :store_id="props.store_id"/>
       </div>
       <template #footer >
         <h3 style = "font-size: 18px;
@@ -91,9 +91,12 @@
     }).then(res => {
       let content = res.data
       console.log(content)
+      cart.items = []
       if (content.code === "200") {
         content.items.forEach(item => {
-          cart.items.push(item)
+          if (item.num > 0) {
+            cart.items.push(item)
+          }
         })
       }
     })
@@ -108,7 +111,6 @@
   const calSum = () => {
     let ans = 0
     cart.items.forEach(item => {
-      // TODO: 等接口
       ans += item.price * item.num
     })
     return ans

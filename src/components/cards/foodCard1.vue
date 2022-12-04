@@ -47,8 +47,7 @@ const addToCart = () => {
     console.log(content)
     if (content.code === "200") {
       ElMessage({
-        dangerouslyUseHTMLString: true,
-        message: "已将[<i>{{props.item.name}}</i>]加入购物车",
+        message: "已将 ["+props.item.name+"] 加入购物车",
         type: "success"
       })
     } else {

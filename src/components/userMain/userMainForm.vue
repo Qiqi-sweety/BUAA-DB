@@ -108,6 +108,7 @@
         user_recommend().then(res => {
           const store_list = res.data.recommended_stores
           console.log(store_list)
+          info.stores = []
           if (res) {
             store_list.forEach(item => {
               info.stores.push(item)

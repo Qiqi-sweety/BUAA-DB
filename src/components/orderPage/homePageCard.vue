@@ -66,6 +66,7 @@
     }).then(res => {
       let content = res.data
       console.log(content)
+      info.hot_items = []
       if (content.code === "200") {
         info.store = content.info
         content.items.forEach(item => {

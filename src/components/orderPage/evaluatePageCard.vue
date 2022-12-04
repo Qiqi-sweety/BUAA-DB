@@ -29,6 +29,7 @@ onMounted(() => {
   }).then(res => {
     let content = res.data
     console.log(content)
+    info.comments = []
     if (content.code === "200") {
       content.comments.forEach(item => {
         info.comments.push(item)

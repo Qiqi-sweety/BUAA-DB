@@ -32,6 +32,7 @@ onMounted(() =>{
   }).then(res => {
     let content = res.data
     console.log(content)
+    info.items = []
     if (content.code === "200") {
       content.items.forEach(item => {
         info.items.push(item)

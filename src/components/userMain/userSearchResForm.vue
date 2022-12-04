@@ -66,10 +66,10 @@
     setup() {
       const info = reactive({
         stores: [
-          {'id': 123456, 'name': "这是店名1", 'address': "这是地址1",
-            'logo': "/media/2eecdd44-55ae-42d0-9764-f82b979d59a4.jpg", 'info': "这是信息1", 'star': 5, 'sales': 321},
-          {'id': 789012, 'name': "这是店名2", 'address': "这是地址2",
-            'logo': "/media/144d6d9c-9157-4010-bd23-594ef753f0ca.jpg", 'info': "这是信息2", 'star': 4, 'sales': 888},
+          // {'id': 123456, 'name': "这是店名1", 'address': "这是地址1",
+          //   'logo': "/media/2eecdd44-55ae-42d0-9764-f82b979d59a4.jpg", 'info': "这是信息1", 'star': 5, 'sales': 321},
+          // {'id': 789012, 'name': "这是店名2", 'address': "这是地址2",
+          //   'logo': "/media/144d6d9c-9157-4010-bd23-594ef753f0ca.jpg", 'info': "这是信息2", 'star': 4, 'sales': 888},
         ],
         food: [
           {
@@ -93,15 +93,21 @@
       }).then(res => {
         let content = res.data
         console.log(content)
+        info.stores = []
+        info.food = []
         if (content.code === "200") {
-          if (content.label === "店铺") {
+          if (route.query.label === "店铺") {
             content.list.forEach(item => {
               info.stores.push(item)
             })
+            console.log("店铺:")
+            console.log(info.stores)
           } else {
             content.list.forEach(item => {
               info.food.push(item)
             })
+            console.log("商品:")
+            console.log(info.food)
           }
         } else if (content.code === "404") {
           content.list.forEach(item => {
