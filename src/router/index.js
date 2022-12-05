@@ -112,7 +112,7 @@ const router = new createRouter({
                 {
                     path: 'data',
                     name: 'dataSheet'
-                }
+                },
             ]
         },
         {
@@ -134,7 +134,7 @@ const router = new createRouter({
                 {
                     path: 'data',
                     name: 'dataSheet'
-                }
+                },
             ]
         },
         {

@@ -5,23 +5,20 @@
 
 <template>
     <el-row>
-        <el-col :span="12"><verifyCard/></el-col>
-        <el-col :span="12"><verifyCard/></el-col>
+        <el-col :span="12" v-for="store in info.unvalid_stores">
+          <verifyCard :store="store"/>
+        </el-col>
     </el-row>
     
 </template>
 
-<script>
-  import { defineComponent ,ref } from 'vue'
-  import { NTag,NButton} from 'naive-ui'
-  import verifyCard from '../cards/verifyCard.vue'
+<script setup>
+import {onMounted, reactive} from "vue";
 
-  export default defineComponent({
-    components: {
-      NTag,
-      NButton,
-      verifyCard,
-    },
-  })
+const info = reactive({
+  unvalid_stores: []
+})
+onMounted(() => {
 
+})
 </script>
