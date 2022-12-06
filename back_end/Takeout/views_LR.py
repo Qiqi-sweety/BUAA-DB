@@ -71,9 +71,9 @@ class store_register_step2(View):
         if kwargs["address"] == "":
             return "300", "error", "地址不能为空"
         if kwargs["info"] == "":
-            return "300", "modify", "店铺简介不能为空"
+            return "300", "error", "店铺简介不能为空"
         if kwargs["license"] == "":
-            return "300", "modify", "license不能为空"
+            return "300", "error", "营业执照不能为空"
 
         cookie = get_user_model().objects.create_user(kwargs['name'], kwargs['password'])
         store = Store(store_name=kwargs['name'], logo=kwargs["logo"], address=kwargs["address"], info=kwargs["info"],

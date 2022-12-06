@@ -16,9 +16,7 @@
           </el-col>
           <el-col :span="6">
             <n-upload action="/api/image/update/">
-              <n-button disabled type="warning" size = "large" round
-              style = "width: 100px;margin-left:100px;margin-top: 25px;"
-              >
+              <n-button disabled type="warning" size = "large" round style = "width: 100px;margin-left:100px;margin-top: 25px;">
                 修改
               </n-button>
             </n-upload>            
@@ -182,7 +180,7 @@
     title="更换银行卡"
     style="width:400px;height:250px"
     :bordered="false"
-    >
+  >
         <n-card
         style="width: 350px"
         :bordered="false"

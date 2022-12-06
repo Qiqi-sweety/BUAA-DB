@@ -18,15 +18,18 @@ class displayInfo(View):
             return "403", "还没登录"
 
         kind = kwargs["kind"]
-        isChecked = kwargs["isChecked"]
+        isChecked = kwargs["isChecked"] if "isChecked" in kwargs else True
         return_list = []
         if kind == "店铺":
-            if isChecked:
-                stores = Store.objects.filter(isChecked=True)
+            stores = Store.objects.filter(isChecked=isChecked)
+            if not isChecked:
+                for i in stores:
+                    s = dump_store(i)
+                    s['license'] = i.license
+                    return_list.append(s)
             else:
-                stores = Store.objects.filter(isChecked=False)
-            for i in stores:
-                return_list.append(dump_store(i))
+                for i in stores:
+                    return_list.append(dump_store(i))
         if kind == "用户":
             users = User.objects.all()
             for i in users:

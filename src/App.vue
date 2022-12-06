@@ -28,20 +28,20 @@
 
 <script>
 
-  import firstPageVue from './components/pages/firstPage.vue'
+import firstPageVue from './components/pages/firstPage.vue'
 
-  import userLoginPageVue from './components/pages/userLoginPage.vue'
-  import managerLoginPageVue from './components/pages/managerLoginPage.vue'
-  import storeLoginPageVue from './components/pages/storeLoginPage.vue'
+import userLoginPageVue from './components/pages/userLoginPage.vue'
+import managerLoginPageVue from './components/pages/managerLoginPage.vue'
+import storeLoginPageVue from './components/pages/storeLoginPage.vue'
 
-  import storeRegisterPageVue from './components/pages/storeRegisterPage.vue'
-  
-  import userOrderPageVue from './components/pages/userOrderPage.vue'
-  import userMainPageVue from './components/pages/userMainPage.vue'
-  import storeMainPageVue from './components/pages/storeMainPage.vue'
-  import managerMainPageVue from './components/pages/managerMainPage.vue'
-  import personalCenterPageVue from './components/pages/personalCenterPage.vue'
-  import userRegisterPageVue from './components/pages/userRegisterPage.vue'
+import storeRegisterPageVue from './components/pages/storeRegisterPage.vue'
+
+import userOrderPageVue from './components/pages/userOrderPage.vue'
+import userMainPageVue from './components/pages/userMainPage.vue'
+import storeMainPageVue from './components/pages/storeMainPage.vue'
+import managerMainPageVue from './components/pages/managerMainPage.vue'
+import personalCenterPageVue from './components/pages/personalCenterPage.vue'
+import userRegisterPageVue from './components/pages/userRegisterPage.vue'
 
 export default {
   name: 'App',
@@ -61,7 +61,10 @@ export default {
 
     personalCenterPageVue,
     userOrderPageVue,
-}
+  },
+  methods: {
+
+  }
 }
 </script>
 

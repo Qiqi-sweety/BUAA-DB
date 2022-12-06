@@ -86,14 +86,14 @@
           </el-aside>
 
           <el-main>
-<!--            <NMessageProvider>-->
+            <NMessageProvider>
               <router-view></router-view>
 <!--                <storeInfoSheet/> -->
 <!--                <foodManageSheet/>-->
 <!--                <orderManageSheet/>-->
 <!--                <userEvaluateSheet/>-->
 <!--                <storeIdManageSheet/>-->
-<!--            </NMessageProvider>-->
+            </NMessageProvider>
 
             
             

@@ -3,61 +3,39 @@
     <NCard style = "width: 680px;height: 450px;">
         <el-row>
             <el-col :span="6">
-                <img :src="{storeLogoUrl}" 
+<!--              user_logo-->
+              <img src="../../assets/card.jpg"
                 style = "width: 100px;height: 100px;background-color: white;">
             </el-col>
             <el-col :span="14">
                 <h3 style = "font-size: 25px;margin-bottom: 10px;">
-                  {{storeName}}
+                  {{props.comment.user_name}}
                 </h3>
             </el-col>
             <el-col :span="4">
                 <p style = "margin-top: 20px;color: gray;">
-                  日期：{{time}}
+                  日期：{{props.comment.time}}
                 </p>
             </el-col>
         </el-row>
 
         <el-row>
             <el-col :span="14">
-                <n-rate allow-half readonly :default-value="3.5" style = "margin-left: 20px;" size = "large">        
-                </n-rate>
+              <el-rate disabled v-model="props.comment.star" style = "margin-left: 20px;" size = "large"/>
                 <h3 style = "font-size: 17px;margin-left: 20px;margin-right: 20px;">
-                {{rateDetail}}
+                {{props.comment.content}}
                 </h3>
             </el-col>
             <el-col :span="10">
-              <img :src="{rateLogoUrl}" style = "margin-top: 0%;width: 240px;height: 290px;">
+              <img v-if="props.comment.image" :src="`/api${props.comment.image}`" style = "margin-top: 0%;width: 240px;height: 290px;">
             </el-col>
         </el-row>
     </NCard>
 </template>
 
-<script>
-  import { defineComponent ,ref } from 'vue'
-  import {NCard,NRate} from 'naive-ui'
-
-  export default defineComponent({
-    components: {
-      NCard,
-      NRate,
-    },
-    props:{
-      storeLogoUrl:{
-        type:String
-      },
-      storeName:{
-        type:String
-      },
-      time:{
-        type:String
-      },
-      rateDetail:{
-        type:String
-      },
-      rateLogoUrl:{
-        type:String
-      }
-    }
-  })
-  </script>
+<script setup>
+import {NCard} from 'naive-ui'
+const props = defineProps({
+  comment: Object
+})
+</script>

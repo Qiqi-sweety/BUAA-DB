@@ -5,7 +5,7 @@
 
 <template>
     <el-row>
-        <el-col :span="12" v-for="store in info.unvalid_stores">
+        <el-col :span="12" v-for="store in info.invalid_stores">
           <verifyCard :store="store"/>
         </el-col>
     </el-row>
@@ -14,11 +14,24 @@
 
 <script setup>
 import {onMounted, reactive} from "vue";
+import {show_info} from "@/api/admin";
 
 const info = reactive({
-  unvalid_stores: []
+  invalid_stores: []
 })
 onMounted(() => {
-
+  show_info({
+    kind: "店铺",
+    isChecked: false
+  }).then(res => {
+    let content = res.data
+    console.log(content)
+    info.invalid_stores = []
+    if (content.code === "200") {
+      content.list.forEach(item => {
+        info.invalid_stores.push(item)
+      })
+    }
+  })
 })
 </script>

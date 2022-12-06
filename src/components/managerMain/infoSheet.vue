@@ -18,11 +18,11 @@
             <el-table-column label="logo">
                 <template #default="scope">
                 <div style="display: flex; align-items: center">
-                    <el-image :src="scope.row.店铺头像" style = "width: 80px;height: 80px;"/>
+                    <el-image :src="`/api${scope.row.logo}`" style = "width: 80px;height: 80px;"/>
                 </div>
-                </template> 
+                </template>
             </el-table-column>
-            <el-table-column prop = "店铺销量" label="店铺销量">
+            <el-table-column prop = "sales" label="店铺销量">
             </el-table-column>
         </el-table>
         
@@ -37,9 +37,9 @@
             <el-table-column prop = "address" label="用户地址">
             </el-table-column>
 
-            <el-table-column prop = "银行卡号" label="银行卡号">
+            <el-table-column prop = "card_num" label="银行卡号">
             </el-table-column>
-            <el-table-column prop = "订单总量" label="订单总量">
+            <el-table-column prop = "order_count" label="订单总量">
             </el-table-column>
 
             <el-table-column label="用户头像">
@@ -113,7 +113,7 @@ const info = reactive({
 })
 
 onMounted(() => {
-  show_info({kind: "商家"}).then(res => {
+  show_info({kind: "店铺"}).then(res => {
     let content = res.data
     console.log(content)
     info.tableStore = []

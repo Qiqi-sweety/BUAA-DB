@@ -15,11 +15,11 @@ class homepage(View):
         #     return "400", "参数异常"
 
         if not request.user.is_authenticated:
-            return "403", "还没登录"
+            return "403", "店铺未登录"
         cookie = request.user
         store = cookie.store
         if cookie.type != "store":
-            return "300", "未登录"
+            return "300", "店铺未登录"
 
         return_card = dump_store(store)
         return_list = []
@@ -35,11 +35,11 @@ class display_goods(View):
     @JSR('code', 'message', 'item_data')
     def post(self, request):
         if not request.user.is_authenticated:
-            return "403", "还没登录"
+            return "403", "店铺未登录"
         cookie = request.user
         store = cookie.store
         if cookie.type != "store":
-            return "300", "未登录"
+            return "300", "店铺未登录"
 
         items = Item.objects.filter(belonging_store=store)
         return_list = []
@@ -57,7 +57,7 @@ class delete_good(View):
             return "400", "参数异常"
 
         if not request.user.is_authenticated:
-            return "403", "还没登录"
+            return "403", "店铺未登录"
 
         item = Item.objects.get(id=kwargs["item_id"])
         item.delete()
@@ -73,11 +73,11 @@ class add_good(View):
             return "400", "参数异常"
 
         if not request.user.is_authenticated:
-            return "403", "还没登录"
+            return "403", "店铺未登录"
         cookie = request.user
 
         if cookie.type != "store":
-            return "300", "未登录"
+            return "300", "店铺未登录"
 
         item = Item(name=kwargs["name"], image=kwargs["image"], price=kwargs["price"], intro=kwargs["intro"],
                     belonging_store=request.user.store)
@@ -96,11 +96,11 @@ class manage_orders(View):
             return "400", "参数异常"
 
         if not request.user.is_authenticated:
-            return "403", "还没登录"
+            return "403", "店铺未登录"
         cookie = request.user
         store = cookie.store
         if cookie.type != "store":
-            return "300", "未登录"
+            return "300", "店铺未登录"
 
         orders = Order.objects.filter(belonging_store=store, isProcessed=kwargs["isProcessed"])
         return_list = []
@@ -128,11 +128,11 @@ class comments(View):
     def post(self, request):
 
         if not request.user.is_authenticated:
-            return "403", "还没登录"
+            return "403", "店铺未登录"
         cookie = request.user
         store = cookie.store
         if cookie.type != "store":
-            return "300", "未登录"
+            return "300", "店铺未登录"
 
         orders = Order.objects.filter(belonging_store=store)
         words = []
@@ -149,17 +149,18 @@ class show_info(View):
     @JSR('code', 'message', 'store_info')
     def post(self, request):
         if not request.user.is_authenticated:
-            return "403", "还没登录"
+            return "403", "店铺未登录"
         cookie = request.user
         store = cookie.store
         if cookie.type != "store":
-            return "300", "未登录"
-
-        return "200", "success", dump_store(store)
+            return "300", "店铺未登录"
+        store_info = dump_store(store)
+        store_info['license'] = store.license
+        return "200", "success", store_info
 
 
 class change_info(View):
-    @JSR('code', 'message')
+    @JSR('code', 'message', 'hint')
     def post(self, request):
         try:
             kwargs: dict = json.loads(request.body)
@@ -167,18 +168,18 @@ class change_info(View):
             return "400", "参数异常"
 
         if not request.user.is_authenticated:
-            return "403", "还没登录"
+            return "403", "店铺未登录", "error"
         cookie = request.user
         store = cookie.store
         if cookie.type != "store":
-            return "300", "未登录"
+            return "300", "店铺未登录", "error"
 
         kind = kwargs["type"]
         info = kwargs["info"]
 
         if kind == "name":
             if Cookie.objects.filter(name=info):
-                return "300", "店铺名已存在"
+                return "300", "店铺名已存在", "error"
             else:
                 print(store.store_name)
                 store.store_name = info
@@ -195,6 +196,6 @@ class change_info(View):
         elif kind == 'info':
             store.info = info
         else:
-            return "404", "修改失败"
+            return "404", "所选信息暂不支持修改", "error"
         store.save()
-        return "200", "success"
+        return "200", "修改成功", "success"

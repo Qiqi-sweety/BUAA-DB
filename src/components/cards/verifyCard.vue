@@ -2,7 +2,7 @@
     <n-card style = "width: 700px;height: 400px;">
         <el-row>
             <el-col :span="16">
-                <el-row style = "margin-bottom: 0%;">
+                <el-row style = "margin-bottom: 0;">
                     <el-col :span="6">
                         <h3 style = "font-size: 20px;">店铺头像：</h3>
                     </el-col>
@@ -37,21 +37,25 @@
 </template>
 
 <script setup>
-import {show_orders} from "@/api/user";
+import {NCard, NButton} from "naive-ui"
 import {ElMessage} from "element-plus";
+import {valid_store} from "@/api/admin";
+import {useRouter} from "vue-router";
 
+const router = useRouter()
 const props = defineProps({
   store: {}
 })
 const validate = () => {
-  show_orders({
+  valid_store({
     store_id: props.store.id
   }).then(res => {
     let content = res.data
     console.log(content)
-    info.orders = []
     if (content.code === "200") {
       ElMessage({message: "处理成功", type: "success"})
+      router.go(0)
+      console.log("没刷新吗？？")
     } else {
       ElMessage({message: content.message, type: "error"})
     }
