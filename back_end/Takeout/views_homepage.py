@@ -29,14 +29,14 @@ class search(View):
             return not_found(kwargs["type"])
 
         if kwargs["type"] == "店铺":
-            stores = Store.objects.filter(store_name__icontains=msg)
+            stores = Store.objects.filter(store_name__icontains=msg,isChecked=True)
             if len(stores) == 0:
                 return not_found(kwargs["type"])
             for i in stores:
                 return_list.append(dump_store(i))
             return "200", return_msg, return_list
         elif kwargs["type"] == "商品":
-            items = Item.objects.filter(name__icontains=msg)
+            items = Item.objects.filter(name__icontains=msg,belonging_store__isChecked=True)
             stores = items.values('belonging_store').distinct()
             res_list = []
             if len(items) == 0:
@@ -59,7 +59,7 @@ class search(View):
 class recommend(View):
     @JSR('recommended_stores')
     def post(self, request):
-        stores = Store.objects.all().order_by('-sales', '-star')
+        stores = Store.objects.filter(isChecked=True).order_by('-sales', '-star')
         return_list = []
         for i in stores:
             return_list.append(dump_store(i))

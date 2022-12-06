@@ -3,7 +3,7 @@ import json
 from utils.meta_wrapper import JSR
 from django.views import View
 from Takeout.models import *
-from utils.dump import dump_store, dump_item, dump_order, dump_comment
+from utils.dump import dump_store, dump_item, dump_order, dump_comment, dump_user
 
 
 class displayInfo(View):
@@ -18,15 +18,22 @@ class displayInfo(View):
             return "403", "还没登录"
 
         kind = kwargs["kind"]
+        isChecked = kwargs["isChecked"]
         return_list = []
         if kind == "店铺":
-            stores = Store.objects.all()
+            if isChecked:
+                stores = Store.objects.filter(isChecked=True)
+            else:
+                stores = Store.objects.filter(isChecked=False)
             for i in stores:
                 return_list.append(dump_store(i))
         if kind == "用户":
-            items = Item.objects.all()
-            for i in items:
-                return_list.append(dump_item(i))
+            users = User.objects.all()
+            for i in users:
+                orders = Order.objects.filter(belonging_user=i)
+                tmp = dump_user(i)
+                tmp["order_count"] = len(orders)
+                return_list.append(tmp)
         if kind == "订单":
             orders = Order.objects.all()
             for i in orders:
@@ -40,7 +47,7 @@ class displayInfo(View):
 
 class validate(View):
     @JSR('code', 'message')
-    def post(self,request):
+    def post(self, request):
         try:
             kwargs: dict = json.loads(request.body)
         except Exception:
@@ -49,10 +56,8 @@ class validate(View):
         if not request.user.is_authenticated:
             return "403", "还没登录"
 
-        stores = Store.objects.filter(isChecked=False)
-        if len(stores) != len(kwargs["requests"]):
-            return "300", "请求异常"
-        for i in range(len(stores)):
-            stores[i].isChecked = kwargs["requests"][i]
-            stores[i].save()
+        store = Store.objects.get(id=kwargs["store_id"])
+        store.isChecked = True
+        store.save()
+
         return "200", "success"

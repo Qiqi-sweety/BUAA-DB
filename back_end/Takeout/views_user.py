@@ -46,6 +46,7 @@ class writeComment(View):
 class myComments(View):
     @JSR('code', 'message', 'list')
     def post(self, request):
+        global comment
         if not request.user.is_authenticated:
             return "403", "用户未登录"
         cookie = request.user
@@ -55,7 +56,9 @@ class myComments(View):
         orders = Order.objects.filter(belonging_user=user)
         comments = []
         for i in orders:
-            comment = Comment.objects.get(belonging_order=i)
+            tmp_comments = Comment.objects.filter(belonging_order=i)
+            if len(tmp_comments) > 0:
+                comment = tmp_comments[0]
             comments.append(comment)
         return_list = []
         for i in comments:

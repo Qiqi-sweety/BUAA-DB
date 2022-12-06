@@ -1,6 +1,6 @@
 def dump_store(store):
     return {'id': store.id, 'name': store.store_name, 'address': store.address, 'info': store.info,
-            'star': store.star, 'sales': store.sales, 'logo': store.logo}
+            'star': store.star, 'sales': store.sales, 'logo': store.logo,'isChecked':store.isChecked}
 
 
 def dump_item(item):
@@ -26,4 +26,4 @@ def dump_order(order):
 
 
 def dump_user(user):
-    return {"id": user.id, "name": user.user_name, "address": user.address}
+    return {"id": user.id, "name": user.user_name, "address": user.address,"card_num": user.card_num,}
