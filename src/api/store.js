@@ -23,3 +23,27 @@ export const change_info = (data) => {
         data: JSON.stringify(data)
     })
 }
+
+export const show_items = (data) => {
+    return request({
+        url: 'store/display_goods/',
+        method: 'POST',
+        data: JSON.stringify(data)
+    })
+}
+
+export const add_items = (data) => {
+    return request({
+        url: 'store/add_good/',
+        method: 'POST',
+        data: JSON.stringify(data)
+    })
+}
+
+export const del_items = (data) => {
+    return request({
+        url: 'store/delete_good/',
+        method: 'POST',
+        data: JSON.stringify(data)
+    })
+}

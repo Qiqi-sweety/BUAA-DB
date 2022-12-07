@@ -49,7 +49,7 @@ class display_goods(View):
 
 
 class delete_good(View):
-    @JSR('code', 'message')
+    @JSR('code', 'message', 'hint')
     def post(self, request):
         try:
             kwargs: dict = json.loads(request.body)
@@ -57,15 +57,15 @@ class delete_good(View):
             return "400", "参数异常"
 
         if not request.user.is_authenticated:
-            return "403", "店铺未登录"
+            return "403", "店铺未登录", "error"
 
         item = Item.objects.get(id=kwargs["item_id"])
         item.delete()
-        return "200", "删除成功"
+        return "200", "删除成功", "success"
 
 
 class add_good(View):
-    @JSR('code', 'message')
+    @JSR('code', 'message', 'hint')
     def post(self, request):
         try:
             kwargs: dict = json.loads(request.body)
@@ -73,18 +73,18 @@ class add_good(View):
             return "400", "参数异常"
 
         if not request.user.is_authenticated:
-            return "403", "店铺未登录"
+            return "403", "店铺未登录", "error"
         cookie = request.user
 
         if cookie.type != "store":
-            return "300", "店铺未登录"
+            return "300", "店铺未登录", "error"
 
         item = Item(name=kwargs["name"], image=kwargs["image"], price=kwargs["price"], intro=kwargs["intro"],
                     belonging_store=request.user.store)
 
         item.save()
 
-        return "200", "添加成功"
+        return "200", "添加成功", "success"
 
 
 class manage_orders(View):

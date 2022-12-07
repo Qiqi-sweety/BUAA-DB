@@ -252,7 +252,7 @@
     title="修改密码"
     style="width:400px"
     :bordered="false"
-    >
+  >
     <el-form
         :model="pw"
         :rules="rules"

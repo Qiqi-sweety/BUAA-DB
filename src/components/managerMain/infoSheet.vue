@@ -7,7 +7,7 @@
     <n-tabs type="segment">
     <n-tab-pane name="商家" tab="商家">
         <el-table :data="info.tableStore" style="width: 100%" table-layout="fixed">
-            <el-table-column prop = "row_id" label="编号">
+            <el-table-column prop = "row_id" label="序号">
             </el-table-column>
             <el-table-column prop = "name" label="店铺名">
             </el-table-column>
@@ -30,7 +30,7 @@
     </n-tab-pane>
     <n-tab-pane name="用户" tab="用户">
         <el-table :data="info.tableUser" stripe style="width: 100%" table-layout="fixed">
-            <el-table-column prop = "row_id" label="编号" >
+            <el-table-column prop = "row_id" label="序号" >
             </el-table-column>
             <el-table-column prop = "name" label="用户名">
             </el-table-column>
@@ -55,7 +55,7 @@
     </n-tab-pane>
     <n-tab-pane name="订单" tab="订单">
         <el-table :data="info.tableOrder" style="width: 100%" table-layout="fixed">
-            <el-table-column prop = "row_id" label="编号">
+            <el-table-column prop = "row_id" label="序号">
             </el-table-column>
             <el-table-column prop = "order_id" label="订单号">
             </el-table-column>
@@ -76,7 +76,7 @@
 
     <n-tab-pane name="评价" tab="评价">
         <el-table :data="info.tableComment" style="width: 100%" table-layout="fixed">
-            <el-table-column prop = "row_id" label="编号">
+            <el-table-column prop = "row_id" label="序号">
             </el-table-column>
             <el-table-column prop = "order_id" label="订单号">
             </el-table-column>
