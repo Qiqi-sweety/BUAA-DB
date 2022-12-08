@@ -57,8 +57,9 @@ def test_change_info():
 
     url = "http://127.0.0.1:8000/user/changeInfo/"
     data = {
-        "type": "card_num",
-        "info": "1234567890",
+        "type": "password",
+        "info": "123456",
+        "info2":"234567"
     }
     r = requests.post(url, json=data, cookies=cookie)
     print(r.json())

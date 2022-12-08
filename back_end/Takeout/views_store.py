@@ -1,10 +1,11 @@
 import json
+import os
 
 from utils.meta_wrapper import JSR
 from utils.dump import *
 from django.views import View
 from Takeout.models import *
-
+from django.contrib.auth.hashers import check_password
 
 class homepage(View):
     @JSR('code', 'message', 'store_data', 'item_data')
@@ -190,13 +191,19 @@ class change_info(View):
                 print(store.store_name)
 
         elif kind == "license":
+            os.unlink(f"media/{store.license}")
             store.license = info
         elif kind == "logo":
+            os.unlink(f"media/{store.logo}")
             store.logo = info
         elif kind == "address":
             store.address = info
         elif kind == 'password':
-            store.password = info
+            if check_password(info,request.user.password):
+                cookie.set_password(kwargs["info2"])
+                cookie.save()
+            else:
+                return "300", "密码错误"
         elif kind == 'info':
             store.info = info
         else:

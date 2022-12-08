@@ -80,6 +80,8 @@ class Order(models.Model):
 
     money = models.FloatField(verbose_name="订单金额", default=0)
 
+    isCommented = models.BooleanField(verbose_name="是否已评价", default=False)
+
 
 # 评论
 class Comment(models.Model):

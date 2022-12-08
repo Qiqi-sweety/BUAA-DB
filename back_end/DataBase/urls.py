@@ -25,7 +25,7 @@ from django.views.static import serve
 urlpatterns = [
     re_path(r'^media/(?P<path>.*)$', serve,
             {"document_root": settings.MEDIA_ROOT}, name='media'),
-    path('admin/', admin.site.urls),
+   # path('admin/', admin.site.urls),
     # views_LR
     path('image/update/', views_LR.update_photo.as_view()),
     path('login/', views_LR.cookie_login.as_view()),

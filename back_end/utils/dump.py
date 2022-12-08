@@ -22,6 +22,7 @@ def dump_order(order):
     return {"order_id": order.id, "items": [{"item": dump_item(i.item), "num": i.tmp_num} for i in order.items.all()],
             "time": t.strftime("%Y.%m.%d"), "address": order.address,
             "store": order.belonging_store.store_name,
+            "is_commented":order.isCommented,
             "user": order.belonging_user.user_name}
 
 

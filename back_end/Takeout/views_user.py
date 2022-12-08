@@ -5,7 +5,7 @@ from utils.dump import dump_comment, dump_user, dump_order
 from utils.meta_wrapper import JSR
 from django.views import View
 from Takeout.models import *
-
+from django.contrib.auth.hashers import check_password
 
 class showOrders(View):
     @JSR('code', 'message', 'list')
@@ -20,6 +20,8 @@ class showOrders(View):
         orders = Order.objects.filter(belonging_user=user)
         return_list = []
         for i in orders:
+            tmp = dump_order(i)
+            tmp["isCommented"] = i.isCommented
             return_list.append(dump_order(i))
         return "200", "success", return_list
 
@@ -40,6 +42,9 @@ class writeComment(View):
         comment = Comment(info=kwargs["content"], star=kwargs["star"], image=kwargs["photo"],
                           belonging_order=order)
         comment.save()
+
+        order.isCommented = True
+        order.save()
         return "200", "评论成功", "success"
 
 
@@ -77,6 +82,7 @@ class manage(View):
             return "300", "用户未登录"
 
         return_dict = dump_user(user)
+
         return "200", "success", return_dict
 
 
@@ -104,6 +110,9 @@ class changeInfo(View):
                 return_msg = "用户名已存在"
             else:
                 user.name = info
+                user.save()
+                cookie.name = info
+                cookie.save()
         elif kind == "image":
             user.image = info
         elif kind == "address":
@@ -113,7 +122,11 @@ class changeInfo(View):
         elif kind == 'card_password':
             user.card_password = info
         elif kind == 'password':
-            user.set_password(info)
+            if check_password(info, request.user.password):
+                cookie.set_password(kwargs["info2"])
+                cookie.save()
+            else:
+                return "300", "密码错误"
         else:
             return_msg = "参数异常"
         user.save()
