@@ -1,25 +1,30 @@
 <template>
     <el-row class = "orderSheetRowClass">
-        <el-col :span="12"><rateCard1/></el-col>
-        <el-col :span="12"><rateCard1/></el-col>
-    </el-row>
-    <el-row class = "orderSheetRowClass">
-        <el-col :span="12"><rateCard1/></el-col>
-        <el-col :span="12"><rateCard1/></el-col>
+      <el-col :span="12" v-for="c in info.comments">
+        <rateCard1 :comment="c"/>
+      </el-col>
     </el-row>
 </template>
 
-<script>
-  import { defineComponent ,ref } from 'vue'
-  import { NTag,NButton} from 'naive-ui'
-  import rateCard1 from '../cards/rateCard1.vue'
+<script setup>
+import {defineProps, reactive, onMounted} from 'vue'
+import {show_comments} from "@/api/store";
 
-  export default defineComponent({
-    components: {
-      NTag,
-      NButton,
-      rateCard1,
-    },
+const info = reactive({
+  comments: []
+})
+const props = defineProps({store_id: String})
+
+onMounted(() => {
+  show_comments().then(res => {
+    let content = res.data
+    console.log(content)
+    info.comments = []
+    if (content.code === "200") {
+      content.comment_list.forEach(item => {
+        info.comments.push(item)
+      })
+    }
   })
-
+})
 </script>

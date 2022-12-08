@@ -5,7 +5,7 @@
        <!--评价 -->
       <el-row class = "evaluateRow">
         <el-col :span="12" v-for="c in info.comments">
-          <rateCard1 :comment="c"></rateCard1>
+          <rateCard1 :comment="c"/>
         </el-col>
       </el-row>
     </n-card>

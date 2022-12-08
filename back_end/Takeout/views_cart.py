@@ -14,11 +14,11 @@ class cart(View):
             return "400", "参数异常"
 
         if not request.user.is_authenticated:
-            return "403", "还没登录"
+            return "403", "用户未登录"
         cookie = request.user
         user = cookie.user
         if cookie.type != "user":
-            return "300", "未登录"
+            return "300", "用户未登录"
 
         store = Store.objects.get(id=kwargs["store_id"])
         this_cart = Cart.objects.get(belonging_user=user, belonging_store=store)
@@ -41,11 +41,11 @@ class addItem(View):
             return "400", "参数异常"
 
         if not request.user.is_authenticated:
-            return "403", "还没登录"
+            return "403", "用户未登录"
         cookie = request.user
         user = cookie.user
         if cookie.type != "user":
-            return "300", "未登录"
+            return "300", "用户未登录"
 
         num = kwargs["num"] if "num" in kwargs else 1
         item = Item.objects.get(id=kwargs["item_id"])
@@ -123,11 +123,11 @@ class makeOrder(View):
             return "400", "参数异常"
 
         if not request.user.is_authenticated:
-            return "403", "还没登录"
+            return "403", "用户未登录"
         cookie = request.user
         user = cookie.user
         if cookie.type != "user":
-            return "300", "未登录"
+            return "300", "用户未登录"
 
         store = Store.objects.get(id=kwargs["store_id"])
         items = Cart.objects.get(belonging_user=user, belonging_store=store).items.all()

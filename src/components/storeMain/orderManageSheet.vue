@@ -2,44 +2,55 @@
     <n-tabs type="segment">
     <n-tab-pane name="未处理" tab="未处理">
         <el-row>
-            <el-col :span="6"><orderSheetCard2/></el-col>
-            <el-col :span="6"><orderSheetCard2/></el-col>
-            <el-col :span="6"><orderSheetCard2/></el-col>
-            <el-col :span="6"><orderSheetCard2/></el-col>
+          <div v-for="order in info.unhandled_orders">
+            <el-col :span="6"><orderSheetCard2 :order="order"/></el-col>
+          </div>
         </el-row>
         
       
     </n-tab-pane>
     <n-tab-pane name="已处理" tab="已处理">
         <el-row>
-            <el-col :span="6"><orderSheetCard3/></el-col>
-            <el-col :span="6"><orderSheetCard3/></el-col>
-            <el-col :span="6"><orderSheetCard3/></el-col>
-            <el-col :span="6"><orderSheetCard3/></el-col>
+          <div v-for="order in info.handled_orders">
+            <el-col :span="6"><orderSheetCard3 :order="order"/></el-col>
+          </div>
         </el-row>
     </n-tab-pane>
   </n-tabs>
     
 </template>
 
-<script>
-  import { defineComponent ,ref } from 'vue'
-  import { NCard,NRate,NTabs,NTabPane} from 'naive-ui'
-  import orderSheetCard2 from '../cards/orderSheetCard2.vue'
-  import orderSheetCard3 from '../cards/orderSheetCard3.vue'
+<script setup>
+import {NTabs, NTabPane} from 'naive-ui'
+import {show_orders} from "@/api/store";
+import {onMounted, reactive} from "vue";
 
-  export default defineComponent({
-    components: {
-      NCard,
-      NRate,
-      NTabPane,
-      NTabs,
-      orderSheetCard2,
-      orderSheetCard3,
-    },
-    setup() {
-      return {
-      }
+const info = reactive({
+  handled_orders: [],
+  unhandled_orders: [],
+})
+onMounted(() => {
+  show_orders({
+    isProcessed: true
+  }).then(res => {
+    let content = res.data
+    console.log(content)
+    if (content.code === "200") {
+      content.list.forEach(item => {
+        info.handled_orders.push(item)
+      })
     }
   })
+  show_orders({
+    isProcessed: false
+  }).then(res => {
+    let content = res.data
+    console.log(content)
+    if (content.code === "200") {
+      content.list.forEach(item => {
+        info.unhandled_orders.push(item)
+      })
+    }
+  })
+})
 </script>

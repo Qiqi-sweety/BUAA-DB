@@ -47,3 +47,27 @@ export const del_items = (data) => {
         data: JSON.stringify(data)
     })
 }
+
+export const show_orders = (data) => {
+    return request({
+        url: 'store/manage_orders/',
+        method: 'POST',
+        data: JSON.stringify(data)
+    })
+}
+
+export const process_order = (data) => {
+    return request({
+        url: 'store/process_order/',
+        method: 'POST',
+        data: JSON.stringify(data)
+    })
+}
+
+export const show_comments = (data) => {
+    return request({
+        url: 'store/comments/',
+        method: 'POST',
+        data: JSON.stringify(data)
+    })
+}

@@ -110,17 +110,19 @@ class manage_orders(View):
 
 
 class process_order(View):
-    @JSR('code', 'message')
+    @JSR('code', 'message', 'hint')
     def post(self, request):
         try:
             kwargs: dict = json.loads(request.body)
         except Exception:
             return "400", "参数异常"
-
-        order = Order.objects.get(id=kwargs["order_id"])
+        try:
+            order = Order.objects.get(id=kwargs["order_id"])
+        except Exception:
+            return "300", "订单不存在", "error"
         order.isProcessed = True
         order.save()
-        return "200", "处理成功"
+        return "200", "处理成功", "success"
 
 
 class comments(View):
@@ -137,8 +139,10 @@ class comments(View):
         orders = Order.objects.filter(belonging_store=store)
         words = []
         for i in orders:
-            word = Comment.objects.get(belonging_order=i)
-            words.append(word)
+            word = Comment.objects.filter(belonging_order=i)
+            if len(word) > 0:
+                comment = word[0]
+                words.append(comment)
         return_list = []
         for i in words:
             return_list.append(dump_comment(i))

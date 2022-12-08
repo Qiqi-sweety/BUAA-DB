@@ -131,6 +131,9 @@
         ElMessage({message: content.message, type: "error"})
       }
     })
+    active.value = false
+    cart.items = []
+    sum.value = calSum()
   }
   const handleNegativeClick = () => {
   }

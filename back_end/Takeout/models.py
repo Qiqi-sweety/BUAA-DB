@@ -78,7 +78,7 @@ class Order(models.Model):
     belonging_store = models.ForeignKey(Store, on_delete=models.PROTECT)
     belonging_user = models.ForeignKey(User, on_delete=models.PROTECT)
 
-    money=models.FloatField(verbose_name="订单金额",default=0)
+    money = models.FloatField(verbose_name="订单金额", default=0)
 
 
 # 评论
