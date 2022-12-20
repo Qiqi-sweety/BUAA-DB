@@ -32,16 +32,16 @@ class user_info(View):
         favorite_store = Store.objects.get(id=list(favorite_stores.keys())[0])
 
         # orders group by month
-        month_info = {}
+        month_info = {
+            'money': [0]*12,
+            'sales': [0]*12
+        }
         for i in orders:
-            month = i.time.strftime('%Y-%m')
-            if month not in month_info:
-                month_info[month] = {}
-                month_info[month]['money'] = i.money
-                month_info[month]['sales'] = 1
-            else:
-                month_info[month]['money'] += i.money
-                month_info[month]['sales'] += 1
+            year, month = i.time.strftime('%Y-%m').split('-')
+            if year != '2022':
+                continue
+            month_info['money'][int(month)-1] += i.money
+            month_info['sales'][int(month)-1] += 1
 
         # orders.values('belonging_store').annotate(total=Count('belonging_store')).order_by('-total')
         return "200", "success", orders_num, total_money, dump_store(favorite_store), month_info

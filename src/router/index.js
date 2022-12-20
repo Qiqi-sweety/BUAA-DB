@@ -111,7 +111,8 @@ const router = new createRouter({
                 },
                 {
                     path: 'data',
-                    name: 'dataSheet'
+                    name: 'storeDataSheet',
+                    component: () => import('../components/storeMain/storeDataSheet.vue')
                 },
             ]
         },
@@ -133,7 +134,8 @@ const router = new createRouter({
                 },
                 {
                     path: 'data',
-                    name: 'dataSheet'
+                    name: 'managerDataSheet',
+                    component: () => import('../components/managerMain/managerDataSheet.vue')
                 },
             ]
         },
@@ -155,7 +157,8 @@ const router = new createRouter({
                 },
                 {
                     path: 'data',
-                    name: 'dataSheet'
+                    name: 'userDataSheet',
+                    component: () => import('../components/personalCenter/userDataSheet.vue')
                 },
                 {
                     path: 'userManage',

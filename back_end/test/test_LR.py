@@ -42,7 +42,7 @@ def test_cookie_login(type="store"):
 
     if type == "user":
         data = {
-            "name": "zhy",
+            "name": "aaa",
             "password": "123456",
         }
     elif type == "store":

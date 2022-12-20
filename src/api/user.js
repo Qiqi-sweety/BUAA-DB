@@ -120,3 +120,11 @@ export const change_info = (data) => {
         data: JSON.stringify(data)
     })
 }
+
+export const show_data = (data) => {
+    return request({
+        url: 'statistic/user_info',
+        method: 'POST',
+        data: JSON.stringify(data)
+    })
+}

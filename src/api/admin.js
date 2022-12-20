@@ -15,3 +15,11 @@ export const valid_store = (data) => {
         data: JSON.stringify(data)
     })
 }
+
+export const show_data = (data) => {
+    return request({
+        url: 'statistic/admin_info',
+        method: 'POST',
+        data: JSON.stringify(data)
+    })
+}

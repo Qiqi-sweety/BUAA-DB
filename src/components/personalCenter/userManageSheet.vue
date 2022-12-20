@@ -94,8 +94,14 @@
           <el-col :span="6">
             <p style = "font-size: 25px;margin-left: 150px;">密码</p>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="1">
             <el-divider direction="vertical" style="height:80px;margin-top:10px"/>
+          </el-col>
+          <el-col :span="5">
+            <p
+                style = "font-size:20px;color:gray;margin-top: 30px;">
+              ******
+            </p>
           </el-col>
           <el-col :span="6"><div class="grid-content ep-bg-purple" /></el-col>
           <el-col :span="6">
@@ -289,6 +295,7 @@ import {onMounted, reactive, ref} from 'vue'
 import {NCard,NButton,NModal,NUpload} from 'naive-ui'
 import {change_info, show_info} from "@/api/user";
 import {ElMessage} from "element-plus";
+import {login} from "@/api/login";
 
 const info = reactive({
   user_info: {},
@@ -380,7 +387,6 @@ const changeName = () => {
     console.log(content)
     ElMessage({message: content.message, type: content.hint})
   })
-  renewInfo()
   showIdModal.value = false
 }
 
@@ -393,7 +399,6 @@ const changeAddr = () => {
     console.log(content)
     ElMessage({message: content.message, type: content.hint})
   })
-  renewInfo()
   showAddressModal.value = false
 }
 
@@ -406,28 +411,34 @@ const changeCard = () => {
     console.log(content)
     ElMessage({message: content.message, type: content.hint})
   })
-  renewInfo()
   showCardModal.value = false
 }
 
 const changePw = () => {
-  if (pw.oldPw !== info.user_info.password) {
-    ElMessage({message: "旧密码错误", type: "error"})
-    return
-  }
+  // if (pw.oldPw !== info.user_info.password) {
+  //   ElMessage({message: "旧密码错误", type: "error"})
+  //   return
+  // }
   if (pw.newPw !== pw.confirmPw) {
     ElMessage({message: "未确认新密码", type: "error"})
     return
   }
   change_info({
     type: "password",
-    info: pw.newPw
+    info: pw.oldPw,
+    info2: pw.newPw
   }).then(res => {
     let content = res.data
     console.log(content)
     ElMessage({message: content.message, type: content.hint})
+    login({
+      name: info.new_info.name,
+      password: pw.newPw
+    }).then(res => {
+      let content = res.data
+      console.log(content)
+    })
   })
-  renewInfo()
   showPasswordModal.value = false
 }
 

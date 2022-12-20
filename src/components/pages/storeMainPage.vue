@@ -141,7 +141,7 @@
         this.$router.push({path: '/storeMainPage/info'})
       },
       sub_dataSheet(){
-        this.$router.push({path: '/storeMainPage'})
+        this.$router.push({path: '/storeMainPage/data'})
       },
       sub_foodManageSheet(){
         this.$router.push({path: '/storeMainPage/foodManage'})

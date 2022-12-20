@@ -59,8 +59,12 @@ def test_change_info():
     data = {
         "type": "password",
         "info": "123456",
-        "info2":"234567"
+        "info2": "234567"
     }
     r = requests.post(url, json=data, cookies=cookie)
     print(r.json())
     assert (r.json()["code"] == '200')
+
+
+if __name__ == '__main__':
+    pass

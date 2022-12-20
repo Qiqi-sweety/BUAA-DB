@@ -51,8 +51,15 @@ def test_makeOrder():
 
     url = "http://127.0.0.1:8000/cart/makeOrder/"
     data = {
-        "store_id": 1,
+        "store_id": 3,
     }
     r = requests.post(url, json=data, cookies=cookie)
     print(r.json())
     assert (r.json()['code'] == '200')
+
+
+if __name__ == '__main__':
+    from test_LR import test_cookie_login
+    test_cookie_login("user")
+    test_makeOrder()
+

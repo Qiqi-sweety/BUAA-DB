@@ -75,6 +75,7 @@ class myComments(View):
         return_list = []
         for i in comments:
             return_list.append(dump_comment(i))
+        return_list.reverse()
         return "200", "success", return_list
 
 
@@ -114,8 +115,8 @@ class changeInfo(View):
 
         return_msg = "修改成功"
         if kind == "name":
-            if len(User.objects.filter(name=info)) != 0:
-                return_msg = "用户名已存在"
+            if len(User.objects.filter(user_name=info)) != 0:
+                return "300", "用户名已存在", "error"
             else:
                 user.name = info
                 user.save()
@@ -134,9 +135,9 @@ class changeInfo(View):
                 cookie.set_password(kwargs["info2"])
                 cookie.save()
             else:
-                return "300", "密码错误"
+                return "300", "旧密码错误", "error"
         else:
-            return_msg = "参数异常"
+            return "400", "参数异常"
         user.save()
 
         return "200", return_msg, "success"

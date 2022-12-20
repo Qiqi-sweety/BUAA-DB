@@ -16,7 +16,7 @@
         <el-row>
             <el-col :span="12"><h3>合计：￥{{sum}}</h3></el-col>
             <el-col :span="12">
-              <div v-if="form.isCommented">
+              <div v-if="form.is_commented = true">
                 <n-button disabled round type="warning" class = "orderRateButton" @click="showModal = true">
                   已评价
                 </n-button>
@@ -103,7 +103,7 @@ const form = reactive({
   input: '',
   star: 0,
   photo: '',
-  isCommented: false, // todo: 临时变量名，具体看接口user/showOrders/
+  is_commented: false, // todo: 临时变量名，具体看接口user/showOrders/
 })
 const props = defineProps({
   order: Object
@@ -138,7 +138,7 @@ const submitComment = () => {
     ElMessage({message: content.message, type: content.hint})
   })
   showModal.value = false
-  form.isCommented = true
+  form.is_commented = true
 }
 
 </script>

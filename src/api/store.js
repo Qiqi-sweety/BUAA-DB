@@ -71,3 +71,11 @@ export const show_comments = (data) => {
         data: JSON.stringify(data)
     })
 }
+
+export const show_data = (data) => {
+    return request({
+        url: 'statistic/store_info',
+        method: 'POST',
+        data: JSON.stringify(data)
+    })
+}
