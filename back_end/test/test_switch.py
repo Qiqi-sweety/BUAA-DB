@@ -61,18 +61,18 @@ def test_comments():
     assert (r.json()['code'] == '200')
 
 
-def test_add_to_cart():
-    login = test_LR.test_cookie_login("user")
-    cookie = login.cookies
-
-    url = "http://127.0.0.1:8000/switch/addToCart"
-    data = {
-        "store_id": 2,
-        "item_id": 2,
-    }
-    r = requests.post(url, json=data, cookies=cookie)
-    print(r.json())
-    assert (r.json()['code'] == '200')
+# def test_add_to_cart():
+#     login = test_LR.test_cookie_login("user")
+#     cookie = login.cookies
+#
+#     url = "http://127.0.0.1:8000/switch/addToCart"
+#     data = {
+#         "store_id": 2,
+#         "item_id": 2,
+#     }
+#     r = requests.post(url, json=data, cookies=cookie)
+#     print(r.json())
+#     assert (r.json()['code'] == '200')
 
 
 def test_make_order():

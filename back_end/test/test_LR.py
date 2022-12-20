@@ -10,7 +10,7 @@ def random_string(l=10):
 def test_user_register():
     url = "http://127.0.0.1:8000/user/register/"
     data = {
-        "name": random_string(5),
+        "name": "zhy",
         "address": random_string(20),
         "card_num": random_string(10),
         "password": "123456",
@@ -42,7 +42,7 @@ def test_cookie_login(type="store"):
 
     if type == "user":
         data = {
-            "name": "user_123",
+            "name": "zhy",
             "password": "123456",
         }
     elif type == "store":

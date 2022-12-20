@@ -23,8 +23,8 @@ def test_addItem():
 
     url = "http://127.0.0.1:8000/cart/addItem/"
     data = {
-        "store_id": 2,
-        "item_id": 2,
+        "store_id": 1,
+        "item_id": 3,
     }
     r = requests.post(url, json=data, cookies=cookie)
     print(r.json())
@@ -51,7 +51,7 @@ def test_makeOrder():
 
     url = "http://127.0.0.1:8000/cart/makeOrder/"
     data = {
-        "store_id": 2,
+        "store_id": 1,
     }
     r = requests.post(url, json=data, cookies=cookie)
     print(r.json())

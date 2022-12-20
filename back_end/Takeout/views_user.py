@@ -7,6 +7,7 @@ from django.views import View
 from Takeout.models import *
 from django.contrib.auth.hashers import check_password
 
+
 class showOrders(View):
     @JSR('code', 'message', 'list')
     def post(self, request):
@@ -45,6 +46,13 @@ class writeComment(View):
 
         order.isCommented = True
         order.save()
+
+        star = kwargs["star"]
+        store = Store.objects.get(id=order.belonging_store.id)
+        new_star = store.star - (5 - star) * 0.001
+        store.star = new_star
+        store.save()
+
         return "200", "评论成功", "success"
 
 

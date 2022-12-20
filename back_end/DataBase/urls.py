@@ -16,7 +16,8 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
-from Takeout import views_homepage, views_LR, views_switch, views_store, views_admin, views_cart, views_user
+from Takeout import views_homepage, views_LR, views_switch, views_store, views_admin, views_cart, views_user, \
+    views_statistic
 from django.conf import settings
 from Takeout import views_user
 from django.urls import path, include, re_path
@@ -67,4 +68,8 @@ urlpatterns = [
     path('cart/addItem/', views_cart.addItem.as_view()),
     path('cart/deleteItem/', views_cart.deleteItem.as_view()),
     path('cart/makeOrder/', views_cart.makeOrder.as_view()),
+    # views_statistic
+    path('statistic/user_info', views_statistic.user_info.as_view()),
+    path('statistic/store_info', views_statistic.store_info.as_view()),
+    path('statistic/admin_info', views_statistic.admin_info.as_view()),
 ]

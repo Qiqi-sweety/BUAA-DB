@@ -147,4 +147,7 @@ class makeOrder(View):
         this_cart = Cart.objects.get(belonging_user=user, belonging_store=store)
         this_cart.delete()
 
+        store.sales += 1
+        store.save()
+
         return "200", "success"

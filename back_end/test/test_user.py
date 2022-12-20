@@ -20,9 +20,9 @@ def test_write_comments():
 
     url = "http://127.0.0.1:8000/user/writeComments/"
     data = {
-        "order_id": 3,
-        "content": "还凑合hhhhhh",
-        "star": 4,
+        "order_id": 18,
+        "content": "不咋地",
+        "star": 1,
         "photo": "/media/milktea.jpg",
     }
     r=requests.post(url, json=data, cookies=cookie)
