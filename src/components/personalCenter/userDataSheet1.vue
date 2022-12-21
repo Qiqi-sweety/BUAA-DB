@@ -28,7 +28,9 @@
          alt="暂无图片"/>
       </el-col>
     </el-row>
-    
+    <el-row>
+      <n-button type="warning" style="margin-left:90%;margin-bottom:20px">导出图表</n-button>
+    </el-row>
     <el-row>
       <user-chart2 style="background-color:white ; border-radius:20px" :month_info="info.month_info"/>
     </el-row>

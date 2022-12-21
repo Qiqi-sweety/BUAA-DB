@@ -42,12 +42,21 @@
       </el-col>
 
     </el-row>
+
     <el-row>
-        <manage-chart1 style="background-color:white;border-radius:20px;margin-top:50px"/>
+      <n-button type="warning" style="margin-left:90%;margin-top:10px">导出图表</n-button>
     </el-row>
 
     <el-row>
-        <manage-chart2 style="background-color:white;border-radius:20px;margin-top:50px" :unum="info.user_num" :snum="info.store_num"/>
+        <manage-chart1 style="background-color:white;border-radius:20px;margin-top:10px"/>
+    </el-row>
+
+    <el-row>
+      <n-button type="warning" style="margin-left:90%;margin-top:30px">导出图表</n-button>
+    </el-row>
+
+    <el-row>
+        <manage-chart2 style="background-color:white;border-radius:20px;margin-top:10px" :unum="info.user_num" :snum="info.store_num"/>
     </el-row>
 
 

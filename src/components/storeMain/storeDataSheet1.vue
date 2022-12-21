@@ -26,7 +26,13 @@
         
     </el-row>
     <el-row>
+      <n-button type="warning" style="margin-left:90%;margin-top:20px">导出图表</n-button>
+    </el-row>
+    <el-row>
       <storeChart1 style="background-color:white;border-radius: 20px;margin-top: 20px;" :item_sales="info.item_sales_list"/>
+    </el-row>
+    <el-row>
+      <n-button type="warning" style="margin-left:90%;margin-top:20px">导出图表</n-button>
     </el-row>
     <el-row>
       <storeChart2 style="background-color:white;border-radius: 20px;margin-top: 20px;" :month_info="info.month_info"/>
@@ -36,7 +42,7 @@
 </template>
 
 <script setup>
-import {NStatistic} from 'naive-ui'
+import {NStatistic,NButton} from 'naive-ui'
 import StoreChart1 from './storeChart1.vue';
 import StoreChart2 from './storeChart2.vue';
 import {onMounted, reactive} from "vue";
