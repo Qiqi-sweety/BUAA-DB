@@ -21,6 +21,7 @@
       <el-col :span="12"><user-chart1 style="margin-left:100px"/></el-col>
       <el-col :span="12">
         <h3 style="30px">最常购买店铺：</h3>
+        <h3 style="30px">{{info.favorite_store.name}}</h3>
         <img
         style="width:300px;height:300px;margin-left: 50px;"
         :src="`/api${info.favorite_store.logo}`"

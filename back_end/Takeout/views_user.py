@@ -24,6 +24,7 @@ class showOrders(View):
             tmp = dump_order(i)
             tmp["isCommented"] = i.isCommented
             return_list.append(dump_order(i))
+        return_list.reverse()
         return "200", "success", return_list
 
 

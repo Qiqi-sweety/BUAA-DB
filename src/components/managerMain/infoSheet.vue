@@ -85,7 +85,7 @@
             <el-table-column prop = "store_name" label="店铺名">
             </el-table-column>
 
-            <el-table-column prop = "user_id" label="用户名">
+            <el-table-column prop = "user_name" label="用户名">
             </el-table-column>
 
 
@@ -157,7 +157,7 @@ onMounted(() => {
       })
     }
   })
-  show_info({kind: "评价"}).then(res => {
+  show_info({kind: "评论"}).then(res => {
     let content = res.data
     console.log(content)
     info.tableComment = []

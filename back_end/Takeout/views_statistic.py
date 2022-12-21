@@ -48,7 +48,7 @@ class user_info(View):
 
 
 class store_info(View):
-    @JSR('code', 'hint', 'orders_num', 'star', 'favorite_item', 'item_sales_list', 'month_info')
+    @JSR('code', 'hint', 'orders_num', 'star', 'favorite_item', 'item_sales_list', 'month_info', 'income')
     def post(self, request):
         if not request.user.is_authenticated:
             return "403", "店铺未登录"
@@ -63,24 +63,30 @@ class store_info(View):
         items = Item.objects.filter(belonging_store=store).order_by('-sales')
         favorite_item = items[0]
 
-        item_sales_list = []
+        item_sales_list = {
+            "item_name": [],
+            "sales": []
+        }
+        income = 0
         for i in items:
-            tmp = {"item_name": i.name, "sales": i.sales, "id": i.id}
-            item_sales_list.append(tmp)
+            item_sales_list["item_name"].append(i.name)
+            item_sales_list["sales"].append(i.sales)
+            income += i.price * i.sales
 
         # orders group by month
-        month_info = {}
+        month_info = {
+            'money': [0] * 12,
+            'sales': [0] * 12
+        }
         for i in orders:
-            month = i.time.strftime('%Y-%m')
-            if month not in month_info:
-                month_info[month] = {}
-                month_info[month]['money'] = i.money
-                month_info[month]['sales'] = 1
-            else:
-                month_info[month]['money'] += i.money
-                month_info[month]['sales'] += 1
+            year, month = i.time.strftime('%Y-%m').split('-')
+            if year != '2022':
+                continue
+            month_info['money'][int(month) - 1] += i.money
+            month_info['sales'][int(month) - 1] += 1
 
-        return "200", "success", orders_num, store.star, dump_item(favorite_item), item_sales_list, month_info
+        return "200", "success", orders_num, store.star, dump_item(favorite_item), \
+               item_sales_list, month_info, income
 
 
 class admin_info(View):

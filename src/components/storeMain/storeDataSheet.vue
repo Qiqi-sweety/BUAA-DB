@@ -1,6 +1,6 @@
 <template>
   <store-data-sheet1/>
-  <store-data-sheet2/>
+<!--  <store-data-sheet2/>-->
 </template>
 
 <script setup>

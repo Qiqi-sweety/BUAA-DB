@@ -183,12 +183,13 @@ class change_info(View):
         info = kwargs["info"]
 
         if kind == "name":
-            if Cookie.objects.filter(name=info):
+            if len(Store.objects.filter(store_name=info)) != 0:
                 return "300", "店铺名已存在", "error"
             else:
-                print(store.store_name)
                 store.store_name = info
-                print(store.store_name)
+                store.save()
+                cookie.name = info
+                cookie.save()
 
         elif kind == "license":
             os.unlink(f"media/{store.license}")
@@ -203,7 +204,7 @@ class change_info(View):
                 cookie.set_password(kwargs["info2"])
                 cookie.save()
             else:
-                return "300", "密码错误"
+                return "300", "旧密码错误", "error"
         elif kind == 'info':
             store.info = info
         else:

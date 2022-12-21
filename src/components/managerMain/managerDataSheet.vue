@@ -5,14 +5,14 @@
         <el-col :span="12"
         style = "padding-left: 25%;padding-top: 40px ;height: 140px">
           <n-statistic label="用户总数">
-        1,234,123
+            {{ info.user_num }}
           </n-statistic>
         </el-col>
       
         <el-col :span="12" 
         style="padding-left:15%;padding-top: 40px;">
           <n-statistic label="店铺总数">
-        1,234,123
+            {{ info.store_num }}
           </n-statistic>
         </el-col>
         
@@ -25,27 +25,29 @@
 
     <el-col :span="12">
         <h3 style="30px">历史销量最高店铺：</h3>
-        <n-image
+        <h3 style="30px">{{info.best_sales_store.name}}</h3>
+        <img
         style="width:300px;height:300px;margin-left: 50px;"
-        src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
+        :src="`/api${info.best_sales_store.logo}`"
         />
       </el-col>
 
       <el-col :span="12">
         <h3 style="30px">评分最高店铺：</h3>
-        <n-image
-        style="width:300px;height:300px;margin-left: 50px;"
-        src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
+        <h3 style="30px">{{info.best_star_store.name}}</h3>
+        <img
+            style="width:300px;height:300px;margin-left: 50px;"
+            :src="`/api${info.best_star_store.logo}`"
         />
       </el-col>
 
     </el-row>
     <el-row>
-        <manageChart1 style="background-color:white;border-radius:20px;margin-top:50px"/>
+        <manage-chart1 style="background-color:white;border-radius:20px;margin-top:50px"/>
     </el-row>
 
     <el-row>
-        <manageChart2 style="background-color:white;border-radius:20px;margin-top:50px"/>
+        <manage-chart2 style="background-color:white;border-radius:20px;margin-top:50px" :unum="info.user_num" :snum="info.store_num"/>
     </el-row>
 
 
@@ -54,23 +56,32 @@
     
 </template>
 
-<script>
-  import { defineComponent ,ref } from 'vue'
-  import { NTag,NButton,NStatistic,NImage} from 'naive-ui'
-  import manageChart1 from './manageChart1.vue';
-  import manageChart2 from './manageChart2.vue';
+<script setup>
+import {NStatistic} from 'naive-ui'
+import {onMounted, reactive} from "vue";
+import {show_data} from "@/api/admin";
+import ManageChart1 from "@/components/managerMain/manageChart1";
+import ManageChart2 from "@/components/managerMain/manageChart2";
 
-  export default defineComponent({
-    components: {
-      NTag,
-      NButton,
-      NStatistic,
-      NImage,
-      manageChart1,
-      manageChart2,
-    },
+const info = reactive({
+  store_num: 0,
+  user_num: 0.0,
+  best_sales_store: {},
+  best_star_store: {},
+  store_list: {}
+})
+
+onMounted(() => {
+  show_data().then(res => {
+    let content = res.data
+    console.log(content)
+    if (res) {
+      info.store_num = content.store_num
+      info.user_num = content.user_num
+      info.best_sales_store = content.best_sales_store
+      info.best_star_store = content.best_star_store
+      info.store_list = content.store_list
+    }
   })
-
-  
-
+})
 </script>

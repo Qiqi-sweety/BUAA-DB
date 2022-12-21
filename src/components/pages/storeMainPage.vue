@@ -50,16 +50,16 @@
                     <span>店铺信息</span>
                 </el-menu-item>
 
-                <el-sub-menu index="2" @click.native="sub_dataSheet">
+                <el-menu-item index="2" @click.native="sub_dataSheet">
                     <template #title>
                         <el-icon><DataAnalysis /></el-icon>
                         <span>数据统计</span>
                     </template>
-                    <el-menu-item index="1-1">item one</el-menu-item>
-                    <el-menu-item index="1-2">item two</el-menu-item>
-                    <el-menu-item index="1-3">item three</el-menu-item>
+<!--                    <el-menu-item index="1-1">item one</el-menu-item>-->
+<!--                    <el-menu-item index="1-2">item two</el-menu-item>-->
+<!--                    <el-menu-item index="1-3">item three</el-menu-item>-->
                    
-                </el-sub-menu>
+                </el-menu-item>
 
                 <el-menu-item index="3" @click.native="sub_foodManageSheet">
                     <el-icon><Dish /></el-icon>
