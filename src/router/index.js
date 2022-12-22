@@ -110,9 +110,14 @@ const router = new createRouter({
                     component: () => import('../components/storeMain/storeIdManageSheet.vue')
                 },
                 {
-                    path: 'data',
-                    name: 'storeDataSheet',
-                    component: () => import('../components/storeMain/storeDataSheet.vue')
+                    path: 'data1',
+                    name: 'storeDataSheet1',
+                    component: () => import('../components/storeMain/storeDataSheet1.vue')
+                },
+                {
+                    path: 'data2',
+                    name: 'storeDataSheet2',
+                    component: () => import('../components/storeMain/storeDataSheet2.vue')
                 },
             ]
         },

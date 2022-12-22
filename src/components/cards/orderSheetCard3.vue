@@ -1,7 +1,7 @@
 <template>
     <n-card  style="margin-bottom: 50px"  class = "orderSheetCardClass">
         <el-row>
-          <el-col :span="14"><h3 class = "orderId">订单号：{{props.order.id}}</h3></el-col>
+          <el-col :span="14"><h3 class = "orderId">订单号：{{props.order.order_id}}</h3></el-col>
           <el-col :span="10"><p class = "orderTime">日期：{{props.order.time}}</p></el-col>
         </el-row>
         

@@ -29,7 +29,10 @@
       </el-col>
     </el-row>
     <el-row>
-      <n-button type="warning" style="margin-left:90%;margin-bottom:20px">导出图表</n-button>
+      <n-button type="warning"
+                style="margin-left:90%;margin-bottom:20px"
+                @click="export_pic"
+      >导出图表</n-button>
     </el-row>
     <el-row>
       <user-chart2 style="background-color:white ; border-radius:20px" :month_info="info.month_info"/>
@@ -38,7 +41,7 @@
 </template>
 
 <script setup>
-import {NStatistic} from 'naive-ui'
+import {NStatistic, NButton} from 'naive-ui'
 import UserChart2 from "@/components/personalCenter/userChart2";
 import UserChart1 from "@/components/personalCenter/userChart1";
 import {onMounted, reactive} from "vue";
@@ -50,6 +53,25 @@ const info = reactive({
   favorite_store: {},
   month_info: {},
 })
+const echarts = require("echarts");
+const export_pic = () => {
+  let myChart = echarts.init(document.getElementById("userChart2"));
+  const picInfo = myChart.getDataURL({
+    type: 'png',
+    pixelRatio: 1,
+    backgroundColor: '#ffffff',
+    // 忽略组件的列表，例如要忽略 toolbox 就是 ['toolbox']
+    // excludeComponents: 'toolbox'
+  });
+  const elink = document.createElement('a');
+  elink.download = '图表';
+  elink.style.display = 'none';
+  elink.href = picInfo;
+  document.body.appendChild(elink);
+  elink.click();
+  URL.revokeObjectURL(elink.href); // 释放URL 对象
+  document.body.removeChild(elink)
+}
 
 onMounted(() => {
   show_data().then(res => {

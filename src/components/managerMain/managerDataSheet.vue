@@ -44,19 +44,32 @@
     </el-row>
 
     <el-row>
-      <n-button type="warning" style="margin-left:90%;margin-top:10px">导出图表</n-button>
+      <n-button type="warning"
+                style="margin-left:90%;margin-top:10px"
+                @click="export_pic('1')"
+      >导出图表</n-button>
     </el-row>
 
     <el-row>
-        <manage-chart1 style="background-color:white;border-radius:20px;margin-top:10px"/>
+        <manage-chart1
+            :store_list="info.store_list"
+            style="background-color:white;border-radius:20px;margin-top:10px"
+        />
     </el-row>
 
     <el-row>
-      <n-button type="warning" style="margin-left:90%;margin-top:30px">导出图表</n-button>
+      <n-button type="warning"
+                style="margin-left:90%;margin-top:30px"
+                @click="export_pic('2')"
+      >导出图表</n-button>
     </el-row>
 
     <el-row>
-        <manage-chart2 style="background-color:white;border-radius:20px;margin-top:10px" :unum="info.user_num" :snum="info.store_num"/>
+        <manage-chart2
+            :unum="info.user_num"
+            :snum="info.store_num"
+            style="background-color:white;border-radius:20px;margin-top:10px"
+        />
     </el-row>
 
 
@@ -66,7 +79,7 @@
 </template>
 
 <script setup>
-import {NStatistic} from 'naive-ui'
+import {NStatistic, NButton} from 'naive-ui'
 import {onMounted, reactive} from "vue";
 import {show_data} from "@/api/admin";
 import ManageChart1 from "@/components/managerMain/manageChart1";
@@ -77,8 +90,28 @@ const info = reactive({
   user_num: 0.0,
   best_sales_store: {},
   best_star_store: {},
-  store_list: {}
+  store_list: {s: [1, 1, 1, ]},
 })
+
+const echarts = require("echarts");
+const export_pic = (id) => {
+  let myChart = echarts.init(document.getElementById("manageChart" + id));
+  const picInfo = myChart.getDataURL({
+    type: 'png',
+    pixelRatio: 1,
+    backgroundColor: '#ffffff',
+    // 忽略组件的列表，例如要忽略 toolbox 就是 ['toolbox']
+    // excludeComponents: 'toolbox'
+  });
+  const elink = document.createElement('a');
+  elink.download = '图表';
+  elink.style.display = 'none';
+  elink.href = picInfo;
+  document.body.appendChild(elink);
+  elink.click();
+  URL.revokeObjectURL(elink.href); // 释放URL 对象
+  document.body.removeChild(elink)
+}
 
 onMounted(() => {
   show_data().then(res => {
@@ -89,7 +122,10 @@ onMounted(() => {
       info.user_num = content.user_num
       info.best_sales_store = content.best_sales_store
       info.best_star_store = content.best_star_store
-      info.store_list = content.store_list
+      info.store_list.s = []
+      content.store_list.forEach(item => {
+        info.store_list.s.push(item)
+      })
     }
   })
 })

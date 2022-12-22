@@ -3,7 +3,7 @@
     <div>
       <div id="storeChart1" :style="{ width: '1500px', height: '500px'}"></div>
     </div>
-  </template>
+</template>
    
 <script setup>
 import {reactive, watch} from "vue";

@@ -26,13 +26,19 @@
         
     </el-row>
     <el-row>
-      <n-button type="warning" style="margin-left:90%;margin-top:20px">导出图表</n-button>
+      <n-button type="warning"
+                style="margin-left:90%;margin-top:20px"
+                @click="export_pic('1')"
+      >导出图表</n-button>
     </el-row>
     <el-row>
       <storeChart1 style="background-color:white;border-radius: 20px;margin-top: 20px;" :item_sales="info.item_sales_list"/>
     </el-row>
     <el-row>
-      <n-button type="warning" style="margin-left:90%;margin-top:20px">导出图表</n-button>
+      <n-button type="warning"
+                style="margin-left:90%;margin-top:20px"
+                @click="export_pic('2')"
+      >导出图表</n-button>
     </el-row>
     <el-row>
       <storeChart2 style="background-color:white;border-radius: 20px;margin-top: 20px;" :month_info="info.month_info"/>
@@ -55,6 +61,26 @@ const info = reactive({
   month_info: {},
   income: 0
 })
+const echarts = require("echarts");
+const export_pic = (id) => {
+  let myChart = echarts.init(document.getElementById("storeChart" + id));
+  const picInfo = myChart.getDataURL({
+    type: 'png',
+    pixelRatio: 1,
+    backgroundColor: '#ffffff',
+    // 忽略组件的列表，例如要忽略 toolbox 就是 ['toolbox']
+    // excludeComponents: 'toolbox'
+  });
+  const elink = document.createElement('a');
+  elink.download = '图表';
+  elink.style.display = 'none';
+  elink.href = picInfo;
+  document.body.appendChild(elink);
+  elink.click();
+  URL.revokeObjectURL(elink.href); // 释放URL 对象
+  document.body.removeChild(elink)
+}
+
 
 onMounted(() => {
   show_data().then(res => {

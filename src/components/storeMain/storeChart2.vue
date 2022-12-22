@@ -14,6 +14,7 @@ const data = reactive({
   money: [],
   sales: [],
 })
+const echarts = require("echarts");
 
 watch(
 //监听props里面的某个对象users，这里是 () =>{return props.users}的简写，
@@ -26,7 +27,6 @@ watch(
         newValue.sales.forEach(item => {
           data.sales.push(item)
         })
-        let echarts = require("echarts");
         let myChart = echarts.init(document.getElementById("storeChart2"));
         // 绘制图表
         myChart.setOption({
@@ -66,5 +66,24 @@ watch(
       }
     }
 )
+
+const export_pic = () => {
+  let myChart = echarts.init(document.getElementById("storeChart2"));
+  const picInfo = myChart.getDataURL({
+    type: 'png',
+    pixelRatio: 1,
+    backgroundColor: '#ffffff',
+    // 忽略组件的列表，例如要忽略 toolbox 就是 ['toolbox']
+    // excludeComponents: 'toolbox'
+  });
+  const elink = document.createElement('a');
+  elink.download = '图表';
+  elink.style.display = 'none';
+  elink.href = picInfo;
+  document.body.appendChild(elink);
+  elink.click();
+  URL.revokeObjectURL(elink.href); // 释放URL 对象
+  document.body.removeChild(elink)
+}
 
 </script>

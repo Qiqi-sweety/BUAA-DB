@@ -102,12 +102,12 @@ class admin_info(View):
         stores = Store.objects.all()
         store_list = []
         for i in stores:
-            tmp = {"store_name": i.store_name, "sales": i.sales, "star": i.star,"id":i.id}
+            tmp = [i.store_name, i.sales, 0, i.star]
             orders = Order.objects.filter(belonging_store=i)
             total_money = 0
             for j in orders:
                 total_money += j.money
-            tmp["total_money"] = total_money
+            tmp[2] = total_money
             store_list.append(tmp)
 
         return "200", "success", store_num, user_num, dump_store(best_sales_store), dump_store(

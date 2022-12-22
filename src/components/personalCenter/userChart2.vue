@@ -14,6 +14,7 @@ const data = reactive({
   money: [],
   sales: [],
 })
+const echarts = require("echarts");
 
 watch(
 //监听props里面的某个对象users，这里是 () =>{return props.users}的简写，
@@ -26,7 +27,7 @@ watch(
         newValue.sales.forEach(item => {
           data.sales.push(item)
         })
-        let echarts = require("echarts");
+
         let myChart = echarts.init(document.getElementById("userChart2"));
         // 绘制图表
         myChart.setOption({
@@ -40,6 +41,7 @@ watch(
             top: "5%",
             left: "center",
           },
+          backgroundColor: '#ffffff',
           xAxis: {
             type: 'category',
             boundaryGap: false,

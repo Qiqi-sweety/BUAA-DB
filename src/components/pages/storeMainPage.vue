@@ -50,13 +50,13 @@
                     <span>店铺信息</span>
                 </el-menu-item>
 
-                <el-menu-item index="2" @click.native="sub_dataSheet">
+                <el-menu-item index="2" @click.native="sub_dataSheet1">
                     <template #title>
                         <el-icon><DataAnalysis /></el-icon>
                         <span>数据统计</span>
                     </template>
-<!--                    <el-menu-item index="1-1">item one</el-menu-item>-->
-<!--                    <el-menu-item index="1-2">item two</el-menu-item>-->
+<!--                    <el-menu-item index="1-1" @click.native="sub_dataSheet1">历史数据分析</el-menu-item>-->
+<!--                    <el-menu-item index="1-2" @click.native="sub_dataSheet2">订单明细</el-menu-item>-->
 <!--                    <el-menu-item index="1-3">item three</el-menu-item>-->
                    
                 </el-menu-item>
@@ -140,8 +140,11 @@
       sub_storeInfoSheet(){
         this.$router.push({path: '/storeMainPage/info'})
       },
-      sub_dataSheet(){
-        this.$router.push({path: '/storeMainPage/data'})
+      sub_dataSheet1(){
+        this.$router.push({path: '/storeMainPage/data1'})
+      },
+      sub_dataSheet2(){
+        this.$router.push({path: '/storeMainPage/data2'})
       },
       sub_foodManageSheet(){
         this.$router.push({path: '/storeMainPage/foodManage'})
