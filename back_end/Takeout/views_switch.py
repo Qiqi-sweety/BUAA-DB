@@ -74,8 +74,9 @@ class comments(View):
         orders = Order.objects.filter(belonging_store=store)
         words = []
         for i in orders:
-            word = Comment.objects.get(belonging_order=i)
-            words.append(word)
+            word = Comment.objects.filter(belonging_order=i)
+            if word:
+                words.append(word[0])
         return_list = []
         for i in words:
             return_list.append(dump_comment(i))

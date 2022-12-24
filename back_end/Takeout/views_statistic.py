@@ -5,7 +5,7 @@ from Takeout.models import *
 
 
 class user_info(View):
-    @JSR('code', 'hint', 'orders_num', 'total_money', 'favorite_store', 'month_info')
+    @JSR('code', 'hint', 'orders_num', 'total_money', 'favorite_store', 'month_info', 'money_info')
     def post(self, request):
         if not request.user.is_authenticated:
             return "403", "用户未登录"
@@ -33,18 +33,34 @@ class user_info(View):
 
         # orders group by month
         month_info = {
-            'money': [0]*12,
-            'sales': [0]*12
+            'money': [0] * 12,
+            'sales': [0] * 12
         }
         for i in orders:
             year, month = i.time.strftime('%Y-%m').split('-')
             if year != '2022':
                 continue
-            month_info['money'][int(month)-1] += i.money
-            month_info['sales'][int(month)-1] += 1
+            month_info['money'][int(month) - 1] += i.money
+            month_info['sales'][int(month) - 1] += 1
+
+        # order by money
+        money1, money2, money3, money4, money5 = 0, 0, 0, 0, 0
+        for i in orders:
+            tmp = i.money
+            if tmp < 10:
+                money1 += 1
+            elif tmp < 30:
+                money2 += 1
+            elif tmp < 50:
+                money3 += 1
+            elif tmp < 100:
+                money4 += 1
+            else:
+                money5 += 1
+        money_info = [money1, money2, money3, money4, money5]
 
         # orders.values('belonging_store').annotate(total=Count('belonging_store')).order_by('-total')
-        return "200", "success", orders_num, total_money, dump_store(favorite_store), month_info
+        return "200", "success", orders_num, total_money, dump_store(favorite_store), month_info, money_info
 
 
 class store_info(View):
@@ -90,7 +106,7 @@ class store_info(View):
 
 
 class admin_info(View):
-    @JSR('code', 'hint', 'store_num', 'user_num', 'best_sales_store', 'best_star_store','store_list')
+    @JSR('code', 'hint', 'store_num', 'user_num', 'best_sales_store', 'best_star_store', 'store_list')
     def post(self, request):
         store_num = len(Store.objects.all())
         user_num = len(User.objects.all())
